@@ -6,6 +6,7 @@
 
 
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
   <link rel="icon" href="/img/fyy.png">
@@ -16,15 +17,15 @@
   <meta name="author" content="fyy">
   <meta name="keywords" content="">
   
-    <meta name="description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();  声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变量">
+    <meta name="description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();   声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java新版本的重要语言特性（9-17）">
 <meta property="og:url" content="http://example.com/2023/09/21/Java%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E9%87%8D%E8%A6%81%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7%EF%BC%889-17%EF%BC%89/index.html">
 <meta property="og:site_name" content="fyy-coding">
-<meta property="og:description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();  声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变量">
+<meta property="og:description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();   声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-21T01:06:04.000Z">
-<meta property="article:modified_time" content="2024-03-15T08:23:22.630Z">
+<meta property="article:modified_time" content="2024-03-16T07:43:10.895Z">
 <meta property="article:author" content="fyy">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary_large_image">
@@ -311,6 +312,7 @@
               <div class="markdown-body">
                 
                 <h2 id="JDK9"><a href="#JDK9" class="headerlink" title="JDK9"></a>JDK9</h2><h4 id="允许在接口中使用私有方法"><a href="#允许在接口中使用私有方法" class="headerlink" title="允许在接口中使用私有方法"></a>允许在接口中使用私有方法</h4><h2 id="JDK10"><a href="#JDK10" class="headerlink" title="JDK10"></a>JDK10</h2><h4 id="局部变量类型推断"><a href="#局部变量类型推断" class="headerlink" title="局部变量类型推断"></a>局部变量类型推断</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;<span class="hljs-title class_">String</span>&gt;();<br></code></pre></td></tr></table></figure>
+
 <ul>
 <li>声明时必须初始化</li>
 </ul>
@@ -331,6 +333,7 @@
 <p>建议：为了程序的易读性和可维护性，尽量显式定义变量类型。</p>
 <h2 id="JDK11"><a href="#JDK11" class="headerlink" title="JDK11"></a>JDK11</h2><h4 id="用于-Lambda-参数的局部变量语法"><a href="#用于-Lambda-参数的局部变量语法" class="headerlink" title="用于 Lambda 参数的局部变量语法"></a>用于 Lambda 参数的局部变量语法</h4><p>将局部变量和 Lambda 表达式的用法进行了统一，并且可以将注释应用于局部变量和 Lambda 表达式</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">@<span class="hljs-title class_">Nonnull</span> <span class="hljs-keyword">var</span> x = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>();<br><br>(@<span class="hljs-title class_">Nonnull</span> <span class="hljs-keyword">var</span> x, @<span class="hljs-title class_">Nullable</span> <span class="hljs-keyword">var</span> y) -&gt; x.<span class="hljs-title function_">process</span>(y)<br></code></pre></td></tr></table></figure>
+
 <ul>
 <li>@NonNull 注解可以标注在方法、字段、参数之上，表示对应的值不能为空；</li>
 <li>@Nullable 注解可以标注在方法、字段、参数之上，表示对应的值可以为空；</li>
@@ -360,6 +363,7 @@
 
 <p>如果 if 条件中有 &amp;&amp; 运算符时，当 instanceof 类型匹配成功，模式局部变量的作用范围也可以相应延长，如下面代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">if</span> (obj <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">String</span> s &amp;&amp; s.<span class="hljs-title function_">length</span>() &gt; <span class="hljs-number">5</span>) &#123;<br>    .. s.<span class="hljs-title function_">contains</span>(..) ..&#125;<br></code></pre></td></tr></table></figure>
+
 <p>注意：这种作用范围延长，并不适用于或 || 运算符，因为即便 || 运算符左边的 instanceof 类型匹配没有成功也不会造成短路，依旧会执行到||运算符右边的表达式.但是如果左边instanceof 类型匹配没有成功，局部变量并未定义赋值，此时使用会产生问题。</p>
 <h4 id="Records类型"><a href="#Records类型" class="headerlink" title="Records类型"></a>Records类型</h4><ul>
 <li>Record 类型允许在代码中使用紧凑的语法形式来声明类，而这些类能够作为不可变数据类型的封装持有者。Record 这一特性主要用在特定领域的类上；</li>
@@ -381,6 +385,7 @@
 <h2 id="JDK17"><a href="#JDK17" class="headerlink" title="JDK17"></a>JDK17</h2><h4 id="密封的类和接口"><a href="#密封的类和接口" class="headerlink" title="密封的类和接口"></a>密封的类和接口</h4><p>用来增强 Java 编程语言，防止其他类或接口扩展或实现它们。</p>
 <p>使用修饰符<strong>sealed</strong>，您可以将一个类声明为密封类。<br>密封的类使用关键字<strong>permits</strong>列出可以直接扩展它的类。<br>子类可以是最终的、非密封的或密封的。<br><strong>继承了密封类的子类可以使用non-sealed修饰，这样任何类都可以继承这个子类。</strong></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 旧版</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>     &#125; <span class="hljs-comment">//人</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;<span class="hljs-comment">//教师</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;  <span class="hljs-comment">//工人</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span>&#123;<br>     &#125; <span class="hljs-comment">//学生</span><br><br><br><span class="hljs-comment">// 新版</span><br><span class="hljs-comment">// 添加sealed修饰符，permits后面跟上只能被继承的子类名称</span><br>public sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> permits <span class="hljs-title class_">Teacher</span>, <span class="hljs-title class_">Worker</span>, <span class="hljs-title class_">Student</span>&#123;<br>     &#125; <span class="hljs-comment">//人</span><br> <br><span class="hljs-comment">// 子类可以被修饰为 final</span><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;<span class="hljs-comment">//教师</span><br> <br><span class="hljs-comment">// 子类可以被修饰为 non-sealed，此时 Worker类就成了普通类，谁都可以继承它</span><br>non-sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;  <span class="hljs-comment">//工人</span><br><span class="hljs-comment">// 任何类都可以继承Worker</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AnyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Worker</span>&#123;<br>    &#125;<br> <br><span class="hljs-comment">//子类可以被修饰为 sealed,同上</span><br>sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> permits <span class="hljs-title class_">MiddleSchoolStudent</span>,<span class="hljs-title class_">GraduateStudent</span>&#123;<br>     &#125; <span class="hljs-comment">//学生</span><br><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">MiddleSchoolStudent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Student</span> &#123;<br>     &#125;  <span class="hljs-comment">//中学生</span><br><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">GraduateStudent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Student</span> &#123;<br>     &#125;  <span class="hljs-comment">//研究生</span><br></code></pre></td></tr></table></figure>
+
 <p>可以限制类的层次结构。</p>
 
                 
@@ -471,12 +476,6 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
-                    
-                      <a href="/2024/03/16/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/" title="测试文章">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">测试文章</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
                     
                   </article>
                   <article class="post-next col-6">

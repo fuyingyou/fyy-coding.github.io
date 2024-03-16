@@ -6,6 +6,7 @@
 
 
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
   <link rel="icon" href="/img/fyy.png">
@@ -24,7 +25,7 @@
 <meta property="og:description" content="布隆过滤器本质：一个空的2进制数组（初始全为0，只存0和1） 插入一个key，经过k个hash函数运算后，得到k个值，将2进制数组对应下标的位置置为1。 查询将key同样进行k个hash，去2进制数组比对对应下标位置的值  全为1则可能存在该key； 不全为1，则一定不存在该key  删除不能删 应用 大集合中检查元素是否重复 Redis中防止缓存穿透  缓存穿透：key对应的数据在数据源并不存在">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-19T05:16:04.000Z">
-<meta property="article:modified_time" content="2024-03-15T08:23:29.881Z">
+<meta property="article:modified_time" content="2024-03-16T07:40:05.641Z">
 <meta property="article:author" content="fyy">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary_large_image">
