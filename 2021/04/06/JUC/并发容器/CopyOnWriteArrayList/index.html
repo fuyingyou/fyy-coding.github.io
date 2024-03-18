@@ -1,0 +1,840 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CopyOnWriteArrayListJDK1.5之前，线程安全的List只有Vector，但是Vector过于老旧（CRUD都加了synchronized，性能非常低）。 JDK1.5 引入了 JUC，其中唯一的线程安全List实现就是 CopyOnWriteArrayList 。 优点对于大部分业务场景而言，读的操作都是多于写的操作的，而对读的操作加锁其实就是浪费资源（读操作不会更改数据），">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CopyOnWriteArrayList">
+<meta property="og:url" content="http://example.com/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/CopyOnWriteArrayList/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="CopyOnWriteArrayListJDK1.5之前，线程安全的List只有Vector，但是Vector过于老旧（CRUD都加了synchronized，性能非常低）。 JDK1.5 引入了 JUC，其中唯一的线程安全List实现就是 CopyOnWriteArrayList 。 优点对于大部分业务场景而言，读的操作都是多于写的操作的，而对读的操作加锁其实就是浪费资源（读操作不会更改数据），">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231015184956043.png">
+<meta property="article:published_time" content="2021-04-06T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:54:57.142Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231015184956043.png">
+  
+  
+  
+  <title>CopyOnWriteArrayList - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CopyOnWriteArrayList"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 12:13" pubdate>
+          2021年4月6日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CopyOnWriteArrayList</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>JDK1.5之前，线程安全的List只有Vector，但是Vector过于老旧（CRUD都加了synchronized，性能非常低）。</p>
+<p>JDK1.5 引入了 JUC，其中唯一的线程安全List实现就是 <code>CopyOnWriteArrayList</code> 。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>对于大部分业务场景而言，读的操作都是多于写的操作的，而对读的操作加锁其实就是浪费资源（读操作不会更改数据），所以我们应该允许多个线程同时访问 <code>List</code> 的内部数据（对读操作是安全的）。</p>
+<p>为了将读操作性能发挥到极致，<code>CopyOnWriteArrayList</code> 中的读取操作是完全无需加锁的，写入操作也不会阻塞读取操作，只有写写才会互斥。</p>
+<p><code>CopyOnWriteArrayList</code> 线程安全的核心在于其采用了 <strong>写时复制（Copy-On-Write）</strong> 的策略，从 <code>CopyOnWriteArrayList</code> 的名字就能看出了。</p>
+<h3 id="Copy-On-Write-的思想是什么？"><a href="#Copy-On-Write-的思想是什么？" class="headerlink" title="Copy-On-Write 的思想是什么？"></a>Copy-On-Write 的思想是什么？</h3><p><code>CopyOnWriteArrayList</code>名字中的“Copy-On-Write”即写时复制，简称 COW。</p>
+<p>核心思想是，如果有多个调用者（callers）同时请求相同资源（如内存或磁盘上的数据存储），他们会共同获取相同的指针指向相同的资源，直到某个调用者试图修改资源的内容时，系统才会真正复制一份专用副本（private copy）给该调用者，而其他调用者所见到的最初的资源仍然保持不变。这过程对其他的调用者都是透明的。优点是如果调用者没有修改该资源，就不会有副本（private copy）被创建，因此多个调用者只是读取操作时可以共享同一份资源。</p>
+<blockquote>
+<p>写的时候，写线程写自己的，读线程读原数组，等待写线程修改完数据副本后，再将数据赋值回原数据。</p>
+</blockquote>
+<p>可以看出，写时复制机制非常适合读多写少的并发场景，能够极大地提高系统的并发性能。</p>
+<p>COW 的缺点：</p>
+<ol>
+<li>写操作开销：每一次写操作都需要复制一份原始数据，然后再进行修改和替换，所以写操作的开销相对较大，在写入比较频繁的场景下，性能可能会受到影响。</li>
+<li>内存占用：每次写操作都需要复制一份原始数据，会占用额外的内存空间，在数据量比较大的情况下，可能会导致内存资源不足。</li>
+<li>数据一致性问题：修改操作不会立即反映到最终结果中，还需要等待复制完成，这可能会导致一定的数据一致性问题。</li>
+</ol>
+<h2 id="CopyOnWriteArrayList-源码分析"><a href="#CopyOnWriteArrayList-源码分析" class="headerlink" title="CopyOnWriteArrayList 源码分析"></a>CopyOnWriteArrayList 源码分析</h2><p>JDK1.8 为例，CopyOnWriteArrayList 的底层核心源码。</p>
+<p><code>CopyOnWriteArrayList</code> 实现了以下接口：</p>
+<ul>
+<li><code>List</code> : 表明它是一个列表，支持添加、删除、查找等操作，并且可以通过下标进行访问。</li>
+<li><code>RandomAccess</code> ：这是一个标志接口，表明实现这个接口的 <code>List</code> 集合是支持 <strong>快速随机访问</strong> 的。</li>
+<li><code>Cloneable</code> ：表明它具有拷贝能力，可以进行深拷贝或浅拷贝操作。</li>
+<li><code>Serializable</code> : 表明它可以进行序列化操作，也就是可以将对象转换为字节流进行持久化存储或网络传输，非常方便。</li>
+</ul>
+<p><img src="C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231015184956043.png" srcset="/img/loading.gif" lazyload alt="image-20231015184956043"></p>
+<p>CopyOnWriteArrayList 类图</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p><code>CopyOnWriteArrayList</code> 中有一个无参构造函数和两个有参构造函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 创建一个空的 CopyOnWriteArrayList</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">CopyOnWriteArrayList</span><span class="hljs-params">()</span> &#123;<br>    setArray(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[<span class="hljs-number">0</span>]);<br>&#125;<br><br><span class="hljs-comment">// 按照集合的迭代器返回的顺序创建一个包含指定集合元素的 CopyOnWriteArrayList</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">CopyOnWriteArrayList</span><span class="hljs-params">(Collection&lt;? extends E&gt; c)</span> &#123;<br>    Object[] elements;<br>    <span class="hljs-keyword">if</span> (c.getClass() == CopyOnWriteArrayList.class)<br>        elements = ((CopyOnWriteArrayList&lt;?&gt;)c).getArray();<br>    <span class="hljs-keyword">else</span> &#123;<br>        elements = c.toArray();<br>        <span class="hljs-comment">// c.toArray might (incorrectly) not return Object[] (see 6260652)</span><br>        <span class="hljs-keyword">if</span> (elements.getClass() != Object[].class)<br>            elements = Arrays.copyOf(elements, elements.length, Object[].class);<br>    &#125;<br>    setArray(elements);<br>&#125;<br><br><span class="hljs-comment">// 创建一个包含指定数组的副本的列表</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">CopyOnWriteArrayList</span><span class="hljs-params">(E[] toCopyIn)</span> &#123;<br>    setArray(Arrays.copyOf(toCopyIn, toCopyIn.length, Object[].class));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h3><p><code>CopyOnWriteArrayList</code> 的 <code>add()</code>方法有三个版本：</p>
+<ul>
+<li><code>add(E e)</code>：在 <code>CopyOnWriteArrayList</code> 的尾部插入元素。</li>
+<li><code>add(int index, E element)</code>：在 <code>CopyOnWriteArrayList</code> 的指定位置插入元素。</li>
+<li><code>addIfAbsent(E e)</code>：如果指定元素不存在，那么添加该元素。如果成功添加元素则返回 true。</li>
+</ul>
+<p>这里以<code>add(E e)</code>为例进行介绍：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 插入元素到 CopyOnWriteArrayList 的尾部</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">add</span><span class="hljs-params">(E e)</span> &#123;<br>    <span class="hljs-keyword">final</span> <span class="hljs-type">ReentrantLock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.lock;<br>    <span class="hljs-comment">// 加锁</span><br>    lock.lock();<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">// 获取原来的数组</span><br>        Object[] elements = getArray();<br>        <span class="hljs-comment">// 原来数组的长度</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> elements.length;<br>        <span class="hljs-comment">// 创建一个长度+1的新数组，并将原来数组的元素复制给新数组</span><br>        Object[] newElements = Arrays.copyOf(elements, len + <span class="hljs-number">1</span>);<br>        <span class="hljs-comment">// 元素放在新数组末尾</span><br>        newElements[len] = e;<br>        <span class="hljs-comment">// array指向新数组</span><br>        setArray(newElements);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>        <span class="hljs-comment">// 解锁</span><br>        lock.unlock();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>从上面的源码可以看出：</p>
+<ul>
+<li><code>add</code>方法内部用到了 <code>ReentrantLock</code> 加锁，保证了同步，避免了多线程写的时候会复制出多个副本出来。锁被修饰保证了锁的内存地址肯定不会被修改，并且，释放锁的逻辑放在 finally 中，可以保证锁能被释放。</li>
+<li><code>CopyOnWriteArrayList</code> 通过复制底层数组的方式实现写操作。</li>
+<li>每次写操作都需要通过 <code>Arrays.copyOf</code> 复制底层数组，时间复杂度是 O(n) 的，且会占用额外的内存空间。因此，CopyOnWriteArrayList 适用于读多写少的场景，在写操作不频繁且内存资源充足的情况下，可以提升系统的性能表现（更适用）。</li>
+<li><code>CopyOnWriteArrayList</code> 中并没有类似于 <code>ArrayList</code> 的 <code>grow()</code> 方法扩容的操作。</li>
+</ul>
+<blockquote>
+<p><code>Arrays.copyOf</code> 方法的时间复杂度是 O(n)，其中 n 表示需要复制的数组长度。因为这个方法的实现原理是先创建一个新的数组，然后将源数组中的数据复制到新数组中，最后返回新数组。这个方法会复制整个数组，因此其时间复杂度与数组长度成正比，即 O(n)。值得注意的是，由于底层调用了系统级别的拷贝指令，因此在实际应用中这个方法的性能表现比较优秀，但是也需要注意控制复制的数据量，避免出现内存占用过高的情况。</p>
+</blockquote>
+<h3 id="读取元素"><a href="#读取元素" class="headerlink" title="读取元素"></a>读取元素</h3><p><code>CopyOnWriteArrayList</code> 的读取操作是基于内部数组 <code>array</code> ，并不会发生实际的修改。（因此在读取操作时不需要进行同步控制和锁操作，可以保证数据的安全性。这种机制下，多个线程可以同时读取列表中的元素）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 底层数组，只能通过getArray和setArray方法访问</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Object[] array;<br><br><span class="hljs-keyword">public</span> E <span class="hljs-title function_">get</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span> &#123;<br>    <span class="hljs-keyword">return</span> get(getArray(), index);<br>&#125;<br><br><span class="hljs-keyword">final</span> Object[] getArray() &#123;<br>    <span class="hljs-keyword">return</span> array;<br>&#125;<br><br><span class="hljs-keyword">private</span> E <span class="hljs-title function_">get</span><span class="hljs-params">(Object[] a, <span class="hljs-type">int</span> index)</span> &#123;<br>    <span class="hljs-keyword">return</span> (E) a[index];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>不过，<code>get</code>方法是弱一致性的，在某些情况下可能读到旧的元素值。</p>
+<blockquote>
+<p><code>get(int index)</code>方法是分两步进行的：</p>
+<ol>
+<li>通过<code>getArray()</code>获取当前数组的引用；</li>
+<li>直接从数组中获取下标为 index 的元素。</li>
+</ol>
+<p>这个过程并没有加锁，所以在并发环境下可能出现如下情况：</p>
+<ol>
+<li>线程 1 调用<code>get(int index)</code>方法获取值，内部通过<code>getArray()</code>方法获取到了 array 属性值；</li>
+<li>线程 2 调用<code>CopyOnWriteArrayList</code>的<code>add</code>、<code>set</code>、<code>remove</code> 等修改方法时，内部通过<code>setArray</code>方法修改了<code>array</code>属性的值；</li>
+<li>线程 1 还是从旧的 <code>array</code> 数组中取值。</li>
+</ol>
+</blockquote>
+<h3 id="获取列表中元素的个数"><a href="#获取列表中元素的个数" class="headerlink" title="获取列表中元素的个数"></a>获取列表中元素的个数</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">size</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> getArray().length;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>CopyOnWriteArrayList</code>中的<code>array</code>数组每次复制都刚好能够容纳下所有元素，并不像<code>ArrayList</code>那样会预留一定的空间，因此 CopyOnWriteArrayList 中并没有<code>size</code>属性。CopyOnWriteArrayList 的底层数组的长度就是元素个数，因此<code>size()</code>方法只要返回数组长度就可以了。</p>
+<h3 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h3><p><code>CopyOnWriteArrayList</code>删除元素相关的方法一共有 4 个：</p>
+<ol>
+<li><code>remove(int index)</code>：移除此列表中指定位置上的元素。将任何后续元素向左移动（从它们的索引中减去 1）。</li>
+<li><code>boolean remove(Object o)</code>：删除此列表中首次出现的指定元素，如果不存在该元素则返回 false。</li>
+<li><code>boolean removeAll(Collection&lt;?&gt; c)</code>：从此列表中删除指定集合中包含的所有元素。</li>
+<li><code>void clear()</code>：移除此列表中的所有元素。</li>
+</ol>
+<p>这里以<code>remove(int index)</code>为例进行介绍：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> E <span class="hljs-title function_">remove</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span> &#123;<br>    <span class="hljs-comment">// 获取可重入锁</span><br>    <span class="hljs-keyword">final</span> <span class="hljs-type">ReentrantLock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.lock;<br>    <span class="hljs-comment">// 加锁</span><br>    lock.lock();<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">//获取当前array数组</span><br>        Object[] elements = getArray();<br>        <span class="hljs-comment">// 获取当前array长度</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> elements.length;<br>        <span class="hljs-comment">//获取指定索引的元素(旧值)</span><br>        <span class="hljs-type">E</span> <span class="hljs-variable">oldValue</span> <span class="hljs-operator">=</span> get(elements, index);<br>        <span class="hljs-type">int</span> <span class="hljs-variable">numMoved</span> <span class="hljs-operator">=</span> len - index - <span class="hljs-number">1</span>;<br>        <span class="hljs-comment">// 判断删除的是否是最后一个元素</span><br>        <span class="hljs-keyword">if</span> (numMoved == <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 如果删除的是最后一个元素，直接复制该元素前的所有元素到新的数组</span><br>            setArray(Arrays.copyOf(elements, len - <span class="hljs-number">1</span>));<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 分段复制，将index前的元素和index+1后的元素复制到新数组</span><br>            <span class="hljs-comment">// 新数组长度为旧数组长度-1</span><br>            Object[] newElements = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[len - <span class="hljs-number">1</span>];<br>            System.arraycopy(elements, <span class="hljs-number">0</span>, newElements, <span class="hljs-number">0</span>, index);<br>            System.arraycopy(elements, index + <span class="hljs-number">1</span>, newElements, index,<br>                             numMoved);<br>            <span class="hljs-comment">//将新数组赋值给array引用</span><br>            setArray(newElements);<br>        &#125;<br>        <span class="hljs-keyword">return</span> oldValue;<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>       	<span class="hljs-comment">// 解锁</span><br>        lock.unlock();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="判断元素是否存在"><a href="#判断元素是否存在" class="headerlink" title="判断元素是否存在"></a>判断元素是否存在</h3><p><code>CopyOnWriteArrayList</code>提供了两个用于判断指定元素是否在列表中的方法：</p>
+<ul>
+<li><code>contains(Object o)</code>：判断是否包含指定元素。</li>
+<li><code>containsAll(Collection&lt;?&gt; c)</code>：判断是否保证指定集合的全部元素。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 判断是否包含指定元素</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">contains</span><span class="hljs-params">(Object o)</span> &#123;<br>    <span class="hljs-comment">//获取当前array数组</span><br>    Object[] elements = getArray();<br>    <span class="hljs-comment">//调用index尝试查找指定元素，如果返回值大于等于0，则返回true，否则返回false</span><br>    <span class="hljs-keyword">return</span> indexOf(o, elements, <span class="hljs-number">0</span>, elements.length) &gt;= <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">// 判断是否保证指定集合的全部元素</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">containsAll</span><span class="hljs-params">(Collection&lt;?&gt; c)</span> &#123;<br>    <span class="hljs-comment">//获取当前array数组</span><br>    Object[] elements = getArray();<br>    <span class="hljs-comment">//获取数组长度</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> elements.length;<br>    <span class="hljs-comment">//遍历指定集合</span><br>    <span class="hljs-keyword">for</span> (Object e : c) &#123;<br>        <span class="hljs-comment">//循环调用indexOf方法判断，只要有一个没有包含就直接返回false</span><br>        <span class="hljs-keyword">if</span> (indexOf(e, elements, <span class="hljs-number">0</span>, len) &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>    <span class="hljs-comment">//最后表示全部包含或者制定集合为空集合，那么返回true</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="CopyOnWriteArrayList-常用方法测试"><a href="#CopyOnWriteArrayList-常用方法测试" class="headerlink" title="CopyOnWriteArrayList 常用方法测试"></a>CopyOnWriteArrayList 常用方法测试</h2><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 创建一个 CopyOnWriteArrayList 对象</span><br>CopyOnWriteArrayList&lt;String&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CopyOnWriteArrayList</span>&lt;&gt;();<br><br><span class="hljs-comment">// 向列表中添加元素</span><br>list.add(<span class="hljs-string">&quot;Java&quot;</span>);<br>list.add(<span class="hljs-string">&quot;Python&quot;</span>);<br>list.add(<span class="hljs-string">&quot;C++&quot;</span>);<br>System.out.println(<span class="hljs-string">&quot;初始列表：&quot;</span> + list);<br><br><span class="hljs-comment">// 使用 get 方法获取指定位置的元素</span><br>System.out.println(<span class="hljs-string">&quot;列表第二个元素为：&quot;</span> + list.get(<span class="hljs-number">1</span>));<br><br><span class="hljs-comment">// 使用 remove 方法删除指定元素</span><br><span class="hljs-type">boolean</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> list.remove(<span class="hljs-string">&quot;C++&quot;</span>);<br>System.out.println(<span class="hljs-string">&quot;删除结果：&quot;</span> + result);<br>System.out.println(<span class="hljs-string">&quot;列表删除元素后为：&quot;</span> + list);<br><br><span class="hljs-comment">// 使用 set 方法更新指定位置的元素</span><br>list.set(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;Golang&quot;</span>);<br>System.out.println(<span class="hljs-string">&quot;列表更新后为：&quot;</span> + list);<br><br><span class="hljs-comment">// 使用 add 方法在指定位置插入元素</span><br>list.add(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;PHP&quot;</span>);<br>System.out.println(<span class="hljs-string">&quot;列表插入元素后为：&quot;</span> + list);<br><br><span class="hljs-comment">// 使用 size 方法获取列表大小</span><br>System.out.println(<span class="hljs-string">&quot;列表大小为：&quot;</span> + list.size());<br><br><span class="hljs-comment">// 使用 removeAll 方法删除指定集合中所有出现的元素</span><br>result = list.removeAll(List.of(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;Golang&quot;</span>));<br>System.out.println(<span class="hljs-string">&quot;批量删除结果：&quot;</span> + result);<br>System.out.println(<span class="hljs-string">&quot;列表批量删除元素后为：&quot;</span> + list);<br><br><span class="hljs-comment">// 使用 clear 方法清空列表中所有元素</span><br>list.clear();<br>System.out.println(<span class="hljs-string">&quot;列表清空后为：&quot;</span> + list);<br></code></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">列表更新后为：[Java, Golang]<br>列表插入元素后为：[PHP, Java, Golang]<br>列表大小为：3<br>批量删除结果：true<br>列表批量删除元素后为：[PHP]<br>列表清空后为：[]<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JUC/" class="category-chain-item">JUC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JUC/" class="print-no-link">#JUC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CopyOnWriteArrayList</div>
+      <div>http://example.com/2021/04/06/JUC/并发容器/CopyOnWriteArrayList/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/ConcurrentSkipListMap/" title="ConcurrentSkipListMap">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ConcurrentSkipListMap</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/BlockingQueue/ArrayBlockingQueue/" title="ArrayBlockingQueue">
+                        <span class="hidden-mobile">ArrayBlockingQueue</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

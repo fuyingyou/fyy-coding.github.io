@@ -1,0 +1,963 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java 学习 Java8新特性 哈希表默认大小：16 hash碰撞：生成链表，后来的作为链表头，之前的后移。 HashMap提供加载因子：默认0.75-&gt;当元素到达现有hash表的75%时进行扩容。扩容后链表中的每个元素重新进行哈希运算，置入新地址中。 变红黑树：某一个碰撞个数大于8，与此同时，总容量大于64，会将链表转换为红黑树 好处：除了添加以外的操作效率都比链表高。扩容以后重排序不需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础">
+<meta property="og:url" content="http://example.com/2022/03/06/JavaSE/Java%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="Java 学习 Java8新特性 哈希表默认大小：16 hash碰撞：生成链表，后来的作为链表头，之前的后移。 HashMap提供加载因子：默认0.75-&gt;当元素到达现有hash表的75%时进行扩容。扩容后链表中的每个元素重新进行哈希运算，置入新地址中。 变红黑树：某一个碰撞个数大于8，与此同时，总容量大于64，会将链表转换为红黑树 好处：除了添加以外的操作效率都比链表高。扩容以后重排序不需">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-06T09:13:03.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:37:27.367Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java基础 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-06 17:13" pubdate>
+          2022年3月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Java 学习</p>
+<p>Java8新特性</p>
+<p>哈希表默认大小：16</p>
+<p>hash碰撞：生成链表，后来的作为链表头，之前的后移。</p>
+<p>HashMap提供加载因子：默认0.75-&gt;当元素到达现有hash表的75%时进行扩容。扩容后链表中的每个元素重新进行哈希运算，置入新地址中。</p>
+<p>变红黑树：某一个碰撞个数大于8，与此同时，总容量大于64，会将链表转换为红黑树</p>
+<p>好处：除了添加以外的操作效率都比链表高。扩容以后重排序不需要哈希算法就可以重新运算出新的位置：原来哈希表的总长度+当前所在的位置</p>
+<p>ConcurrentHashMap：</p>
+<p>7并发级别（ConcurrentLevel）默认：16</p>
+<p>8 CAS（无锁）算法 ： 链表+红黑树，效率提高了</p>
+<p>方法区属于堆中永久区（PremGen）的一部分</p>
+<p>永久区几乎不会垃圾回收机制回收（回收条件比较苛刻）</p>
+<h3 id="Date-2021-11-30"><a href="#Date-2021-11-30" class="headerlink" title="Date 2021.11.30"></a>Date 2021.11.30</h3><ol>
+<li>可变参数类型：参数写为：类型…参数名  例： String…strs</li>
+<li>getClass()  得到 class[ I  ,[ 表示数组，I表示int类型</li>
+<li>使用可变参数列表，不依赖自动包装机制，而是使用基本类型，应尽量避免使用可变参数列表。</li>
+<li>初始化在Java中有至关重要的地位。</li>
+<li>一个编译单元，即.java文件，只能有一个public类，那么包之外是看不见.java文件中的其他类的。</li>
+<li>Java包的命名规则全部使用小写字母。</li>
+<li>package和import是将单一的全局命名空间分隔开，使得无论多少人使用和编写类，都不会出现命名冲突。</li>
+</ol>
+<h3 id="Date-2021-12-01"><a href="#Date-2021-12-01" class="headerlink" title="Date 2021.12.01"></a>Date 2021.12.01</h3><ol>
+<li><p>classpath可以包含多个可供选择的查询路径，通过分号隔开。在使用jar文件时，必须在类路径中把jar文件实际名称写清楚。</p>
+</li>
+<li><p>如果导入的类库有重复部分，只要不写这些重复的就没问题。</p>
+</li>
+<li><p>可以不import，直接使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">java.util.<span class="hljs-type">Vector</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">java</span>.util.Vector();<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>定制工具库： classpath设置搜索路径（将工具库的路径放进去），其他类使用工具库时，导入工具库所在的包。</p>
+</li>
+<li><p>无权限修饰符  &#x3D;&#x3D; 包访问权限</p>
+</li>
+<li><p>继承而来的类可以访问public、protected 。 （extends：继承）</p>
+</li>
+<li><p>类不可以设置为private、protected。(内部类除外)</p>
+</li>
+</ol>
+<h3 id="Date-2021-12-02"><a href="#Date-2021-12-02" class="headerlink" title="Date 2021.12.02"></a>Date 2021.12.02</h3><ol>
+<li>Java会自动在导出类的构造器中插入对基类的构造器。（且在导出构造器的最前面）（super：超类）</li>
+<li>编译器强制初始化基类，但不监督将成员对象初始化。</li>
+<li>确保正确清理：finally 。以防异常出现。</li>
+<li>清理动作同生成顺序相反，通常这就要求基类元素仍然存在。</li>
+<li>垃圾回收器可能永远也不会被调用，且就算被调用，顺序也不一定。</li>
+<li>@override 的存在可以防止程序员意外重载。</li>
+<li>is a 继承；has a 组合。</li>
+<li>finally修饰对象，使引用指向不变，即不能重新指向其他对象，但对象自身可以修改。</li>
+<li>Java不提供使任何对象恒定不变的途径（但是可以自己编写实现）。数组也是对象。</li>
+<li>带有恒定初始值的final static基本类型全用大写字母命名。</li>
+<li>static的属性在装载时被初始化，不是每次创建新对象都初始化。</li>
+<li>Java允许生成“空白final”。（指声明为final，但是又没有给定初值的域）必须在域的定义处或者每个构造器中用表达式对final进行赋值，这就是final域在使用前总是被初始化的原因所在。</li>
+<li>final参数：可以将参数声明为final，无法在方法内部更改参数引用所指向的对象。主要用来向匿名内部类传递数据。</li>
+<li>final方法。使用final方法的两个原因<ol>
+<li>把方法锁定，以防止任何继承类修改它的含义。</li>
+<li>效率。转为内嵌调用。方法调用机制：将参数压入栈，跳至方法代码外并执行，然后跳回并清理栈中的参数，处理返回值。如果一个方法很大，那么可能看不到内嵌带来的任何性能提高（程序代码膨胀），甚至效率可能反而降低。在最近的版本中效率问题交给编译器和JVM去处理，只有在想要明确禁止覆盖时，才会将方法设置为final的。</li>
+</ol>
+</li>
+<li>一般来说，类的代码在初次使用时才加载。这里指的是加载发生于创建类的第一个对象时，但是当访问static域或static方法时，也会发生加载。</li>
+<li>所有的static对象和static代码段都会在加载时依程序中的顺序（定义类时的书写顺序）而依次初始化。</li>
+<li>对象被创建时，所有的基本类型都会被设置成默认值，对象引用被设为null，这是通过将对象内存设为二进制零值而一举生成的，然后再调用构造器将成员初始化。</li>
+</ol>
+<ul>
+<li><strong>parseInt(String s):</strong> 返回用十进制参数表示的整数值。</li>
+<li><strong>parseInt(int i):</strong> 使用指定基数的字符串参数表示的整数 (基数可以是 10, 2, 8, 或 16 等进制数) 。</li>
+</ul>
+<h3 id="Date-2022-10-10"><a href="#Date-2022-10-10" class="headerlink" title="Date 2022.10.10"></a>Date 2022.10.10</h3><p><code>trim()</code> 方法用于删除字符串的头尾空白符。</p>
+<p>1、<code>int indexOf(String str)</code> ：返回第一次出现的指定子字符串在此字符串中的索引。<br>2、<code>int indexOf(String str, int startIndex)</code>：从指定的索引处开始，返回第一次出现的指定子字符串在此字符串中的索引。<br>3、<code>int lastIndexOf(String str)</code> ：返回在此字符串中最右边出现的指定子字符串的索引。<br>4、<code>int lastIndexOf(String str, int startIndex)</code> ：从指定的索引处开始向后搜索，返回在此字符串中最后一次出现的指定子字符串的索引。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Collectors.toMap(Info::getName, Info::getContent, (a, b) -&gt; b)<br></code></pre></td></tr></table></figure>
+
+<p>第三个参数用在key值冲突的情况下：如果新元素产生的key在Map中已经出现过了，第三个参数就会定义解决的办法。</p>
+<h3 id="Date-2022-10-30"><a href="#Date-2022-10-30" class="headerlink" title="Date 2022.10.30"></a>Date 2022.10.30</h3><p>@Schedule<br>cron表达式语法</p>
+<p>[秒] [分] [小时] [日] [月] [周] [年]</p>
+<p>特殊符号：</p>
+<blockquote>
+<p>‘*’：任意值，可以解为‘每’   每天&#x2F;每月</p>
+<p>‘&#x2F;‘ ：增量     例如 0&#x2F;1 表示从第0分钟开始，每隔1分钟</p>
+<p>‘L’  :   表示最后，只能出现在DayofWeek和DayofMonth域，如果在DayofWeek域使用5L,意味着在最后的一个星期四触发</p>
+</blockquote>
+<p>设置定时任务为每天凌晨2点执行和每小时执行一次<br>每天凌晨2点 0 0 2 * * ?和每天隔一小时 0 * *&#x2F;1 * * ?</p>
+<p>例1：每隔5秒执行一次：*&#x2F;5 * * * * ?</p>
+<p>例2：每隔5分执行一次：0 *&#x2F;5 * * * ?</p>
+<p>在26分、29分、33分执行一次：0 26,29,33 * * * ?</p>
+<p>例3：每天半夜12点30分执行一次：0 30 0 * * ? （注意日期域为0不是24）</p>
+<p>每天凌晨1点执行一次：0 0 1 * * ?</p>
+<p>每天上午10：15执行一次： 0 15 10 ? * * 或 0 15 10 * * ? 或 0 15 10 * * ? *</p>
+<p>每天中午十二点执行一次：0 0 12 * * ?</p>
+<p>每天14点到14：59分，每1分钟执行一次：0 * 14 * * ?</p>
+<p>每天14点到14：05分，每1分钟执行一次：0 0-5 14 * * ?</p>
+<p>每天14点到14：55分，每5分钟执行一次：0 0&#x2F;5 14 * * ?</p>
+<p>每天14点到14：55分，和18点到18点55分，每5分钟执行一次：0 0&#x2F;5 14,18 * * ?</p>
+<p>每天18点执行一次：0 0 <strong>18</strong> * * ?</p>
+<p>每天18点、22点执行一次：0 0 <strong>18,22</strong> * * ?</p>
+<p>每天7点到23点，每整点执行一次：0 0 <strong>7-23</strong> * * ?</p>
+<p>每个整点执行一次：0 0 <strong>0&#x2F;1</strong> * * ?</p>
+<h3 id="Date-2022-10-31"><a href="#Date-2022-10-31" class="headerlink" title="Date 2022.10.31"></a>Date 2022.10.31</h3><ol>
+<li><p>父pom和子pom关系（继承）</p>
+<ol>
+<li><p>如果父pom中是<code>&lt;dependencies&gt;&lt;/dependencies&gt;</code>时，那么子pom会自动继承父pom依赖，不需要子pom去导入</p>
+</li>
+<li><p>如果父pom中是</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencyManagement</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span>....<span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencyManagement</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>则子pom不会自动继承父pom的依赖，除非子pom中声明。声明需要groupId和artifactId，无需给到version。一句话总结：第二种方法是用来约束子pom，若要使用，需声明。</p>
+</li>
+</ol>
+</li>
+<li><p>自定义配置怎么出现提示</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--注解执行器--&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">optional</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">optional</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+</li>
+<li><p>Java中Date类的toInstant()方法用于将Date对象转换为Instant对象。在转换过程中会创建一个Instant，用于表示时间轴上与此日期相同的点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Java">Original Date: Fri Jul <span class="hljs-number">12</span> <span class="hljs-number">06</span>:<span class="hljs-number">01</span>:<span class="hljs-number">49</span> UTC <span class="hljs-number">1996</span><br>Instant: <span class="hljs-number">1996</span>-<span class="hljs-number">07</span>-12T06:<span class="hljs-number">01</span>:<span class="hljs-number">49.</span>766Z<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Date-2022-11-15"><a href="#Date-2022-11-15" class="headerlink" title="Date 2022.11.15"></a>Date 2022.11.15</h3><p><strong>布隆过滤器</strong>：</p>
+<p>本质：一个空的2进制数组（数据全为0、1，初始全0）</p>
+<ul>
+<li><p>插入：一个key，经过k个hash函数运算后，得到k个值，将2进制数组对应下标的位置置为1。</p>
+</li>
+<li><p>查询：将key同样进行k个hash，去2进制数组比对对应下标位置的值，全为1则可能存在该key，不全为1，则一定不存在该key</p>
+</li>
+<li><p>删除：不能删</p>
+</li>
+<li><p>误判率：误以为存在的概率</p>
+</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>不需要存储元素本身，节省空间的同时保证了数据安全。</li>
+<li>查询速度很快。理解为O(k), k为哈希函数的个数。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>有一定的误判率，不适合对误判率要求较高的场景</li>
+<li>无法删除数据</li>
+</ul>
+<p>应用：</p>
+<ul>
+<li><p>大集合中检查元素是否重复</p>
+</li>
+<li><p>Redis中防止缓存穿透</p>
+<blockquote>
+<p>缓存穿透：key对应的数据在数据源并不存在，每次针对此key的请求从缓存获取不到，请求都会到数据源，从而可能压垮数据源。</p>
+<p>解决办法：将数据源的key是否存在的信息存储到布隆过滤器中，如果布隆过滤器判定数据不存在，则不再请求数据源。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>布隆计数过滤器</strong>：待学</p>
+<p><strong>布谷鸟过滤器</strong>：</p>
+<p>​      初始化一个给定容量的过滤器Filter，这个容量数为2的n次方，如果不为2的n次方，内部会通将其转化为2的n次方。</p>
+<ul>
+<li><p>插入：</p>
+<p>先进行一次hash，得出应当插入位置和应当插入的值。</p>
+<p>如果这个这个位置（bucket内的4个位置均被占用）插入失败，会进行第二次hash(或者利用指纹和第一个hash位置异或？前提是确保指纹hash(fp)!&#x3D;0)，查看第二个位置能否插入。</p>
+<p>若第二个位置插入失败，则会随机在两个位置挑选一个将其中的一个值标记为旧值，用新值覆盖旧值，旧值会在重复上面的步骤进行插入。</p>
+<p>会对插入的值进行校验，只有当未插入过该值时才会插入成功，若过滤器中已经存在该值，会插入失败返回false。</p>
+</li>
+<li><p>扩容：  如果数组过小，会发生循环挤兑的情况，如果超过最大挤兑次数，进行扩容，重新计算每个指纹的位置。</p>
+</li>
+<li><p>查找：用两个hash函数计算，将计算结果与两个元素中的8个位置的指纹进行对比，如果对比成功则表示数据存在。先进行一次hash查询数据，若没有该值会进行第二次hash进行查询，若还是没有会返回false。</p>
+</li>
+<li><p>删除</p>
+<ul>
+<li><p>通过两次hash找到索引位置，若有该数据，将该位置数据删除。因为每个对象的指纹会存储到一个位置中，所以可以通过删除这个指纹来删除数据。</p>
+</li>
+<li><p>删除功能无法使用的情况：如果相同对象存储超过8个，就无法使用删除功能 <code>？？(TODO) 为什么？？</code>；如果俩数据的哈希值和指纹相同时，会出现误删除情况。</p>
+</li>
+</ul>
+</li>
+<li><p>删除全部：布谷鸟过滤器可以删除全部元素（重置数组为0）。</p>
+</li>
+<li><p>更新：删除后再添加新指纹。</p>
+</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>支持删除</li>
+<li>更节省空间（比布隆过滤器节省约40%），在错误率小于3%时，空间性能优于布隆过滤器</li>
+<li>查询效率高（最低只需一次哈希，第二个位置可以根据第一个位置和指纹异或求得？<code>? ?</code>）</li>
+</ul>
+<p>缺点： </p>
+<ul>
+<li>插入性能差<ul>
+<li>布谷鸟过滤器在计算哈希后可能当前位置上已经存储了指纹，这时就要将已存储的项踢到候选桶，随着桶越来越满，产生冲突的可能性越来越大，插入耗时越来越高。</li>
+<li>布隆过滤器插入时计算好哈希直接写入位即可</li>
+</ul>
+</li>
+<li>插入重复元素存在上限<ul>
+<li>布谷鸟过滤器对已存在的值会做踢出操作，因此重复元素的插入存在上限。</li>
+<li>布隆过滤器在插入重复元素时并没有影响，只是对已存在的位再置一遍。</li>
+</ul>
+</li>
+<li>空间大小必须是2的指数（布隆过滤器不需要2的指数）</li>
+<li>删除有问题：<ul>
+<li>删除仅在相同哈希值被插入一次时是完美的</li>
+<li>如果元素没有插入便进行删除，可能会出现误删除，这和假阳性率的原因相同</li>
+<li>如果元素插入了多次，那么每次删除仅会删除一个值，你需要知道元素插入了多少次才能删除干净，或者循环运行删除直到删除失败为止</li>
+</ul>
+</li>
+</ul>
+<p>Arrays.sort(nums, (a, b) -&gt; b[1] - a[1]);    返回值大于0</p>
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><blockquote>
+<p>所有需要网络传输的对象，都需要实现序列化接口，通常所有的JavaBean都实现Serializable接口。</p>
+</blockquote>
+<blockquote>
+<p>对象的类名、实例变量（包括基本类型、数组、对其他对象的引用）都会被序列化；方法、静态变量（又称类变量）、transient修饰的变量都不会被实例化</p>
+<p>&#x2F;&#x2F; 对象的类型需要被序列化的原因是反序列化时需要对象的class文件?</p>
+<p>transient 修饰 不想被序列化的属性</p>
+</blockquote>
+<blockquote>
+<p>序列化对象的引用类型成员变量必须是可序列化的。</p>
+<p>在通过文件、网络来读取序列化后的对象时，必须按照实际写入的顺序读取。</p>
+<p>&#x2F;&#x2F; 是否有某种读取方式是可以不按照实际写入的顺序读取？</p>
+</blockquote>
+<blockquote>
+<p>单例类序列化时需要重写readResolve()方法，否则会破坏单例原则</p>
+<p>同一对象序列化多次，只有第一次序列化为二进制流，以后都只会保存序列化编号，不会重复序列化。</p>
+<p>建议所有可序列化的类加上serialVersionUID版本号，方便后期项目升级。</p>
+<p>&#x2F;&#x2F; 如果单体应用是否需要版本号？</p>
+<p>&#x2F;&#x2F; 如果非单体应用未添加版本号，重启应用是否可以解决问题</p>
+</blockquote>
+<blockquote>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java基础</div>
+      <div>http://example.com/2022/03/06/JavaSE/Java基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/06/JavaSE/JDK%E6%96%B0%E7%89%B9%E6%80%A7/" title="JDK新特性">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JDK新特性</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/06/JavaSE/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">
+                        <span class="hidden-mobile">设计模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

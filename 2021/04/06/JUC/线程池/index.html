@@ -1,0 +1,863 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="线程池什么是线程池?顾名思义，线程池就是管理一系列线程的资源池。当有任务要处理时，直接从线程池中获取线程来处理，处理完之后线程并不会立即被销毁，而是等待下一个任务。 为什么要用线程池？线程池、数据库连接池、Http 连接池等等都是对池化思想的应用。池化技术的思想主要是为了减少每次获取资源的消耗，提高对资源的利用率。 线程池提供了一种限制和管理资源（包括执行一个任务）的方式。 每个线程池还维护一些基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池">
+<meta property="og:url" content="http://example.com/2021/04/06/JUC/%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="线程池什么是线程池?顾名思义，线程池就是管理一系列线程的资源池。当有任务要处理时，直接从线程池中获取线程来处理，处理完之后线程并不会立即被销毁，而是等待下一个任务。 为什么要用线程池？线程池、数据库连接池、Http 连接池等等都是对池化思想的应用。池化技术的思想主要是为了减少每次获取资源的消耗，提高对资源的利用率。 线程池提供了一种限制和管理资源（包括执行一个任务）的方式。 每个线程池还维护一些基">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-06T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:54:57.182Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>线程池 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="线程池"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 12:13" pubdate>
+          2021年4月6日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">线程池</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><h4 id="什么是线程池"><a href="#什么是线程池" class="headerlink" title="什么是线程池?"></a>什么是线程池?</h4><p>顾名思义，线程池就是管理一系列线程的资源池。当有任务要处理时，直接从线程池中获取线程来处理，处理完之后线程并不会立即被销毁，而是等待下一个任务。</p>
+<h4 id="为什么要用线程池？"><a href="#为什么要用线程池？" class="headerlink" title="为什么要用线程池？"></a>为什么要用线程池？</h4><p>线程池、数据库连接池、Http 连接池等等都是对池化思想的应用。池化技术的思想主要是为了减少每次获取资源的消耗，提高对资源的利用率。</p>
+<p><strong>线程池</strong>提供了一种限制和管理资源（包括执行一个任务）的方式。 每个<strong>线程池</strong>还维护一些基本统计信息，例如已完成任务的数量。</p>
+<p><strong>使用线程池的好处</strong>：</p>
+<ul>
+<li><strong>降低资源消耗</strong>。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
+<li><strong>提高响应速度</strong>。当任务到达时，任务可以不需要等到线程创建就能立即执行。</li>
+<li><strong>提高线程的可管理性</strong>。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。</li>
+</ul>
+<h4 id="如何创建线程池？"><a href="#如何创建线程池？" class="headerlink" title="如何创建线程池？"></a>如何创建线程池？</h4><p><strong>方式一：通过<code>ThreadPoolExecutor</code>构造函数来创建（推荐）。</strong></p>
+<p><strong>方式二：通过 <code>Executor</code> 框架的工具类 <code>Executors</code> 来创建。</strong></p>
+<p>我们可以创建多种类型的 <code>ThreadPoolExecutor</code>：</p>
+<ul>
+<li>**<code>FixedThreadPool</code>**：该方法返回一个固定线程数量的线程池。该线程池中的线程数量始终不变。当有一个新的任务提交时，线程池中若有空闲线程，则立即执行。若没有，则新的任务会被暂存在一个任务队列中，待有线程空闲时，便处理在任务队列中的任务。</li>
+<li><strong><code>SingleThreadExecutor</code>：</strong> 该方法返回一个只有一个线程的线程池。若多余一个任务被提交到该线程池，任务会被保存在一个任务队列中，待线程空闲，按先入先出的顺序执行队列中的任务。</li>
+<li><strong><code>CachedThreadPool</code>：</strong> 该方法返回一个可根据实际情况调整线程数量的线程池。初始大小为0。当有新任务提交时，如果当前线程池中没有线程可用，它会创建一个新的线程来处理该任务。如果在一段时间内（默认为60秒）没有新任务提交，核心线程会超时并被销毁，从而缩小线程池的大小。</li>
+<li>**<code>ScheduledThreadPool</code>**：该方法返回一个用来在给定的延迟后运行任务或者定期执行任务的线程池。</li>
+</ul>
+<h4 id="为什么不推荐使用内置线程池？"><a href="#为什么不推荐使用内置线程池？" class="headerlink" title="为什么不推荐使用内置线程池？"></a>为什么不推荐使用内置线程池？</h4><p>在《阿里巴巴 Java 开发手册》“并发处理”这一章节，明确指出线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。</p>
+<p><strong>为什么呢？</strong></p>
+<blockquote>
+<p>使用线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源开销，解决资源不足的问题。如果不使用线程池，有可能会造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题。</p>
+</blockquote>
+<p>《阿里巴巴 Java 开发手册》中强制线程池不允许使用 <code>Executors</code> 去创建，而是通过 <code>ThreadPoolExecutor</code> 构造函数的方式。</p>
+<p><code>Executors</code> 返回线程池对象的弊端如下：</p>
+<ul>
+<li><p>**<code>FixedThreadPool</code> 和 <code>SingleThreadExecutor</code>**：使用的是无界的 <code>LinkedBlockingQueue</code>，任务队列最大长度为 <code>Integer.MAX_VALUE</code>,可能堆积大量的请求，从而导致 OOM。</p>
+</li>
+<li><p>**<code>CachedThreadPool</code>**：使用的是同步队列 <code>SynchronousQueue</code>, 允许创建的线程数量为 <code>Integer.MAX_VALUE</code> ，如果任务数量过多且执行速度较慢，可能会创建大量的线程，从而导致 OOM。</p>
+</li>
+<li><p><strong><code>ScheduledThreadPool</code> 和 <code>SingleThreadScheduledExecutor</code></strong> : 使用的无界的延迟阻塞队列<code>DelayedWorkQueue</code>，任务队列最大长度为 <code>Integer.MAX_VALUE</code>,可能堆积大量的请求，从而导致 OOM。</p>
+</li>
+</ul>
+<h4 id="线程池常见参数有哪些？如何解释？"><a href="#线程池常见参数有哪些？如何解释？" class="headerlink" title="线程池常见参数有哪些？如何解释？"></a>线程池常见参数有哪些？如何解释？</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 用给定的初始参数创建一个新的ThreadPoolExecutor。</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">ThreadPoolExecutor</span><span class="hljs-params">(<span class="hljs-type">int</span> corePoolSize,//线程池的核心线程数量</span><br><span class="hljs-params">                          <span class="hljs-type">int</span> maximumPoolSize,//线程池的最大线程数</span><br><span class="hljs-params">                          <span class="hljs-type">long</span> keepAliveTime,//当线程数大于核心线程数时，多余的空闲线程存活的最长时间</span><br><span class="hljs-params">                          TimeUnit unit,//时间单位</span><br><span class="hljs-params">                          BlockingQueue&lt;Runnable&gt; workQueue,//任务队列，用来储存等待执行的任务的队列</span><br><span class="hljs-params">                          ThreadFactory threadFactory,//线程工厂，用来创建线程，一般默认即可</span><br><span class="hljs-params">                          RejectedExecutionHandler handler//拒绝策略，当提交的任务过多而不能及时处理（队列放不下）时，我们可以定制策略来处理任务</span><br><span class="hljs-params">                           )</span> &#123;<br>    <span class="hljs-keyword">if</span> (corePoolSize &lt; <span class="hljs-number">0</span> ||<br>        maximumPoolSize &lt;= <span class="hljs-number">0</span> ||<br>        maximumPoolSize &lt; corePoolSize ||<br>        keepAliveTime &lt; <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>();<br>    <span class="hljs-keyword">if</span> (workQueue == <span class="hljs-literal">null</span> || threadFactory == <span class="hljs-literal">null</span> || handler == <span class="hljs-literal">null</span>)<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NullPointerException</span>();<br>    <span class="hljs-built_in">this</span>.corePoolSize = corePoolSize;<br>    <span class="hljs-built_in">this</span>.maximumPoolSize = maximumPoolSize;<br>    <span class="hljs-built_in">this</span>.workQueue = workQueue;<br>    <span class="hljs-built_in">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);<br>    <span class="hljs-built_in">this</span>.threadFactory = threadFactory;<br>    <span class="hljs-built_in">this</span>.handler = handler;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong><code>ThreadPoolExecutor</code> 3 个最重要的参数：</strong></p>
+<ul>
+<li><strong><code>corePoolSize</code> :</strong> 任务队列未达到队列容量时，最大可以同时运行的线程数量。</li>
+<li><strong><code>maximumPoolSize</code> :</strong> 任务队列中存放的任务达到队列容量的时候，当前可以同时运行的线程数量变为最大线程数。</li>
+<li><strong><code>workQueue</code>:</strong> 新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，新任务就会被存放在队列中。</li>
+</ul>
+<p><code>ThreadPoolExecutor</code>其他常见参数 :</p>
+<ul>
+<li><strong><code>keepAliveTime</code></strong>:线程池中的线程数量大于 <code>corePoolSize</code> 的时候，如果这时没有新的任务提交，多余的空闲线程不会立即销毁，而是会等待，直到等待的时间超过了 <code>keepAliveTime</code>才会被回收销毁，线程池<strong>回收线程时，会对核心线程和非核心线程一视同仁，直到线程池中线程的数量等于 <code>corePoolSize</code></strong> ，回收过程才会停止。</li>
+<li><strong><code>unit</code></strong> : <code>keepAliveTime</code> 参数的时间单位。</li>
+<li><strong><code>threadFactory</code></strong> :创建新线程的时候会用到的线程工厂。</li>
+<li><strong><code>handler</code></strong> :拒绝策略。关于拒绝策略下面单独介绍一下。</li>
+</ul>
+<h4 id="线程池的拒绝策略有哪些？"><a href="#线程池的拒绝策略有哪些？" class="headerlink" title="线程池的拒绝策略有哪些？"></a>线程池的拒绝策略有哪些？</h4><p>如果当前同时运行的线程数量达到最大线程数量并且队列也已经被放满了任务时，<code>ThreadPoolTaskExecutor</code> 定义一些策略:</p>
+<ul>
+<li><strong><code>ThreadPoolExecutor.AbortPolicy</code>：</strong> 抛出 <code>RejectedExecutionException</code>来拒绝新任务的处理。</li>
+<li><strong><code>ThreadPoolExecutor.CallerRunsPolicy</code>：</strong> 调用执行自己的线程运行任务，也就是直接在调用<code>execute</code>方法的线程中运行(<code>run</code>)被拒绝的任务，如果执行程序已关闭，则会丢弃该任务。因此这种策略会降低对于新任务提交速度，影响程序的整体性能。如果您的应用程序可以承受此延迟并且你要求任何一个任务请求都要被执行的话，你可以选择这个策略。</li>
+<li><strong><code>ThreadPoolExecutor.DiscardPolicy</code>：</strong> 不处理新任务，直接丢弃掉。</li>
+<li><strong><code>ThreadPoolExecutor.DiscardOldestPolicy</code>：</strong> 此策略将丢弃最早的未处理的任务请求。</li>
+</ul>
+<p>举个例子：Spring 通过 <code>ThreadPoolTaskExecutor</code> 或者我们直接通过 <code>ThreadPoolExecutor</code> 的构造函数创建线程池的时候，当我们不指定 <code>RejectedExecutionHandler</code> 拒绝策略来配置线程池的时候，默认使用的是 <code>AbortPolicy</code>。在这种拒绝策略下，如果队列满了，<code>ThreadPoolExecutor</code> 将抛出 <code>RejectedExecutionException</code> 异常来拒绝新来的任务 ，这代表你将丢失对这个任务的处理。如果不想丢弃任务的话，可以使用<code>CallerRunsPolicy</code>。<code>CallerRunsPolicy</code> 和其他的几个策略不同，它既不会抛弃任务，也不会抛出异常，而是将任务回退给调用者，使用调用者的线程来执行任务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CallerRunsPolicy</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">RejectedExecutionHandler</span> &#123;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">CallerRunsPolicy</span><span class="hljs-params">()</span> &#123; &#125;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">rejectedExecution</span><span class="hljs-params">(Runnable r, ThreadPoolExecutor e)</span> &#123;<br>            <span class="hljs-keyword">if</span> (!e.isShutdown()) &#123;<br>                <span class="hljs-comment">// 直接主线程执行，而不是线程池中的线程执行</span><br>                r.run();<br>            &#125;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="线程池常用的阻塞队列有哪些？"><a href="#线程池常用的阻塞队列有哪些？" class="headerlink" title="线程池常用的阻塞队列有哪些？"></a>线程池常用的阻塞队列有哪些？</h4><p>新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，新任务就会被存放在队列中。</p>
+<p>不同的线程池会选用不同的阻塞队列，我们可以结合内置线程池来分析。</p>
+<ul>
+<li>容量为 <code>Integer.MAX_VALUE</code> 的 <code>LinkedBlockingQueue</code>（无界队列）：<code>FixedThreadPool</code> 和 <code>SingleThreadExector</code> 。由于队列永远不会被放满，因此<code>FixedThreadPool</code>最多只能创建核心线程数的线程。</li>
+<li><code>SynchronousQueue</code>（同步队列）：<code>CachedThreadPool</code> 。<code>SynchronousQueue</code> 没有容量，不存储元素，目的是保证对于提交的任务，如果有空闲线程，则使用空闲线程来处理；否则新建一个线程来处理任务。也就是说，<code>CachedThreadPool</code> 的最大线程数是 <code>Integer.MAX_VALUE</code> ，可以理解为线程数是可以无限扩展的，可能会创建大量线程，从而导致 OOM。</li>
+<li><code>DelayedWorkQueue</code>（延迟阻塞队列）：<code>ScheduledThreadPool</code> 和 <code>SingleThreadScheduledExecutor</code> 。<code>DelayedWorkQueue</code> 的内部元素并不是按照放入的时间排序，而是会按照延迟的时间长短对任务进行排序，内部采用的是“堆”的数据结构，可以保证每次出队的任务都是当前队列中执行时间最靠前的。<code>DelayedWorkQueue</code> 添加元素满了之后会自动扩容原来容量的 1&#x2F;2，即永远不会阻塞，最大扩容可达 <code>Integer.MAX_VALUE</code>，所以最多只能创建核心线程数的线程。</li>
+</ul>
+<h4 id="线程池处理任务的流程了解吗？"><a href="#线程池处理任务的流程了解吗？" class="headerlink" title="线程池处理任务的流程了解吗？"></a>线程池处理任务的流程了解吗？</h4><ol>
+<li>如果当前运行的线程数小于核心线程数，那么就会新建一个线程来执行任务。</li>
+<li>如果当前运行的线程数等于或大于核心线程数，但是小于最大线程数，那么就把该任务放入到任务队列里等待执行。</li>
+<li>如果向任务队列投放任务失败（任务队列已经满了），但是当前运行的线程数是小于最大线程数的，就新建一个线程来执行任务。</li>
+<li>如果当前运行的线程数已经等同于最大线程数了，新建线程将会使当前运行的线程超出最大线程数，那么当前任务会被拒绝，拒绝策略会调用<code>RejectedExecutionHandler.rejectedExecution()</code>方法。</li>
+</ol>
+<h4 id="如何给线程池命名？"><a href="#如何给线程池命名？" class="headerlink" title="如何给线程池命名？"></a>如何给线程池命名？</h4><p>初始化线程池的时候需要显示命名（设置线程池名称前缀），有利于定位问题。</p>
+<p>默认情况下创建的线程名字类似 <code>pool-1-thread-n</code> 这样的，没有业务含义，不利于我们定位问题。</p>
+<p>给线程池里的线程命名通常有下面两种方式：</p>
+<p><strong>1、利用 guava 的 <code>ThreadFactoryBuilder</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ThreadFactory</span> <span class="hljs-variable">threadFactory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThreadFactoryBuilder</span>()<br>                        .setNameFormat(threadNamePrefix + <span class="hljs-string">&quot;-%d&quot;</span>)<br>                        .setDaemon(<span class="hljs-literal">true</span>).build();<br><span class="hljs-type">ExecutorService</span> <span class="hljs-variable">threadPool</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThreadPoolExecutor</span>(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.MINUTES, workQueue, threadFactory);<br></code></pre></td></tr></table></figure>
+
+<p><strong>2、自己实现 <code>ThreadFactory</code>。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.concurrent.Executors;<br><span class="hljs-keyword">import</span> java.util.concurrent.ThreadFactory;<br><span class="hljs-keyword">import</span> java.util.concurrent.atomic.AtomicInteger;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 线程工厂，它设置线程名称，有利于我们定位问题。</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">NamingThreadFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ThreadFactory</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">AtomicInteger</span> <span class="hljs-variable">threadNum</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicInteger</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ThreadFactory delegate;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String name;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 创建一个带名字的线程池生产工厂</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">NamingThreadFactory</span><span class="hljs-params">(ThreadFactory delegate, String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.delegate = delegate;<br>        <span class="hljs-built_in">this</span>.name = name; <span class="hljs-comment">// TODO consider uniquifying this</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Thread <span class="hljs-title function_">newThread</span><span class="hljs-params">(Runnable r)</span> &#123;<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> delegate.newThread(r);<br>        t.setName(name + <span class="hljs-string">&quot; [#&quot;</span> + threadNum.incrementAndGet() + <span class="hljs-string">&quot;]&quot;</span>);<br>        <span class="hljs-keyword">return</span> t;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="如何设定线程池的大小？"><a href="#如何设定线程池的大小？" class="headerlink" title="如何设定线程池的大小？"></a>如何设定线程池的大小？</h4><blockquote>
+<p>上下文切换：</p>
+<p>多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换回这个任务时，可以再加载这个任务的状态。<strong>任务从保存到再加载的过程就是一次上下文切换</strong>。</p>
+<p>上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作。</p>
+<p>Linux 相比与其他操作系统（包括其他类 Unix 系统）有很多的优点，其中有一项就是，其上下文切换和模式切换的时间消耗非常少。</p>
+</blockquote>
+<p>类比于实现世界中的人类通过合作做某件事情，我们可以肯定的一点是线程池大小设置过大或者过小都会有问题，合适的才是最好。</p>
+<ul>
+<li>如果我们设置的线程池数量太小的话，如果同一时间有大量任务&#x2F;请求需要处理，可能会导致大量的请求&#x2F;任务在任务队列中排队等待执行，甚至会出现任务队列满了之后任务&#x2F;请求无法处理的情况，或者大量任务堆积在任务队列导致 OOM。这样很明显是有问题的，CPU 根本没有得到充分利用。</li>
+<li>如果我们设置线程数量太大，大量线程可能会同时在争取 CPU 资源，这样会导致大量的上下文切换，从而增加线程的执行时间，影响了整体执行效率。</li>
+</ul>
+<p>有一个简单并且适用面比较广的公式：</p>
+<ul>
+<li><strong>CPU 密集型任务(N+1)：</strong> 这种任务消耗的主要是 CPU 资源，可以将线程数设置为 N（CPU 核心数）+1。比 CPU 核心数多出来的一个线程是为了防止线程偶发的缺页中断，或者其它原因导致的任务暂停而带来的影响。一旦任务暂停，CPU 就会处于空闲状态，而在这种情况下多出来的一个线程就可以充分利用 CPU 的空闲时间。</li>
+<li><strong>I&#x2F;O 密集型任务(2N)：</strong> 这种任务应用起来，系统会用大部分的时间来处理 I&#x2F;O 交互，而线程在处理 I&#x2F;O 的时间段内不会占用 CPU 来处理，这时就可以将 CPU 交出给其它线程使用。因此在 I&#x2F;O 密集型任务的应用中，我们可以多配置一些线程，具体的计算方法是 2N。</li>
+</ul>
+<p><strong>如何判断是 CPU 密集任务还是 IO 密集任务？</strong></p>
+<p>CPU 密集型简单理解就是利用 CPU 计算能力的任务比如你在内存中对大量数据进行排序。但凡涉及到网络读取，文件读取这类都是 IO 密集型，这类任务的特点是 CPU 计算耗费时间相比于等待 IO 操作完成的时间来说很少，大部分时间都花在了等待 IO 操作完成上。</p>
+<blockquote>
+<p>线程数更严谨的计算的方法应该是：<code>最佳线程数 = N（CPU 核心数）∗（1+WT（线程等待时间）/ST（线程计算时间））</code>，其中 <code>WT（线程等待时间）=线程运行总时间 - ST（线程计算时间）</code>。</p>
+<p>线程等待时间所占比例越高，需要越多线程。线程计算时间所占比例越高，需要越少线程。</p>
+<p>CPU 密集型任务的 <code>WT/ST</code> 接近或者等于 0，因此， 线程数可以设置为 N（CPU 核心数）∗（1+0）&#x3D; N，和我们上面说的 N（CPU 核心数）+1 差不多。</p>
+<p>IO 密集型任务下，几乎全是线程等待时间，从理论上来说，你就可以将线程数设置为 2N（按道理来说，WT&#x2F;ST 的结果应该比较大，这里选择 2N 的原因应该是为了避免创建过多线程吧）。</p>
+</blockquote>
+<h4 id="如何动态修改线程池的参数？"><a href="#如何动态修改线程池的参数？" class="headerlink" title="如何动态修改线程池的参数？"></a>如何动态修改线程池的参数？</h4><p>美团技术团队的思路是主要对线程池的核心参数实现自定义可配置。这三个核心参数是：</p>
+<ul>
+<li><strong><code>corePoolSize</code> :</strong> 核心线程数线程数定义了最小可以同时运行的线程数量。</li>
+<li><strong><code>maximumPoolSize</code> :</strong> 当队列中存放的任务达到队列容量的时候，当前可以同时运行的线程数量变为最大线程数。</li>
+<li><strong><code>workQueue</code>:</strong> 当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，新任务就会被存放在队列中。</li>
+</ul>
+<p><strong>为什么是这三个参数？</strong></p>
+<p>这三个参数是 <code>ThreadPoolExecutor</code> 最重要的参数，它们基本决定了线程池对于任务的处理策略。</p>
+<p><strong>如何支持参数动态配置？</strong> 且看 <code>ThreadPoolExecutor</code> 提供的方法。</p>
+<p>格外需要注意的是<code>corePoolSize</code>， 程序运行期间的时候，我们调用 <code>setCorePoolSize（）</code>这个方法的话，线程池会首先判断当前工作线程数是否大于<code>corePoolSize</code>，如果大于的话就会回收工作线程。</p>
+<p>另外，其中并没有动态指定队列长度的方法，美团的方式是自定义了一个叫做 <code>ResizableCapacityLinkedBlockIngQueue</code> 的队列（主要就是把<code>LinkedBlockingQueue</code>的 capacity 字段的 final 关键字修饰给去掉了，让它变为可变的）。</p>
+<p>如果我们的项目也想要实现这种效果的话，可以借助现成的开源项目：</p>
+<ul>
+<li>**<a target="_blank" rel="noopener" href="https://github.com/opengoofy/hippo4j">Hippo4jopen in new window</a>**：异步线程池框架，支持线程池动态变更&amp;监控&amp;报警，无需修改代码轻松引入。支持多种使用模式，轻松引入，致力于提高系统运行保障能力。</li>
+<li>**<a target="_blank" rel="noopener" href="https://github.com/dromara/dynamic-tp">Dynamic TPopen in new window</a>**：轻量级动态线程池，内置监控告警功能，集成三方中间件线程池管理，基于主流配置中心（已支持 Nacos、Apollo，Zookeeper、Consul、Etcd，可通过 SPI 自定义实现）。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JUC/" class="category-chain-item">JUC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JUC/" class="print-no-link">#JUC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>线程池</div>
+      <div>http://example.com/2021/04/06/JUC/线程池/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E6%AD%BB%E9%94%81/" title="死锁">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">死锁</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%8D%8F%E7%A8%8B/" title="进程线程协程">
+                        <span class="hidden-mobile">进程线程协程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

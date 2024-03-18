@@ -256,15 +256,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2021/04/06/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E4%B9%8B%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
-          回溯算法之八皇后问题（Java实现）
+        <a href="/2023/08/19/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201218.%20%E6%9C%80%E9%95%BF%E5%AE%9A%E5%B7%AE%E5%AD%90%E5%BA%8F%E5%88%97/" target="_self">
+          LeetCode 1218. 最长定差子序列
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/06/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E4%B9%8B%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/08/19/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201218.%20%E6%9C%80%E9%95%BF%E5%AE%9A%E5%B7%AE%E5%AD%90%E5%BA%8F%E5%88%97/" target="_self">
         <div>
-          要求用回溯法求解 8-皇后问题八皇后问题：使放置在 8&#x2F;*8 棋盘上的 8 个皇后彼此不受攻击。 即：任何两个皇后都不在同一行、同一列或同一斜线上。 请输出 8 皇后问题的所有可行解的总数。 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647public class E
+          思路 因为不能改变顺序，所以后面的元素，直接看它前面的元素就行。 长度为n的数组 &#x3D; 长度为n - 1的数组 + 第 n 个数 从前向后遍历，对于每个元素，如果能找到它的前一个元素，就在前一个元素的基础上+1，否则就录入1。 同时记录录入的数据的最大值  代码123456789101112131415class Solution &#123;        public int long
         </div>
       </a>
 
@@ -272,8 +272,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-06 09:16" pubdate>
-              2021-04-06
+            <time datetime="2023-08-19 13:03" pubdate>
+              2023-08-19
             </time>
           </div>
         
@@ -288,7 +288,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/LeeCode/" class="category-chain-item">LeeCode</a>
   
   
 
@@ -303,7 +303,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/leetcode/">#leetcode</a>
+              <a href="/tags/LeeCode/">#LeeCode</a>
             
           </div>
         
@@ -317,15 +317,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2021/04/06/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E4%B9%8B%E8%A3%85%E8%BD%BD%E9%97%AE%E9%A2%98%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
-          回溯算法之装载问题（Java实现）
+        <a href="/2023/07/16/JVM/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/" target="_self">
+          JDK监控和故障处理工具总结
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/06/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E4%B9%8B%E8%A3%85%E8%BD%BD%E9%97%AE%E9%A2%98%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/" target="_self">
         <div>
-          问题描述用回溯法编写一个递归程序解决如下装载问题：有 n 个集装箱要装上 2 艘载重分别为 c1 和 c2的轮船，其中集装箱 i 的重量为 wi（1≤ i ≤ n），且∑ 𝑤𝑖 ≤ 𝑐1 + 𝑐2 。问是否有一个合理的装载方案可以将这 n 个集装箱装上这 2 艘轮船？如果有，请给出装载方案。 示例当 n&#x3D;3，c1&#x3D;c2&#x3D;50，且 w&#x3D;[10,40,4
+          JDK监控和故障处理工具总结JDK 命令行工具这些命令在 JDK 安装目录下的 bin 目录下：  jps (JVM Process Status）: 类似 UNIX 的 ps 命令。用于查看所有 Java 进程的启动类、传入参数和 Java 虚拟机参数等信息； **jstat**（JVM Statistics Monitoring Tool）: 用于收集 HotSpot 虚拟机各方面的运行数据;
         </div>
       </a>
 
@@ -333,8 +333,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-06 09:15" pubdate>
-              2021-04-06
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -349,7 +349,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -364,7 +364,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/leetcode/">#leetcode</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -378,15 +378,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2021/04/06/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%94%AF%E9%BD%BF%E5%BD%A2%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86(Java%E5%AE%9E%E7%8E%B0)/" target="_self">
-          二叉树的锯齿形层序遍历(Java实现)
+        <a href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%AF%A6%E8%A7%A3/" target="_self">
+          ★★★JVM 垃圾回收详解
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/06/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%94%AF%E9%BD%BF%E5%BD%A2%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86(Java%E5%AE%9E%E7%8E%B0)/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%AF%A6%E8%A7%A3/" target="_self">
         <div>
-          题目给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。&#x2F;#&#x2F;#&#x2F;#示例给定二叉树 [3,9,20,null,null,15,7], 返回锯齿形层序遍历如下： 12345[  [3],  [20,9],  [15,7]]  来源：力扣（LeetCode）链接：https://leetcode-cn.c
+          JVM垃圾回收详解（重点）前言当需要排查各种内存溢出问题、当垃圾收集成为系统达到更高并发的瓶颈时，我们就需要对这些“自动化”的技术实施必要的监控和调节。 堆空间的基本结构Java 的自动内存管理主要是针对对象内存的回收和对象内存的分配。同时，Java 自动内存管理最核心的功能是 堆 内存中对象的分配与回收。 Java 堆是垃圾收集器管理的主要区域，因此也被称作 GC 堆（Garbage Colle
         </div>
       </a>
 
@@ -394,8 +394,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-06 09:15" pubdate>
-              2021-04-06
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -410,7 +410,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -425,7 +425,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/leetcode/">#leetcode</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -439,15 +439,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2021/04/06/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
-          分发糖果（Java实现）
+        <a href="/2023/07/16/JVM/JVM%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E6%A1%88%E4%BE%8B/" target="_self">
+          JVM线上问题排查和性能调优案例
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/06/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C%EF%BC%88Java%E5%AE%9E%E7%8E%B0%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/JVM%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E6%A1%88%E4%BE%8B/" target="_self">
         <div>
-          题目老师想给孩子们分发糖果，有 N 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。你需要按照以下要求，帮助老师给这些孩子分发糖果：每个孩子至少分配到 1 个糖果。相邻的孩子中，评分高的孩子必须获得更多的糖果。那么这样下来，老师至少需要准备多少颗糖果呢？ 来源：力扣（LeetCode）链接：https://leetcode-cn.com/problems/candy 示例1输入:
+          JVM线上问题排查和性能调优案例一次线上 OOM 问题分析 - 艾小仙 - 2023open in new window  现象：线上某个服务有接口非常慢，通过监控链路查看发现，中间的 GAP 时间非常大，实际接口并没有消耗很多时间，并且在那段时间里有很多这样的请求。 分析：使用 JDK 自带的jvisualvm分析 dump 文件(MAT 也能分析)。 建议：对于 SQL 语句，如果监测到没有w
         </div>
       </a>
 
@@ -455,8 +455,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-06 09:14" pubdate>
-              2021-04-06
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -471,7 +471,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -486,7 +486,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/leetcode/">#leetcode</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -500,15 +500,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2021/04/06/IDEA%E6%8D%A2%E6%BA%90/" target="_self">
-          IDEA换源
+        <a href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85Java%20%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E8%AF%A6%E8%A7%A3/" target="_self">
+          ★★★Java 内存区域详解
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/06/IDEA%E6%8D%A2%E6%BA%90/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85Java%20%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E8%AF%A6%E8%A7%A3/" target="_self">
         <div>
-          IDEA打开setting，搜索maven如图： 右侧两个override  第一个是配置文件的路径重写 第二个是仓库路径重写  更改为自己的setting.xml的路径即可 setting.xml的内容 12345678910111213141516&lt;settings xmlns=&quot;http://maven.apache.org/SETTINGS/1.0.0&quot;    x
+          Java内存区域详解（重点）   如果没有特殊说明，都是针对的是 HotSpot 虚拟机。  运行时数据区域Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不同的数据区域。 JDK 1.8 和之前的版本略有不同，我们这里以 JDK 1.7 和 JDK 1.8 这两个版本为例介绍。 JDK 1.7：  JDK 1.8：  线程私有的：  程序计数器 虚拟机栈 本地方法栈
         </div>
       </a>
 
@@ -516,8 +516,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-06 09:13" pubdate>
-              2021-04-06
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -532,7 +532,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Java%E5%AD%A6%E4%B9%A0/" class="category-chain-item">Java学习</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -547,7 +547,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Java%E5%AD%A6%E4%B9%A0/">#Java学习</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -561,15 +561,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2020/11/29/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%A4%A7%E5%91%A8%E9%95%BF%E7%AE%97%E6%B3%95/" target="_self">
-          三角形最大周长算法
+        <a href="/2023/07/16/JVM/%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84JVM%E5%8F%82%E6%95%B0%E6%80%BB%E7%BB%93/" target="_self">
+          最重要的JVM参数总结
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/11/29/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%A4%A7%E5%91%A8%E9%95%BF%E7%AE%97%E6%B3%95/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84JVM%E5%8F%82%E6%95%B0%E6%80%BB%E7%BB%93/" target="_self">
         <div>
-          答案： 123456789101112131415161718192021222324class Solution &#123;        public int largestPerimeter(int[] A) &#123;            int len = A.length;        if(len &lt; 3)&#123;                return 0;
+          最重要的JVM参数总结堆内存相关   Java 虚拟机所管理的内存中最大的一块，Java 堆是所有线程共享的一块内存区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。  内存区域常见配置参数 显式指定堆内存–Xms和-Xmx与性能有关的最常见实践之一是根据应用程序要求初始化堆内存。如果我们需要指定最小和最大堆大小（推荐显示指定大小），以下参
         </div>
       </a>
 
@@ -577,8 +577,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-11-29 15:26" pubdate>
-              2020-11-29
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -593,7 +593,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -608,7 +608,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -622,15 +622,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2020/11/29/%E5%8F%98%E8%BF%9B%E5%88%B6%E6%95%B0-%E7%AE%97%E6%B3%95/" target="_self">
-          变进制数-算法
+        <a href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%AF%A6%E8%A7%A3/" target="_self">
+          ★★★类加载器详解
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/11/29/%E5%8F%98%E8%BF%9B%E5%88%B6%E6%95%B0-%E7%AE%97%E6%B3%95/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E2%98%85%E2%98%85%E2%98%85%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%AF%A6%E8%A7%A3/" target="_self">
         <div>
-          答案 12345678910111213141516171819202122232425262728import java.util.Scanner;class Solution&#123;    	public static void main(String[] args) &#123;    		Scanner scanner = new Scanner(System.in);		int[]
+          类加载器详解（重点）回顾一下类加载过程开始介绍类加载器和双亲委派模型之前，简单回顾一下类加载过程。  类加载过程：加载-&gt;连接-&gt;初始化。 连接过程又可分为三步：验证-&gt;准备-&gt;解析。  类 加载是类加载过程的第一步，主要完成下面 3 件事情：  通过全类名获取定义此类的二进制字节流 将字节流所代表的静态存储结构转换为方法区的运行时数据结构 在内存中生成一个代表该类的 Cl
         </div>
       </a>
 
@@ -638,8 +638,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-11-29 15:23" pubdate>
-              2020-11-29
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -654,7 +654,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -669,7 +669,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -683,15 +683,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2020/11/29/%E8%AF%86%E5%88%AB%E5%9B%BE%E4%B8%AD%E6%A8%A1%E7%B3%8A%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%EF%BC%88%E8%8F%9C%E9%B8%9F%E5%81%9A%E6%B3%95%EF%BC%89/" target="_self">
-          识别图中模糊的手写数字（菜鸟做法）
+        <a href="/2023/07/16/JVM/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/" target="_self">
+          类加载过程详解
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/11/29/%E8%AF%86%E5%88%AB%E5%9B%BE%E4%B8%AD%E6%A8%A1%E7%B3%8A%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%EF%BC%88%E8%8F%9C%E9%B8%9F%E5%81%9A%E6%B3%95%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/" target="_self">
         <div>
-          预备知识python语言基础 目标导入图片数据集，分析图片的特点、定义变量，构建模型，训练模型并输出中间状态参数，测试、保存、读取模型 如何搞定它1.1导入图片数据集首先来看看数据集是什么样的。MNIST是一个入门级的计算机视觉数据集。当我们开始学习编程时，第一件事往往是学习打印Hello World。在机器学习入门的领域里，我们会用MNIST数据集来实验各种模型。 1.1.1数据集介绍 MNIS
+          类加载过程详解类的生命周期类从被加载到虚拟机内存中开始到卸载出内存为止，它的整个生命周期可以简单概括为 7 个阶段：：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）和卸载（Unloading）。其中，验证、准备和解析这三个阶段可以统称为连接（Linking）。 这 7
         </div>
       </a>
 
@@ -699,8 +699,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-11-29 14:59" pubdate>
-              2020-11-29
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -715,7 +715,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%85%B6%E5%AE%83/" class="category-chain-item">其它</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -730,7 +730,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">#神经网络</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -744,15 +744,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2020/11/01/%E5%B2%9B%E5%B1%BF%E7%9A%84%E5%91%A8%E9%95%BF-LeetCode463/" target="_self">
-          岛屿的周长-LeetCode463
+        <a href="/2023/07/16/JVM/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3/" target="_self">
+          类文件结构详解
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/11/01/%E5%B2%9B%E5%B1%BF%E7%9A%84%E5%91%A8%E9%95%BF-LeetCode463/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/16/JVM/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3/" target="_self">
         <div>
-          题目给定一个包含 0 和 1 的二维网格地图，其中 1 表示陆地 0 表示水域。 网格中的格子水平和垂直方向相连（对角线方向不相连）。整个网格被水完全包围，但其中恰好有一个岛屿（或者说，一个或多个表示陆地的格子相连组成的岛屿）。 岛屿中没有“湖”（“湖” 指水域在岛屿内部且不和岛屿周围的水相连）。格子是边长为 1 的正方形。网格为长方形，且宽度和高度均不超过 100 。计算这个岛屿的周长。 来源：
+          类文件结构详解回顾一下字节码在 Java 中，JVM 可以理解的代码就叫做字节码（即扩展名为 .class 的文件），它不面向任何特定的处理器，只面向虚拟机。Java 语言通过字节码的方式，在一定程度上解决了传统解释型语言执行效率低的问题，同时又保留了解释型语言可移植的特点。所以 Java 程序运行时比较高效，而且，由于字节码并不针对一种特定的机器，因此，Java 程序无须重新编译便可在多种不同操
         </div>
       </a>
 
@@ -760,8 +760,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-11-01 09:08" pubdate>
-              2020-11-01
+            <time datetime="2023-07-16 22:43" pubdate>
+              2023-07-16
             </time>
           </div>
         
@@ -776,7 +776,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -791,7 +791,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/leetcode/">#leetcode</a>
+              <a href="/tags/JVM/">#JVM</a>
             
           </div>
         
@@ -805,15 +805,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2020/04/29/python%E7%88%AC%E5%8F%9651job%E7%9A%84%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" target="_self">
-          python爬取51job的招聘信息
+        <a href="/2022/10/21/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201700.%20%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/" target="_self">
+          LeetCode 1700. 无法吃午餐的学生数量
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/04/29/python%E7%88%AC%E5%8F%9651job%E7%9A%84%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/10/21/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201700.%20%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/" target="_self">
         <div>
-          前言最近的脚本课程有了新的作业。爬取51job上的一些招聘信息，包括城市 薪资最大最小值等。 这里示例的是 济南、北京、上海、广州、深圳的招聘信息求助薪资有些招聘信息并没有填写，也就是说薪资所在标签的值为空值，这些空值无法在集合中占位，进而导致薪资和招聘信息不匹配，如果有大佬会，能不能指点一下啊 ，555 -.-|| 招聘信息包括职位 公司 工作地点 薪水 发布时间 最低薪资 最高薪资  1234
+          题目来源LeetCode 1700. 无法吃午餐的学生数量https://leetcode.cn/problems/number-of-students-unable-to-eat-lunch/ 题目学校的自助午餐提供圆形和方形的三明治，分别用数字 0 和 1 表示。所有学生站在一个队列里，每个学生要么喜欢圆形的要么喜欢方形的。餐厅里三明治的数量与学生的数量相同。所有三明治都放在一个 栈 里，每一
         </div>
       </a>
 
@@ -821,8 +821,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-04-29 15:55" pubdate>
-              2020-04-29
+            <time datetime="2022-10-21 13:39" pubdate>
+              2022-10-21
             </time>
           </div>
         
@@ -837,7 +837,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%85%B6%E5%AE%83/" class="category-chain-item">其它</a>
+  <a href="/categories/LeetCode/" class="category-chain-item">LeetCode</a>
   
   
 
@@ -852,7 +852,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/python/">#python</a>
+              <a href="/tags/LeetCode/">#LeetCode</a>
             
           </div>
         
@@ -864,7 +864,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/#board">17</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

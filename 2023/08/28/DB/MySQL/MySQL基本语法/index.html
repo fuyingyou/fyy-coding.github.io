@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基础语法别名12-- 别名 as 可省略，但中间需要空格select name as 员工姓名, position as 职位名称 from employees;  常量和运算12select 200, &amp;#x27;篮球&amp;#x27; as hobby;select order_id, unit_price, quantity, unit_price * quantity as total_amou">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL基本语法">
+<meta property="og:url" content="http://example.com/2023/08/28/DB/MySQL/MySQL%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="基础语法别名12-- 别名 as 可省略，但中间需要空格select name as 员工姓名, position as 职位名称 from employees;  常量和运算12select 200, &amp;#x27;篮球&amp;#x27; as hobby;select order_id, unit_price, quantity, unit_price * quantity as total_amou">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-28T01:55:03.000Z">
+<meta property="article:modified_time" content="2024-03-18T12:04:31.890Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>MySQL基本语法 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MySQL基本语法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-28 09:55" pubdate>
+          2023年8月28日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">MySQL基本语法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h4 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 别名 <span class="hljs-keyword">as</span> 可省略，但中间需要空格<br>select name <span class="hljs-keyword">as</span> 员工姓名, position <span class="hljs-keyword">as</span> 职位名称 <span class="hljs-keyword">from</span> employees;<br></code></pre></td></tr></table></figure>
+
+<h4 id="常量和运算"><a href="#常量和运算" class="headerlink" title="常量和运算"></a>常量和运算</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js">select <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;篮球&#x27;</span> <span class="hljs-keyword">as</span> hobby;<br>select order_id, unit_price, quantity, unit_price * quantity <span class="hljs-keyword">as</span> total_amount <span class="hljs-keyword">from</span> orders;<br></code></pre></td></tr></table></figure>
+
+<h4 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">select name, age, salary <span class="hljs-keyword">from</span> employees where age between <span class="hljs-number">25</span> and <span class="hljs-number">30</span>;<br>select name, age, salary <span class="hljs-keyword">from</span> employees where salary &gt; <span class="hljs-number">5500</span>;<br>select name, age, salary <span class="hljs-keyword">from</span> employees where name != <span class="hljs-string">&#x27;小张&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="空值"><a href="#空值" class="headerlink" title="空值"></a>空值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">-- <span class="hljs-variable constant_">SQL</span>查询语句<br>select name, age <span class="hljs-keyword">from</span> employees where hire_date <span class="hljs-variable constant_">IS</span> <span class="hljs-variable constant_">NULL</span>;<br><br>select name, age <span class="hljs-keyword">from</span> employees where hire_date <span class="hljs-variable constant_">IS</span> <span class="hljs-variable constant_">NOT</span> <span class="hljs-variable constant_">NULL</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="模糊查询-like-not-like"><a href="#模糊查询-like-not-like" class="headerlink" title="模糊查询 like, not like _ %"></a>模糊查询 like, not like _ %</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs js">select name, age, position <span class="hljs-keyword">from</span> employees where name like <span class="hljs-string">&#x27;%张%&#x27;</span>;<br>-- 只查询以 <span class="hljs-string">&quot;张&quot;</span> 开头的数据行<br>select name, age, position <span class="hljs-keyword">from</span> employees where name like <span class="hljs-string">&#x27;张%&#x27;</span>;<br><br>-- 只查询以 <span class="hljs-string">&quot;张&quot;</span> 结尾的数据行<br>select name, age, position <span class="hljs-keyword">from</span> employees where name like <span class="hljs-string">&#x27;%张&#x27;</span>;<br>-- 可以使用 not like 来查询不包含某关键字的信息。<br></code></pre></td></tr></table></figure>
+
+<h4 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h4><p>AND OR NOT</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js">-- <span class="hljs-variable constant_">SQL</span>查询语句<br>select name, age, salary <span class="hljs-keyword">from</span> employees where name like <span class="hljs-string">&#x27;%李%&#x27;</span> and age &lt; <span class="hljs-number">30</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- <span class="hljs-variable constant_">SQL</span> 查询语句 使用<span class="hljs-variable constant_">DISTINCT</span>关键字来找出不同的班级 <span class="hljs-variable constant_">ID</span><br>select distinct class_id <span class="hljs-keyword">from</span> students;<br>-- <span class="hljs-variable constant_">DISTINCT</span> 关键字还支持根据多个字段的组合来进行去重操作，确保多个字段的组合是唯一的。<br></code></pre></td></tr></table></figure>
+
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js">-- <span class="hljs-variable constant_">SQL</span> 查询语句 <span class="hljs-number">1</span><br>select name, age <span class="hljs-keyword">from</span> students order by age asc;<br><br>-- <span class="hljs-variable constant_">SQL</span> 查询语句 <span class="hljs-number">2</span><br>select name, score <span class="hljs-keyword">from</span> students order by score desc;<br></code></pre></td></tr></table></figure>
+
+<h4 id="截断、偏移"><a href="#截断、偏移" class="headerlink" title="截断、偏移"></a>截断、偏移</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js">-- <span class="hljs-variable constant_">LIMIT</span> 后只跟一个整数，表示要截断的数据条数（一次获取几条）<br>select task_name, due_date <span class="hljs-keyword">from</span> tasks limit <span class="hljs-number">2</span>;<br><br>-- <span class="hljs-variable constant_">LIMIT</span> 后跟 <span class="hljs-number">2</span> 个整数，依次表示从第几条数据开始、一次获取几条<br>select task_name, due_date <span class="hljs-keyword">from</span> tasks limit <span class="hljs-number">2</span>, <span class="hljs-number">2</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span><br>  name,<br>  <span class="hljs-variable constant_">CASE</span> <span class="hljs-variable constant_">WHEN</span> (name = <span class="hljs-string">&#x27;鸡哥&#x27;</span>) <span class="hljs-variable constant_">THEN</span> <span class="hljs-string">&#x27;会&#x27;</span> <span class="hljs-variable constant_">ELSE</span> <span class="hljs-string">&#x27;不会&#x27;</span> <span class="hljs-variable constant_">END</span> <span class="hljs-variable constant_">AS</span> can_rap<br><span class="hljs-variable constant_">FROM</span><br>  student;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">CASE</span> <span class="hljs-variable constant_">WHEN</span> (条件<span class="hljs-number">1</span>) <span class="hljs-variable constant_">THEN</span> 结果<span class="hljs-number">1</span><br>	   <span class="hljs-variable constant_">WHEN</span> (条件<span class="hljs-number">2</span>) <span class="hljs-variable constant_">THEN</span> 结果<span class="hljs-number">2</span><br>	   ...<br>	   <span class="hljs-variable constant_">ELSE</span> 其他结果 <span class="hljs-variable constant_">END</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h4 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 获取当前日期<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">DATE</span>() <span class="hljs-variable constant_">AS</span> current_date;<br><br>-- 获取当前日期时间<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">DATETIME</span>() <span class="hljs-variable constant_">AS</span> current_datetime;<br><br>-- 获取当前时间<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">TIME</span>() <span class="hljs-variable constant_">AS</span> current_time;<br>-- 这里的日期、日期时间和时间将根据当前的系统时间来生成，实际运行结果可能会因为当前时间而不同。<br></code></pre></td></tr></table></figure>
+
+<h4 id="四舍五入"><a href="#四舍五入" class="headerlink" title="四舍五入"></a>四舍五入</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title function_">round</span>(<span class="hljs-title function_">AVG</span>(grade),<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+
+<h4 id="字符串处理"><a href="#字符串处理" class="headerlink" title="字符串处理"></a>字符串处理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 将姓名转换为大写<br><span class="hljs-variable constant_">SELECT</span> name, <span class="hljs-title function_">UPPER</span>(name) <span class="hljs-variable constant_">AS</span> upper_name<br><span class="hljs-variable constant_">FROM</span> employees;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 计算姓名长度<br><span class="hljs-variable constant_">SELECT</span> name, <span class="hljs-title function_">LENGTH</span>(name) <span class="hljs-variable constant_">AS</span> name_length<br><span class="hljs-variable constant_">FROM</span> employees;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 将姓名转换为小写并进行条件筛选<br><span class="hljs-variable constant_">SELECT</span> name, <span class="hljs-title function_">LOWER</span>(name) <span class="hljs-variable constant_">AS</span> lower_name<br><span class="hljs-variable constant_">FROM</span> employees;<br></code></pre></td></tr></table></figure>
+
+<h4 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h4><ul>
+<li><p>COUNT：计算指定列的行数或非空值的数量。<br>当Mysql确认括号内的表达式值不可能为NULL时，实际上就是在统计行数。<br>所以使用条件要加一个COUNT(c.action &#x3D; ‘confirmed’ OR NULL)<br>不为confirmed时用NULL代替，NULL不会被COUNT统计</p>
+</li>
+<li><p>SUM：计算指定列的数值之和。</p>
+</li>
+<li><p>AVG：计算指定列的数值平均值。</p>
+</li>
+<li><p>MAX：找出指定列的最大值。</p>
+</li>
+<li><p>MIN：找出指定列的最小值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用聚合函数 <span class="hljs-variable constant_">COUNT</span> 计算订单表中的总订单数<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">COUNT</span>(*) <span class="hljs-variable constant_">AS</span> order_num<br><span class="hljs-variable constant_">FROM</span> orders;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用聚合函数 <span class="hljs-title function_">COUNT</span>(<span class="hljs-variable constant_">DISTINCT</span> 列名) 计算订单表中不同客户的数量<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">COUNT</span>(<span class="hljs-variable constant_">DISTINCT</span> customer_id) <span class="hljs-variable constant_">AS</span> customer_num<br><span class="hljs-variable constant_">FROM</span> orders;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用聚合函数 <span class="hljs-variable constant_">SUM</span> 计算总订单金额<br><span class="hljs-variable constant_">SELECT</span> <span class="hljs-title function_">SUM</span>(amount) <span class="hljs-variable constant_">AS</span> total_amount<br><span class="hljs-variable constant_">FROM</span> orders;<br></code></pre></td></tr></table></figure>
+
+<h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><h4 id="字段分组"><a href="#字段分组" class="headerlink" title="字段分组"></a>字段分组</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用分组聚合查询中每个客户的编号<br><span class="hljs-variable constant_">SELECT</span> customer_id<br><span class="hljs-variable constant_">FROM</span> orders<br><span class="hljs-variable constant_">GROUP</span> <span class="hljs-variable constant_">BY</span> customer_id;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用分组聚合查询每个客户的下单数<br><span class="hljs-variable constant_">SELECT</span> customer_id, <span class="hljs-title function_">COUNT</span>(order_id) <span class="hljs-variable constant_">AS</span> order_num<br><span class="hljs-variable constant_">FROM</span> orders<br><span class="hljs-variable constant_">GROUP</span> <span class="hljs-variable constant_">BY</span> customer_id;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用多字段分组查询表中 每个客户 购买的 每种商品 的总金额，相当于按照客户编号和商品编号分组<br><span class="hljs-variable constant_">SELECT</span> customer_id, product_id, <span class="hljs-title function_">SUM</span>(amount) <span class="hljs-variable constant_">AS</span> total_amount<br><span class="hljs-variable constant_">FROM</span> orders<br><span class="hljs-variable constant_">GROUP</span> <span class="hljs-variable constant_">BY</span> customer_id, product_id;<br></code></pre></td></tr></table></figure>
+
+<h4 id="having-子句"><a href="#having-子句" class="headerlink" title="having 子句"></a>having 子句</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用 <span class="hljs-variable constant_">HAVING</span> 子句查询订单数超过 <span class="hljs-number">1</span> 的客户<br><br><span class="hljs-variable constant_">SELECT</span> customer_id, <span class="hljs-title function_">COUNT</span>(order_id) <span class="hljs-variable constant_">AS</span> order_num<br><span class="hljs-variable constant_">FROM</span> orders<br><span class="hljs-variable constant_">GROUP</span> <span class="hljs-variable constant_">BY</span> customer_id<br><span class="hljs-variable constant_">HAVING</span> <span class="hljs-title function_">COUNT</span>(order_id) &gt; <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 使用 <span class="hljs-variable constant_">HAVING</span> 子句查询订单总金额超过 <span class="hljs-number">100</span> 的客户<br><span class="hljs-variable constant_">SELECT</span> customer_id, <span class="hljs-title function_">SUM</span>(amount) <span class="hljs-variable constant_">AS</span> total_amount<br><span class="hljs-variable constant_">FROM</span> orders<br><span class="hljs-variable constant_">GROUP</span> <span class="hljs-variable constant_">BY</span> customer_id<br><span class="hljs-variable constant_">HAVING</span> <span class="hljs-title function_">SUM</span>(amount) &gt; <span class="hljs-number">100</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="关联查询"><a href="#关联查询" class="headerlink" title="关联查询"></a>关联查询</h2><h4 id="CROSS-JOIN"><a href="#CROSS-JOIN" class="headerlink" title="CROSS JOIN"></a>CROSS JOIN</h4><p>是一种简单的关联查询，不需要任何条件来匹配行，它直接将左表的 每一行 与右表的 每一行 进行组合，返回的结果是两个表的笛卡尔积。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> e.<span class="hljs-property">emp_name</span>, e.<span class="hljs-property">salary</span>, e.<span class="hljs-property">department</span>, d.<span class="hljs-property">manager</span><br><span class="hljs-variable constant_">FROM</span> employees e<br><span class="hljs-variable constant_">CROSS</span> <span class="hljs-variable constant_">JOIN</span> departments d;<br></code></pre></td></tr></table></figure>
+
+<h4 id="INNER-JOIN"><a href="#INNER-JOIN" class="headerlink" title="INNER JOIN"></a>INNER JOIN</h4><p>只返回两个表中满足关联条件的交集部分，即在两个表中都存在的匹配行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> e.<span class="hljs-property">emp_name</span>, e.<span class="hljs-property">salary</span>, e.<span class="hljs-property">department</span>, d.<span class="hljs-property">manager</span><br><span class="hljs-variable constant_">FROM</span> employees e<br><span class="hljs-variable constant_">JOIN</span> departments d <span class="hljs-variable constant_">ON</span> e.<span class="hljs-property">department</span> = d.<span class="hljs-property">department</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="OUTER-JOIN"><a href="#OUTER-JOIN" class="headerlink" title="OUTER JOIN"></a>OUTER JOIN</h4><p>根据指定的关联条件，将两个表中满足条件的行组合在一起，并包含没有匹配的行 。<br>包括 LEFT OUTER JOIN 和 RIGHT OUTER JOIN 两种类型，分别表示查询左表和右表的所有行（即使没有被匹配），再加上满足条件的交集部分。有些数据库并不支持 RIGHT JOIN 语法，只需要把主表（from 后面的表）和关联表（LEFT JOIN 后面的表）顺序进行调换即可</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> e.<span class="hljs-property">emp_name</span>, e.<span class="hljs-property">salary</span>, e.<span class="hljs-property">department</span>, d.<span class="hljs-property">manager</span><br><span class="hljs-variable constant_">FROM</span> employees e<br><span class="hljs-variable constant_">LEFT</span> <span class="hljs-variable constant_">JOIN</span> departments d <span class="hljs-variable constant_">ON</span> e.<span class="hljs-property">department</span> = d.<span class="hljs-property">department</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 查询出订单总金额 &gt; <span class="hljs-number">200</span> 的客户的姓名和他们的订单总金额<br>-- 主查询<br><span class="hljs-variable constant_">SELECT</span> name, total_amount<br><span class="hljs-variable constant_">FROM</span> customers<br><span class="hljs-variable constant_">WHERE</span> customer_id <span class="hljs-variable constant_">IN</span> (<br>    -- 子查询<br>    <span class="hljs-variable constant_">SELECT</span> <span class="hljs-variable constant_">DISTINCT</span> customer_id<br>    <span class="hljs-variable constant_">FROM</span> orders<br>    <span class="hljs-variable constant_">WHERE</span> total_amount &gt; <span class="hljs-number">200</span><br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>exists</strong><br>用于检查主查询的结果集是否存在满足条件的记录，它返回布尔值（True 或 False），而不返回实际的数据。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 主查询<br><span class="hljs-variable constant_">SELECT</span> name, total_amount<br><span class="hljs-variable constant_">FROM</span> customers<br><span class="hljs-variable constant_">WHERE</span> <span class="hljs-variable constant_">EXISTS</span> (<br>    -- 子查询<br>    <span class="hljs-variable constant_">SELECT</span> <span class="hljs-number">1</span><br>    <span class="hljs-variable constant_">FROM</span> orders<br>    <span class="hljs-variable constant_">WHERE</span> orders.<span class="hljs-property">customer_id</span> = customers.<span class="hljs-property">customer_id</span><br>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h4><ul>
+<li><strong>UNION</strong> 操作：将两个或多个查询的结果集合并， 并去除重复的行 。即如果两个查询的结果有相同的行，则只保留一行。</li>
+<li><strong>UNION ALL</strong> 操作：将两个或多个查询的结果集合并， 但不去除重复的行 。即如果两个查询的结果有相同的行，则全部保留。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> name, age, department<br><span class="hljs-variable constant_">FROM</span> table1<br><span class="hljs-variable constant_">UNION</span><br><span class="hljs-variable constant_">SELECT</span> name, age, department<br><span class="hljs-variable constant_">FROM</span> table2;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="开窗函数"><a href="#开窗函数" class="headerlink" title="开窗函数"></a>开窗函数</h2><h4 id="sum-over"><a href="#sum-over" class="headerlink" title="sum over"></a>sum over</h4><p>SUM(计算字段名) OVER (PARTITION BY 分组字段名)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> <br>    order_id, <br>    customer_id, <br>    order_date, <br>    total_amount,<br>    <span class="hljs-title function_">SUM</span>(total_amount) <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> customer_id) <span class="hljs-variable constant_">AS</span> customer_total_amount<br><span class="hljs-variable constant_">FROM</span><br>    orders;<br></code></pre></td></tr></table></figure>
+
+<h4 id="sum-over-order-by"><a href="#sum-over-order-by" class="headerlink" title="sum over order by"></a>sum over order by</h4><p>SUM(计算字段名) OVER (PARTITION BY 分组字段名 ORDER BY 排序字段 排序规则)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js">-- 计算每个客户的历史订单累计金额，并显示每个订单的详细信息<br><br><span class="hljs-variable constant_">SELECT</span> <br>    order_id, <br>    customer_id, <br>    order_date, <br>    total_amount,<br>    <span class="hljs-title function_">SUM</span>(total_amount) <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> customer_id <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> order_date <span class="hljs-variable constant_">ASC</span>) <span class="hljs-variable constant_">AS</span> cumulative_total_amount<br><span class="hljs-variable constant_">FROM</span><br>    orders;<br></code></pre></td></tr></table></figure>
+
+<h4 id="rank"><a href="#rank" class="headerlink" title="rank"></a>rank</h4><p>用于对查询结果集中的行进行 排名 的开窗函数。可以根据指定的列或表达式对结果集中的行进行排序，并为每一行分配一个排名。<br>在排名过程中，相同的值将被赋予相同的排名，而不同的值将被赋予不同的排名。<br>常见用法是在查询结果中查找前几名（Top N）或排名最高的行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title function_">RANK</span>() <span class="hljs-variable constant_">OVER</span> (<br>  <span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> 列名<span class="hljs-number">1</span>, 列名<span class="hljs-number">2</span>, ... -- 可选，用于指定分组列<br>  <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> 列名<span class="hljs-number">3</span> [<span class="hljs-variable constant_">ASC</span>|<span class="hljs-variable constant_">DESC</span>], 列名<span class="hljs-number">4</span> [<span class="hljs-variable constant_">ASC</span>|<span class="hljs-variable constant_">DESC</span>], ... -- 用于指定排序列及排序方式<br>) <span class="hljs-variable constant_">AS</span> rank_column<br><span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> 子句可选，用于指定分组列，将结果集按照指定列进行分组；<br><span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> 子句用于指定排序列及排序方式，决定了计算 <span class="hljs-title class_">Rank</span> 时的排序规则。<br><span class="hljs-variable constant_">AS</span> rank_column 用于指定生成的 <span class="hljs-title class_">Rank</span> 排名列的别名。<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> <br>    order_id, <br>    customer_id, <br>    order_date, <br>    total_amount,<br>    <span class="hljs-title function_">RANK</span>() <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> customer_id <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> total_amount <span class="hljs-variable constant_">DESC</span>) <span class="hljs-variable constant_">AS</span> customer_rank<br><span class="hljs-variable constant_">FROM</span><br>    orders;<br></code></pre></td></tr></table></figure>
+
+<h4 id="row-number"><a href="#row-number" class="headerlink" title="row_number"></a>row_number</h4><p>用于为查询结果集中的每一行分配唯一连续排名。<br>Row_Number函数为每一行都分配一个唯一的整数值，不管是否存在并列（相同排序值）的情况。<br>每一行都有一个唯一的行号，从 1 开始连续递增。</p>
+<p>Row_Number 开窗函数的语法如下（几乎和 Rank 函数一模一样）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title function_">ROW_NUMBER</span>() <span class="hljs-variable constant_">OVER</span> (<br>  <span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> column1, column2, ... -- 可选，用于指定分组列<br>  <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> column3 [<span class="hljs-variable constant_">ASC</span>|<span class="hljs-variable constant_">DESC</span>], column4 [<span class="hljs-variable constant_">ASC</span>|<span class="hljs-variable constant_">DESC</span>], ... -- 用于指定排序列及排序方式<br>) <span class="hljs-variable constant_">AS</span> row_number_column<br><span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span>子句可选，用于指定分组列，将结果集按照指定列进行分组。<span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> 子句用于指定排序列及排序方式，决定了计算 <span class="hljs-title class_">Row</span>_Number 时的排序规则。<span class="hljs-variable constant_">AS</span> row_number_column 用于指定生成的行号列的别名。<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> <br>    order_id, <br>    customer_id, <br>    order_date, <br>    total_amount,<br>    <span class="hljs-title function_">ROW_NUMBER</span>() <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> customer_id <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> total_amount <span class="hljs-variable constant_">DESC</span>) <span class="hljs-variable constant_">AS</span> row_number<br><span class="hljs-variable constant_">FROM</span><br>    orders;<br></code></pre></td></tr></table></figure>
+
+<h4 id="lag-lead"><a href="#lag-lead" class="headerlink" title="lag &#x2F; lead"></a>lag &#x2F; lead</h4><p>在需要比较相邻行数据或进行时间序列分析时非常有用。</p>
+<ul>
+<li><p>Lag 函数用于获取当前行之前的某一列的值。Lag 函数的语法如下：<br>LAG(column_name, offset, default_value) OVER (PARTITION BY partition_column ORDER BY sort_column)<br>参数解释：<br>column_name：要获取值的列名。<br>offset：表示要向上偏移的行数。例如，offset为1表示获取上一行的值，offset为2表示获取上两行的值，以此类推。<br>default_value：可选参数，用于指定当没有前一行时的默认值。<br>PARTITION BY和ORDER BY子句可选，用于分组和排序数据。</p>
+</li>
+<li><p>Lead 函数用于获取 当前行之后 的某一列的值。Lead 函数的语法如下：<br>LEAD(column_name, offset, default_value) OVER (PARTITION BY partition_column ORDER BY sort_column)<br>参数解释：<br>column_name：要获取值的列名。<br>offset：表示要向下偏移的行数。例如，offset为1表示获取下一行的值，offset为2表示获取下两行的值，以此类推。<br>default_value：可选参数，用于指定当没有后一行时的默认值。<br>PARTITION BY和ORDER BY子句可选，用于分组和排序数据。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable constant_">SELECT</span> <br>    student_id,<br>    exam_date,<br>    score,<br>    <span class="hljs-title function_">LAG</span>(score, <span class="hljs-number">1</span>, <span class="hljs-variable constant_">NULL</span>) <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> student_id <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> exam_date) <span class="hljs-variable constant_">AS</span> previous_score,<br>    <span class="hljs-title function_">LEAD</span>(score, <span class="hljs-number">1</span>, <span class="hljs-variable constant_">NULL</span>) <span class="hljs-variable constant_">OVER</span> (<span class="hljs-variable constant_">PARTITION</span> <span class="hljs-variable constant_">BY</span> student_id <span class="hljs-variable constant_">ORDER</span> <span class="hljs-variable constant_">BY</span> exam_date) <span class="hljs-variable constant_">AS</span> next_score<br><span class="hljs-variable constant_">FROM</span><br>    scores;<br></code></pre></td></tr></table></figure>
+
+<p>整理自网站SQL之母<a target="_blank" rel="noopener" href="http://sqlmother.yupi.icu/#/learn%EF%BC%88%E5%AD%A6%E4%B9%A0%E8%BF%87%EF%BC%8C%E4%BD%86%E8%AE%B0%E4%B8%8D%E4%BD%8F%EF%BC%8C%E5%8D%95%E7%8B%AC%E6%9F%A5%E7%9C%8B%E5%A4%AA%E9%BA%BB%E7%83%A6%EF%BC%8C%E6%89%80%E4%BB%A5%E6%95%B4%E7%90%86%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9C%8B%EF%BC%89">http://sqlmother.yupi.icu/#/learn（学习过，但记不住，单独查看太麻烦，所以整理给自己看）</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="print-no-link">#数据库</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MySQL基本语法</div>
+      <div>http://example.com/2023/08/28/DB/MySQL/MySQL基本语法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/21/Java/Java%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E9%87%8D%E8%A6%81%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7%EF%BC%889-17%EF%BC%89/" title="Java新版本的重要语言特性（9-17）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java新版本的重要语言特性（9-17）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/19/Java/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CStream%20API/" title="Lambda表达式和Stream API">
+                        <span class="hidden-mobile">Lambda表达式和Stream API</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

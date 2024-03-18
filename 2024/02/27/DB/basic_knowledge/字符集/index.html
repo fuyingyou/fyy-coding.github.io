@@ -1,0 +1,863 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQL 字符编码集中有两套 UTF-8 编码实现：**utf8** 和 **utf8mb4**。   如果使用 utf8 的话，存储 emoji 符号和一些比较复杂的汉字、繁体字就会出错。  字符集字符是各种文字和符号的统称，包括各个国家文字、标点符号、表情、数字等等。 字符集 就是一系列字符的集合。字符集的种类较多，每个字符集可以表示的字符范围通常不同，比如说有些字符集是无法表示汉字的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符集.md">
+<meta property="og:url" content="http://example.com/2024/02/27/DB/basic_knowledge/%E5%AD%97%E7%AC%A6%E9%9B%86/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="MySQL 字符编码集中有两套 UTF-8 编码实现：**utf8** 和 **utf8mb4**。   如果使用 utf8 的话，存储 emoji 符号和一些比较复杂的汉字、繁体字就会出错。  字符集字符是各种文字和符号的统称，包括各个国家文字、标点符号、表情、数字等等。 字符集 就是一系列字符的集合。字符集的种类较多，每个字符集可以表示的字符范围通常不同，比如说有些字符集是无法表示汉字的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss.javaguide.cn/javaguide/a8808cbabeea49caa3af27d314fa3c02-1.jpg">
+<meta property="og:image" content="https://oss.javaguide.cn/javaguide/1280px-Utf8webgrowth.svg.png">
+<meta property="og:image" content="https://oss.javaguide.cn/javaguide/image-20211008164542347.png">
+<meta property="article:published_time" content="2024-02-27T08:49:52.192Z">
+<meta property="article:modified_time" content="2024-03-18T11:10:09.307Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://oss.javaguide.cn/javaguide/a8808cbabeea49caa3af27d314fa3c02-1.jpg">
+  
+  
+  
+  <title>字符集.md - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="字符集.md"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-27 16:49" pubdate>
+          2024年2月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">字符集.md</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>  MySQL 字符编码集中有两套 UTF-8 编码实现：**<code>utf8</code>** 和 **<code>utf8mb4</code>**。</p>
+<p>  如果使用 <strong><code>utf8</code></strong> 的话，存储 emoji 符号和一些比较复杂的汉字、繁体字就会出错。</p>
+</blockquote>
+<h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><p>字符是各种文字和符号的统称，包括各个国家文字、标点符号、表情、数字等等。 <strong>字符集</strong> 就是一系列字符的集合。字符集的种类较多，每个字符集可以表示的字符范围通常不同，比如说有些字符集是无法表示汉字的。</p>
+<p><strong>计算机只能存储二进制的数据，那英文、汉字、表情等字符应该如何存储呢？</strong></p>
+<p>我们要将这些字符和二进制的数据一一对应起来，比如说字符“a”对应“01100001”，反之，“01100001”对应 “a”。我们将字符对应二进制数据的过程称为”<strong>字符编码</strong>“，反之，二进制数据解析成字符的过程称为“<strong>字符解码</strong>”。</p>
+<h2 id="常见的字符集"><a href="#常见的字符集" class="headerlink" title="常见的字符集"></a>常见的字符集</h2><p>常见的字符集有 ASCII、GB2312、GBK、UTF-8……。</p>
+<p>不同的字符集的主要区别在于：</p>
+<ul>
+<li>可以表示的字符范围</li>
+<li>编码方式</li>
+</ul>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>是一套主要用于现代美国英语的字符集（这也是 ASCII 字符集的局限性所在）。</p>
+<p><strong>为什么 ASCII 字符集没有考虑到中文等其他字符呢？</strong> 因为计算机是美国人发明的，当时，计算机的发展还处于比较雏形的时代，还未在其他国家大规模使用。因此，美国发布 ASCII 字符集的时候没有考虑兼容其他国家的语言。</p>
+<p>ASCII 字符集至今为止共定义了 128 个字符，其中有 33 个控制字符（比如回车、删除）无法显示。</p>
+<p>一个 ASCII 码长度是一个字节也就是 8 个 bit，比如“a”对应的 ASCII 码是“01100001”。不过，最高位是 0 仅仅作为校验位，其余 7 位使用 0 和 1 进行组合，所以，ASCII 字符集可以定义 128（2^7）个字符。</p>
+<p>由于，ASCII 码可以表示的字符实在是太少了。后来，人们对其进行了扩展得到了 <strong>ASCII 扩展字符集</strong> 。ASCII 扩展字符集使用 8 位（bits）表示一个字符，所以，ASCII 扩展字符集可以定义 256（2^8）个字符。</p>
+<h3 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a>GB2312</h3><p>GB2312 字符集是一种对汉字比较友好的字符集，共收录 6700 多个汉字，基本涵盖了绝大部分常用汉字。不过，GB2312 字符集不支持绝大部分的生僻字和繁体字。</p>
+<p>对于英语字符，GB2312 编码和 ASCII 码是相同的，1 字节编码即可。对于非英字符，需要 2 字节编码。</p>
+<h3 id="GBK"><a href="#GBK" class="headerlink" title="GBK"></a>GBK</h3><p>GBK 字符集可以看作是 GB2312 字符集的扩展，兼容 GB2312 字符集，共收录了 20000 多个汉字。</p>
+<p>GBK 中 K 是汉语拼音 Kuo Zhan（扩展）中的“Kuo”的首字母。</p>
+<h3 id="GB18030"><a href="#GB18030" class="headerlink" title="GB18030"></a>GB18030</h3><p>GB18030 完全兼容 GB2312 和 GBK 字符集，纳入中国国内少数民族的文字，且收录了日韩汉字，是目前为止最全面的汉字字符集，共收录汉字 70000 多个。</p>
+<h3 id="BIG5"><a href="#BIG5" class="headerlink" title="BIG5"></a>BIG5</h3><p>BIG5 主要针对的是繁体中文，收录了 13000 多个汉字。</p>
+<h3 id="Unicode-UTF-8-编码"><a href="#Unicode-UTF-8-编码" class="headerlink" title="Unicode &amp; UTF-8 编码"></a>Unicode &amp; UTF-8 编码</h3><p><strong>使用错误的编码方式查看一个包含字符的文件就会产生乱码现象。</strong></p>
+<p>乱码的本质：<strong>编码和解码时用了不同或者不兼容的字符集</strong> 。</p>
+<p><img src="https://oss.javaguide.cn/javaguide/a8808cbabeea49caa3af27d314fa3c02-1.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>为了解决这个问题<strong>Unicode</strong> 诞生了。</p>
+<p>Unicode 字符集中包含了世界上几乎所有已知的字符。不过，Unicode 字符集并没有规定如何存储这些字符（也就是如何使用二进制数据表示这些字符）。</p>
+<p>然后，就有了 <strong>UTF-8</strong>（<strong>8</strong>-bit <strong>U</strong>nicode <strong>T</strong>ransformation <strong>F</strong>ormat）。类似的还有 UTF-16、 UTF-32。</p>
+<p>UTF-8 使用 1 到 4 个字节为每个字符编码， UTF-16 使用 2 或 4 个字节为每个字符编码，UTF-32 固定位 4 个字节为每个字符编码。</p>
+<p>UTF-8 可以根据不同的符号自动选择编码的长短，像英文字符只需要 1 个字节就够了，这一点 ASCII 字符集一样 。因此，对于英语字符，UTF-8 编码和 ASCII 码是相同的。</p>
+<p>UTF-32 的规则最简单，不过缺陷也比较明显，对于英文字母这类字符消耗的空间是 UTF-8 的 4 倍之多。</p>
+<p><strong>UTF-8</strong> 是目前使用最广的一种字符编码。</p>
+<p><img src="https://oss.javaguide.cn/javaguide/1280px-Utf8webgrowth.svg.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="MySQL-字符集"><a href="#MySQL-字符集" class="headerlink" title="MySQL 字符集"></a>MySQL 字符集</h2><p>MySQL 支持很多种字符编码的方式，比如 UTF-8、GB2312、GBK、BIG5。</p>
+<h3 id="查看支持的字符集"><a href="#查看支持的字符集" class="headerlink" title="查看支持的字符集"></a>查看支持的字符集</h3><p>你可以通过 <code>SHOW CHARSET</code> 命令来查看，支持 like 和 where 子句。</p>
+<h3 id="默认字符集"><a href="#默认字符集" class="headerlink" title="默认字符集"></a>默认字符集</h3><p>在 MySQL5.7 中，默认字符集是 <code>latin1</code> ；在 MySQL8.0 中，默认字符集是 <code>utf8mb4</code></p>
+<h3 id="字符集的层次级别"><a href="#字符集的层次级别" class="headerlink" title="字符集的层次级别"></a>字符集的层次级别</h3><p>MySQL 中的字符集有以下的层次级别：</p>
+<ul>
+<li><code>server</code>（MySQL 实例级别）</li>
+<li><code>database</code>（库级别）</li>
+<li><code>table</code>（表级别）</li>
+<li><code>column</code>（字段级别）</li>
+</ul>
+<p>它们的优先级可以简单的认为是从上往下依次增大，也即 <code>column</code> 的优先级会大于 <code>table</code> 等其余层次的。如指定 MySQL 实例级别字符集是<code>utf8mb4</code>，指定某个表字符集是<code>latin1</code>，那么这个表的所有字段如果不指定的话，编码就是<code>latin1</code>。</p>
+<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>不同版本的 MySQL 其 <code>server</code> 级别的字符集默认值不同，在 MySQL5.7 中，其默认值是 <code>latin1</code> ；在 MySQL8.0 中，其默认值是 <code>utf8mb4</code> 。</p>
+<p>当然也可以通过在启动 <code>mysqld</code> 时指定 <code>--character-set-server</code> 来设置 <code>server</code> 级别的字符集。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">mysqld<br>mysqld --character-set-server=utf8mb4<br>mysqld --character-set-server=utf8mb4 \<br>  --collation-server=utf8mb4_0900_ai_ci<br></code></pre></td></tr></table></figure>
+
+
+
+<p>或者如果你是通过源码构建的方式启动的 MySQL，你可以在 <code>cmake</code> 命令中指定选项：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">cmake . -DDEFAULT_CHARSET=latin1<br>或者<br>cmake . -DDEFAULT_CHARSET=latin1 \<br>  -DDEFAULT_COLLATION=latin1_german1_ci<br></code></pre></td></tr></table></figure>
+
+<p>此外，你也可<strong>以在运行时改变 <code>character_set_server</code> 的值</strong>，从而达到修改 <code>server</code> 级别的字符集的目的。</p>
+<p><code>server</code> 级别的字符集是 MySQL 服务器的全局设置，它不仅会作为创建或修改数据库时的默认字符集（如果没有指定其他字符集），还会影响到客户端和服务器之间的连接字符集。</p>
+<h4 id="database"><a href="#database" class="headerlink" title="database"></a>database</h4><p><code>database</code> 级别的字符集是我们在创建数据库和修改数据库时指定的：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE db_name<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> charset_name]<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-keyword">COLLATE</span> collation_name]<br><br><span class="hljs-keyword">ALTER</span> DATABASE db_name<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> charset_name]<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-keyword">COLLATE</span> collation_name]<br></code></pre></td></tr></table></figure>
+
+
+
+<p>如前面所说，如果在执行上述语句时未指定字符集，那么 MySQL 将会使用 <code>server</code> 级别的字符集。</p>
+<p>可以通过下面的方式查看某个数据库的字符集：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">USE db_name;<br><span class="hljs-keyword">SELECT</span> @<span class="hljs-variable">@character_set_database</span>, @<span class="hljs-variable">@collation_database</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME<br><span class="hljs-keyword">FROM</span> INFORMATION_SCHEMA.SCHEMATA <span class="hljs-keyword">WHERE</span> SCHEMA_NAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;db_name&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="table"><a href="#table" class="headerlink" title="table"></a>table</h4><p><code>table</code> 级别的字符集是在创建表和修改表时指定的：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> tbl_name (column_list)<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> charset_name]<br>    [<span class="hljs-keyword">COLLATE</span> collation_name]]<br><br><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> tbl_name<br>    [[<span class="hljs-keyword">DEFAULT</span>] <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> charset_name]<br>    [<span class="hljs-keyword">COLLATE</span> collation_name]<br></code></pre></td></tr></table></figure>
+
+<p>如果在创建表和修改表时未指定字符集，那么将会使用 <code>database</code> 级别的字符集。</p>
+<h4 id="column"><a href="#column" class="headerlink" title="column"></a>column</h4><p><code>column</code> 级别的字符集同样是在创建表和修改表时指定的，只不过它是定义在列中。下面是个例子：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> t1<br>(<br>    col1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">5</span>)<br>      <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> latin1<br>      <span class="hljs-keyword">COLLATE</span> latin1_german1_ci<br>);<br></code></pre></td></tr></table></figure>
+
+<p>如果未指定列级别的字符集，那么将会使用表级别的字符集。</p>
+<h3 id="连接字符集"><a href="#连接字符集" class="headerlink" title="连接字符集"></a>连接字符集</h3><p>前面说到了字符集的层次级别，它们是和存储相关的。而连接字符集涉及的是和 MySQL 服务器的通信。</p>
+<p>连接字符集与下面这几个变量息息相关：</p>
+<ul>
+<li><code>character_set_client</code> ：描述了客户端发送给服务器的 SQL 语句使用的是什么字符集。</li>
+<li><code>character_set_connection</code> ：描述了服务器接收到 SQL 语句时使用什么字符集进行翻译。</li>
+<li><code>character_set_results</code> ：描述了服务器返回给客户端的结果使用的是什么字符集。</li>
+</ul>
+<p>它们的值可以通过下面的 SQL 语句查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> performance_schema.session_variables<br><span class="hljs-keyword">WHERE</span> VARIABLE_NAME <span class="hljs-keyword">IN</span> (<br><span class="hljs-string">&#x27;character_set_client&#x27;</span>, <span class="hljs-string">&#x27;character_set_connection&#x27;</span>,<br><span class="hljs-string">&#x27;character_set_results&#x27;</span>, <span class="hljs-string">&#x27;collation_connection&#x27;</span><br>) <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> VARIABLE_NAME;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> SESSION VARIABLES <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;character\_set\_%&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>如果要想修改前面提到的几个变量的值，有以下方式：</p>
+<p>1、修改配置文件</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">[mysql]</span><br><span class="hljs-comment"># 只针对MySQL客户端程序</span><br><span class="hljs-attr">default-character-set</span>=<span class="hljs-string">utf8mb4</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>2、使用 SQL 语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">set</span> names utf8mb4<br># 或者一个个进行修改<br># <span class="hljs-keyword">SET</span> character_set_client <span class="hljs-operator">=</span> utf8mb4;<br># <span class="hljs-keyword">SET</span> character_set_results <span class="hljs-operator">=</span> utf8mb4;<br># <span class="hljs-keyword">SET</span> collation_connection <span class="hljs-operator">=</span> utf8mb4;<br></code></pre></td></tr></table></figure>
+
+<h3 id="JDBC-对连接字符集的影响"><a href="#JDBC-对连接字符集的影响" class="headerlink" title="JDBC 对连接字符集的影响"></a>JDBC 对连接字符集的影响</h3><p>存储 emoji 表情正常，但是使用类似 Navicat 之类的软件的进行查询的时候，发现 emoji 表情变成了问号的情况。这个问题很有可能就是 JDBC 驱动引起的。</p>
+<p>根据前面的内容，我们知道连接字符集也是会影响我们存储的数据的，而 JDBC驱动会影响连接字符集。</p>
+<p><code>mysql-connector-java</code> （JDBC驱动）主要通过这几个属性影响连接字符集：</p>
+<ul>
+<li><code>characterEncoding</code></li>
+<li><code>characterSetResults</code></li>
+</ul>
+<p>以 <code>DataGrip 2023.1.2</code> 来说，在它配置数据源的高级对话框中，可以看到 <code>characterSetResults</code> 的默认值是 <code>utf8</code> ，在使用 <code>mysql-connector-java 8.0.25</code> 时，连接字符集最后会被设置成 <code>utf8mb3</code> 。那么这种情况下 emoji 表情就会被显示为问号，并且当前版本驱动还不支持把 <code>characterSetResults</code> 设置为 <code>utf8mb4</code> ，不过换成 <code>mysql-connector-java driver 8.0.29</code> 却是允许的。</p>
+<h3 id="UTF-8-使用"><a href="#UTF-8-使用" class="headerlink" title="UTF-8 使用"></a>UTF-8 使用</h3><p>通常情况下，我们建议使用 UTF-8 作为默认的字符编码方式。</p>
+<p>MySQL 字符编码集中有两套 UTF-8 编码实现：</p>
+<ul>
+<li>**<code>utf8</code>**：<code>utf8</code>编码只支持<code>1-3</code>个字节 。 在 <code>utf8</code> 编码中，中文是占 3 个字节，其他数字、英文、符号占一个字节。但 emoji 符号占 4 个字节，一些较复杂的文字、繁体字也是 4 个字节。</li>
+<li>**<code>utf8mb4</code>**：UTF-8 的完整实现，正版！最多支持使用 4 个字节表示字符，因此，可以用来存储 emoji 符号。</li>
+</ul>
+<p><strong>为什么有两套 UTF-8 编码实现呢？</strong> 原因如下：</p>
+<p><img src="https://oss.javaguide.cn/javaguide/image-20211008164542347.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>因此，如果你需要存储<code>emoji</code>类型的数据或者一些比较复杂的文字、繁体字到 MySQL 数据库的话，数据库的编码一定要指定为<code>utf8mb4</code> 而不是<code>utf8</code> ，要不然存储的时候就会报错了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/SQL/" class="category-chain-item">SQL</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SQL/" class="print-no-link">#SQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>字符集.md</div>
+      <div>http://example.com/2024/02/27/DB/basic_knowledge/字符集/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/27/DB/basic_knowledge/NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="NoSQL基础知识.md">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">NoSQL基础知识.md</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/27/DB/basic_knowledge/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="数据库基础知识.md">
+                        <span class="hidden-mobile">数据库基础知识.md</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Lambda表达式1. 有且仅有一个参数时，小括号可以省略（无参数时，小括号不能省略） 2. 语句只有一条时，可以省略大括号和return 1234567891011Runnable runnable &#x3D; ()-&gt; System.out.println(&quot;Hello,World!&quot;);BinaryOperator&lt;Long&gt; bo1 &#x3D; x -&gt; x+1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lambda表达式和Stream API">
+<meta property="og:url" content="http://example.com/2023/08/19/Java/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CStream%20API/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="Lambda表达式1. 有且仅有一个参数时，小括号可以省略（无参数时，小括号不能省略） 2. 语句只有一条时，可以省略大括号和return 1234567891011Runnable runnable &#x3D; ()-&gt; System.out.println(&quot;Hello,World!&quot;);BinaryOperator&lt;Long&gt; bo1 &#x3D; x -&gt; x+1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-19T08:26:01.000Z">
+<meta property="article:modified_time" content="2024-03-18T12:06:23.112Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Lambda表达式和Stream API - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Lambda表达式和Stream API"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-19 16:26" pubdate>
+          2023年8月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Lambda表达式和Stream API</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h3><p><strong>1. 有且仅有一个参数时，小括号可以省略（无参数时，小括号不能省略）</strong></p>
+<p><strong>2. 语句只有一条时，可以省略大括号和return</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">Runnable</span> runnable = ()-&gt; <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Hello,World!&quot;</span>);<br><br><span class="hljs-title class_">BinaryOperator</span>&lt;<span class="hljs-title class_">Long</span>&gt; bo1 = x -&gt; x+<span class="hljs-number">1</span>;<br><br><span class="hljs-title class_">BinaryOperator</span>&lt;<span class="hljs-title class_">Long</span>&gt; bo2 = (x,y) -&gt; x+y;<br><br><span class="hljs-title class_">BinaryOperator</span>&lt;<span class="hljs-title class_">Long</span>&gt; bo3 = (x,y) -&gt; &#123;<br>    <br>	<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Hello,World!&quot;</span>);<br>	<span class="hljs-keyword">return</span> x+y;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>Lambda 表达式中无需指定参数类型，程序依然可以编译，这是因为 javac 根据程序的上下文，在后台推断出了参数的类型。</p>
+<h3 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h3><p>“集合讲的是数据，流讲的是计算！”</p>
+<h5 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h5><p>Collection创建</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title function_">stream</span>() 			<span class="hljs-comment">//返回一个顺序流</span><br><span class="hljs-title function_">parallelStream</span>()	<span class="hljs-comment">//返回一个并行流</span><br></code></pre></td></tr></table></figure>
+
+<p>Array创建</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title function_">stream</span>(T[] array)	<span class="hljs-comment">//返回一个流</span><br></code></pre></td></tr></table></figure>
+
+<p>值创建</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">public <span class="hljs-keyword">static</span>&lt;T&gt; <span class="hljs-title class_">Stream</span>&lt;T&gt; <span class="hljs-title function_">of</span>(T... values)		<span class="hljs-comment">//返回一个流</span><br></code></pre></td></tr></table></figure>
+
+<p>函数创建无限流</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 迭代</span><br>public <span class="hljs-keyword">static</span>&lt;T&gt; <span class="hljs-title class_">Stream</span>&lt;T&gt; <span class="hljs-title function_">of</span>(T... values)<br><br><span class="hljs-comment">// 生成</span><br>public <span class="hljs-keyword">static</span>&lt;T&gt; <span class="hljs-title class_">Stream</span>&lt;T&gt; <span class="hljs-title function_">generate</span>(<span class="hljs-title class_">Supplier</span>&lt;T&gt; s)<br></code></pre></td></tr></table></figure>
+
+<h5 id="中间操作"><a href="#中间操作" class="headerlink" title="中间操作"></a>中间操作</h5><p>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理！而在终止操作时一次性全部处理，称为“惰性求值”。</p>
+<p>筛选与切片(filter、distinct、limit、skip)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">Integer</span>&gt; integerList = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>);<br><br><span class="hljs-comment">//filter(Predicate p)接收 Lambda，从流中排除某些元素。</span><br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; integerStream = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">filter</span>(x -&gt; x &gt; <span class="hljs-number">6</span>);<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(integerStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[7, 7, 7, 8, 8, 9]</span><br><br><span class="hljs-comment">//distinct()筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素</span><br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; distinctStream = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">distinct</span>();<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(distinctStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[4, 5, 6, 7, 8, 9]</span><br><br><span class="hljs-comment">//limit(long maxSize) 截断流，使其元素不超过给定数量。</span><br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; limitStream = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">limit</span>(<span class="hljs-number">5</span>);<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(limitStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[4, 5, 6, 7, 7]</span><br><br><span class="hljs-comment">//skip(long n)跳过元素，返回一个扔掉了前 n 个元素的流。</span><br><span class="hljs-comment">//				若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补</span><br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; skipStream = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">skip</span>(<span class="hljs-number">5</span>);<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(skipStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[7, 8, 8, 9]</span><br></code></pre></td></tr></table></figure>
+
+<p>映射（map、flatMap）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs js">public <span class="hljs-keyword">static</span> <span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Character</span>&gt; <span class="hljs-title function_">filterCharacter</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> str</span>)&#123;<br>    <br>    <span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">Character</span>&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-title class_">Character</span> ch : str.<span class="hljs-title function_">toCharArray</span>()) &#123;<br>    <br>        list.<span class="hljs-title function_">add</span>(ch);<br>    &#125;<br>    <span class="hljs-keyword">return</span> list.<span class="hljs-title function_">stream</span>();<br>&#125;<br><br>@<span class="hljs-title class_">Test</span><br>public <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span>(<span class="hljs-params"></span>)&#123;<br>    <br>    <span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">String</span>&gt; stringsList = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;aaa&quot;</span>, <span class="hljs-string">&quot;bbb&quot;</span>);<br><br>    <span class="hljs-comment">//map(Function f 接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素。</span><br>    <span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">String</span>&gt; mapStream = stringsList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">map</span>(<span class="hljs-title class_">String</span>::toUpperCase);<br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(mapStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[AAA, BBB]</span><br><br><br>    <span class="hljs-comment">//flatMap(Function f)  接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流</span><br>    <span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Character</span>&gt; characterStream = stringsList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">flatMap</span>(<span class="hljs-title class_">StreamTest</span>::filterCharacter).<span class="hljs-title function_">map</span>(<span class="hljs-title class_">Character</span>::toUpperCase);<br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(characterStream.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[A, A, A, B, B, B]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>排序(sorted)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//sorted() 生一个新流，其中按自然顺序排序</span><br><span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">Integer</span>&gt; integerList = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">7</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>);<br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; sorted = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">sorted</span>();<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(sorted.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[2, 4, 5, 6, 7, 9]</span><br><br><span class="hljs-comment">//sorted(Comparator comp) 产生一个新流，其中按比较器顺序排序</span><br><span class="hljs-title class_">Stream</span>&lt;<span class="hljs-title class_">Integer</span>&gt; sorted1 = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">sorted</span>((a, b) -&gt; b - a);<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(sorted1.<span class="hljs-title function_">collect</span>(<span class="hljs-title class_">Collectors</span>.<span class="hljs-title function_">toList</span>()));<span class="hljs-comment">//[9, 7, 6, 5, 4, 2]</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="终止操作-allMatch、anyMatch、noneMatch、findFirst、findAny、count…"><a href="#终止操作-allMatch、anyMatch、noneMatch、findFirst、findAny、count…" class="headerlink" title="终止操作(allMatch、anyMatch、noneMatch、findFirst、findAny、count…)"></a>终止操作(allMatch、anyMatch、noneMatch、findFirst、findAny、count…)</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">Integer</span>&gt; integerList = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">7</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>);<br><span class="hljs-comment">//检查是否匹配所有元素</span><br>boolean b = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">allMatch</span>(s -&gt; s == <span class="hljs-number">6</span>);<br><span class="hljs-comment">//检查是否至少匹配一个元素</span><br>boolean b1 = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">anyMatch</span>(s -&gt; s == <span class="hljs-number">6</span>);<br><span class="hljs-comment">//检查是否没有匹配所有元素</span><br>boolean b2 = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">noneMatch</span>(s -&gt; s == <span class="hljs-number">6</span>);<br><span class="hljs-comment">//返回第一个元素</span><br><span class="hljs-title class_">Optional</span>&lt;<span class="hljs-title class_">Integer</span>&gt; first= integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">findFirst</span>();<br><span class="hljs-comment">//返回当前流中的任意元素</span><br><span class="hljs-title class_">Optional</span>&lt;<span class="hljs-title class_">Integer</span>&gt; any = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">findAny</span>();<br><span class="hljs-comment">//返回流中元素总数</span><br>long count = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">count</span>();<br><span class="hljs-comment">//返回流中最大值</span><br><span class="hljs-title class_">Optional</span>&lt;<span class="hljs-title class_">Integer</span>&gt; max = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">max</span>(<span class="hljs-title class_">Integer</span>::compare);<br><span class="hljs-comment">//返回流中最小值</span><br><span class="hljs-title class_">Optional</span>&lt;<span class="hljs-title class_">Integer</span>&gt; min = integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">min</span>(<span class="hljs-title class_">Integer</span>::compare);<br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(b);<span class="hljs-comment">//false</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(b1);<span class="hljs-comment">//true</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(b2);<span class="hljs-comment">//false</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(first.<span class="hljs-title function_">get</span>());<span class="hljs-comment">//7</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(any.<span class="hljs-title function_">get</span>());<span class="hljs-comment">//7</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(count);<span class="hljs-comment">//6</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(max.<span class="hljs-title function_">get</span>());<span class="hljs-comment">//9</span><br><span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(min.<span class="hljs-title function_">get</span>());<span class="hljs-comment">//2</span><br><span class="hljs-comment">//内部迭代</span><br>integerList.<span class="hljs-title function_">stream</span>().<span class="hljs-title function_">forEach</span>(<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>::print);<span class="hljs-comment">//745269</span><br></code></pre></td></tr></table></figure>
+<ol>
+<li>Stream 自己不会存储元素。</li>
+<li>Stream 不会改变源对象。相反，他们会返回一个持有结果的新Stream。</li>
+<li>Stream 操作是延迟执行的。这意味着他们会等到需要结果的时候才执行。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Lambda表达式和Stream API</div>
+      <div>http://example.com/2023/08/19/Java/Lambda表达式和Stream API/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/28/DB/MySQL/MySQL%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" title="MySQL基本语法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL基本语法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/19/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201578.%20%20%E4%BD%BF%E7%BB%B3%E5%AD%90%E5%8F%98%E6%88%90%E5%BD%A9%E8%89%B2%E7%9A%84%E6%9C%80%E7%9F%AD%E6%97%B6%E9%97%B4/" title="LeetCode 1578.  使绳子变成彩色的最短时间">
+                        <span class="hidden-mobile">LeetCode 1578.  使绳子变成彩色的最短时间</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

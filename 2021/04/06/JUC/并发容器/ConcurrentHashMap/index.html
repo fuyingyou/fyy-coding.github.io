@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. ConcurrentHashMap 1.7HashMap 不是线程安全的，在并发场景下如果要保证一种可行的方式是使用 Collections.synchronizedMap() 方法来包装我们的 HashMap。但这是通过使用一个全局的锁来同步不同线程间的并发访问，因此会带来不可忽视的性能问题。 所以就有了 HashMap 的线程安全版本—— ConcurrentHashMap 的诞生。 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ConcurrentHashMap">
+<meta property="og:url" content="http://example.com/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/ConcurrentHashMap/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="1. ConcurrentHashMap 1.7HashMap 不是线程安全的，在并发场景下如果要保证一种可行的方式是使用 Collections.synchronizedMap() 方法来包装我们的 HashMap。但这是通过使用一个全局的锁来同步不同线程间的并发访问，因此会带来不可忽视的性能问题。 所以就有了 HashMap 的线程安全版本—— ConcurrentHashMap 的诞生。 在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231011160536836.png">
+<meta property="og:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231011161137885.png">
+<meta property="article:published_time" content="2021-04-06T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:54:57.106Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231011160536836.png">
+  
+  
+  
+  <title>ConcurrentHashMap - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ConcurrentHashMap"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 12:13" pubdate>
+          2021年4月6日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ConcurrentHashMap</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-ConcurrentHashMap-1-7"><a href="#1-ConcurrentHashMap-1-7" class="headerlink" title="1. ConcurrentHashMap 1.7"></a>1. ConcurrentHashMap 1.7</h2><p><code>HashMap</code> 不是线程安全的，在并发场景下如果要保证一种可行的方式是使用 <code>Collections.synchronizedMap()</code> 方法来包装我们的 <code>HashMap</code>。但这是通过使用一个全局的锁来同步不同线程间的并发访问，因此会带来不可忽视的性能问题。</p>
+<p>所以就有了 <code>HashMap</code> 的线程安全版本—— <code>ConcurrentHashMap</code> 的诞生。</p>
+<p>在 JDK1.7 的时候，<code>ConcurrentHashMap</code> 对整个桶数组进行了分割分段(<code>Segment</code>，分段锁)，每一把锁只锁容器其中一部分数据（下面有示意图），多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。</p>
+<p>到了 JDK1.8 的时候，<code>ConcurrentHashMap</code> 已经摒弃了 <code>Segment</code> 的概念，而是直接用 <code>Node</code> 数组+链表+红黑树的数据结构来实现，并发控制使用 <code>synchronized</code> 和 CAS 来操作。（JDK1.6 以后 <code>synchronized</code> 锁做了很多优化） 整个看起来就像是优化过且线程安全的 <code>HashMap</code>，虽然在 JDK1.8 中还能看到 <code>Segment</code> 的数据结构，但是已经简化了属性，只是为了兼容旧版本。</p>
+<h3 id="1-存储结构"><a href="#1-存储结构" class="headerlink" title="1. 存储结构"></a>1. 存储结构</h3><p><img src="C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231011160536836.png" srcset="/img/loading.gif" lazyload alt="image-20231011160536836"></p>
+<p>Java 7 中 <code>ConcurrentHashMap</code> 的存储结构如上图，<code>ConcurrnetHashMap</code> 由很多个 <code>Segment</code> 组合，而每一个 <code>Segment</code> 是一个类似于 <code>HashMap</code> 的结构，所以每一个 <code>HashMap</code> 的内部可以进行扩容。但是 <code>Segment</code> 的个数一旦<strong>初始化就不能改变</strong>，默认 <code>Segment</code> 的个数是 16 个，你也可以认为 <code>ConcurrentHashMap</code> 默认支持最多 16 个线程并发。</p>
+<blockquote>
+<p>个人理解：将一个map分割为N块，最多允许N个线程分别访问每块的数据</p>
+</blockquote>
+<h3 id="2-初始化"><a href="#2-初始化" class="headerlink" title="2. 初始化"></a>2. 初始化</h3><p>通过 <code>ConcurrentHashMap</code> 的无参构造探寻 <code>ConcurrentHashMap</code> 的初始化流程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Creates a new, empty map with a default initial capacity (16),</span><br><span class="hljs-comment"> * load factor (0.75) and concurrencyLevel (16).</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcurrentHashMap</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">this</span>(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>无参构造中调用了有参构造，传入了三个参数的默认值，他们的值是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 默认初始化容量</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_INITIAL_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">16</span>;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 默认负载因子</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">float</span> <span class="hljs-variable">DEFAULT_LOAD_FACTOR</span> <span class="hljs-operator">=</span> <span class="hljs-number">0.75f</span>;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 默认并发级别</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_CONCURRENCY_LEVEL</span> <span class="hljs-operator">=</span> <span class="hljs-number">16</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>接着看下这个有参构造函数的内部实现逻辑。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcurrentHashMap</span><span class="hljs-params">(<span class="hljs-type">int</span> initialCapacity,<span class="hljs-type">float</span> loadFactor, <span class="hljs-type">int</span> concurrencyLevel)</span> &#123;<br>    <span class="hljs-comment">// 参数校验</span><br>    <span class="hljs-keyword">if</span> (!(loadFactor &gt; <span class="hljs-number">0</span>) || initialCapacity &lt; <span class="hljs-number">0</span> || concurrencyLevel &lt;= <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>();<br>    <span class="hljs-comment">// 校验并发级别大小，大于 1&lt;&lt;16，重置为 65536</span><br>    <span class="hljs-keyword">if</span> (concurrencyLevel &gt; MAX_SEGMENTS)<br>        concurrencyLevel = MAX_SEGMENTS;<br>    <span class="hljs-comment">// Find power-of-two sizes best matching arguments</span><br>    <span class="hljs-comment">// 2的多少次方</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">sshift</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">ssize</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// 这个循环可以找到 concurrencyLevel 之上最近的 2的次方值</span><br>    <span class="hljs-keyword">while</span> (ssize &lt; concurrencyLevel) &#123;<br>        ++sshift;<br>        ssize &lt;&lt;= <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 记录段偏移量</span><br>    <span class="hljs-built_in">this</span>.segmentShift = <span class="hljs-number">32</span> - sshift;<br>    <span class="hljs-comment">// 记录段掩码</span><br>    <span class="hljs-built_in">this</span>.segmentMask = ssize - <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// 设置容量</span><br>    <span class="hljs-keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)<br>        initialCapacity = MAXIMUM_CAPACITY;<br>    <span class="hljs-comment">// c = 容量 / ssize ，默认 16 / 16 = 1，这里是计算每个 Segment 中的类似于 HashMap 的容量</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> initialCapacity / ssize;<br>    <span class="hljs-keyword">if</span> (c * ssize &lt; initialCapacity)<br>        ++c;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">cap</span> <span class="hljs-operator">=</span> MIN_SEGMENT_TABLE_CAPACITY;<br>    <span class="hljs-comment">//Segment 中的类似于 HashMap 的容量至少是2或者2的倍数</span><br>    <span class="hljs-keyword">while</span> (cap &lt; c)<br>        cap &lt;&lt;= <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// create segments and segments[0]</span><br>    <span class="hljs-comment">// 创建 Segment 数组，设置 segments[0]</span><br>    Segment&lt;K,V&gt; s0 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Segment</span>&lt;K,V&gt;(loadFactor, (<span class="hljs-type">int</span>)(cap * loadFactor),<br>                         (HashEntry&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>[cap]);<br>    Segment&lt;K,V&gt;[] ss = (Segment&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">Segment</span>[ssize];<br>    UNSAFE.putOrderedObject(ss, SBASE, s0); <span class="hljs-comment">// ordered write of segments[0]</span><br>    <span class="hljs-built_in">this</span>.segments = ss;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>总结一下在 Java 7 中 ConcurrentHashMap 的初始化逻辑。</p>
+<ol>
+<li>必要参数校验。</li>
+<li>校验并发级别 <code>concurrencyLevel</code> 大小，如果大于最大值，重置为最大值。无参构造<strong>默认值是 16.</strong></li>
+<li>寻找并发级别 <code>concurrencyLevel</code> 之上最近的 <strong>2 的幂次方</strong>值，作为初始化容量大小，<strong>默认是 16</strong>。</li>
+<li>记录 <code>segmentShift</code> 偏移量，这个值为【容量 &#x3D; 2 的 N 次方】中的 N，在后面 Put 时计算位置时会用到。<strong>默认是 32 - sshift &#x3D; 28</strong>.</li>
+<li>记录 <code>segmentMask</code>，默认是 ssize - 1 &#x3D; 16 -1 &#x3D; 15.</li>
+<li><strong>初始化 <code>segments[0]</code><strong>，</strong>默认大小为 2</strong>，<strong>负载因子 0.75</strong>，<strong>扩容阀值是 2*0.75&#x3D;1.5</strong>，插入第二个值时才会进行扩容。</li>
+</ol>
+<h3 id="3-put"><a href="#3-put" class="headerlink" title="3. put"></a>3. put</h3><p>接着上面的初始化参数继续查看 put 方法源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Maps the specified key to the specified value in this table.</span><br><span class="hljs-comment"> * Neither the key nor the value can be null.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * &lt;p&gt; The value can be retrieved by calling the &lt;tt&gt;get&lt;/tt&gt; method</span><br><span class="hljs-comment"> * with a key that is equal to the original key.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> key key with which the specified value is to be associated</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> value value to be associated with the specified key</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> the previous value associated with &lt;tt&gt;key&lt;/tt&gt;, or</span><br><span class="hljs-comment"> *         &lt;tt&gt;null&lt;/tt&gt; if there was no mapping for &lt;tt&gt;key&lt;/tt&gt;</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> NullPointerException if the specified key or value is null</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> V <span class="hljs-title function_">put</span><span class="hljs-params">(K key, V value)</span> &#123;<br>    Segment&lt;K,V&gt; s;<br>    <span class="hljs-keyword">if</span> (value == <span class="hljs-literal">null</span>)<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NullPointerException</span>();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">hash</span> <span class="hljs-operator">=</span> hash(key);<br>    <span class="hljs-comment">// hash 值无符号右移 28位（初始化时获得），然后与 segmentMask=15 做与运算</span><br>    <span class="hljs-comment">// 其实也就是把高4位与segmentMask（1111）做与运算</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> (hash &gt;&gt;&gt; segmentShift) &amp; segmentMask;<br>    <span class="hljs-keyword">if</span> ((s = (Segment&lt;K,V&gt;)UNSAFE.getObject          <span class="hljs-comment">// nonvolatile; recheck</span><br>         (segments, (j &lt;&lt; SSHIFT) + SBASE)) == <span class="hljs-literal">null</span>) <span class="hljs-comment">//  in ensureSegment</span><br>        <span class="hljs-comment">// 如果查找到的 Segment 为空，初始化</span><br>        s = ensureSegment(j);<br>    <span class="hljs-keyword">return</span> s.put(key, hash, value, <span class="hljs-literal">false</span>);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Returns the segment for the given index, creating it and</span><br><span class="hljs-comment"> * recording in segment table (via CAS) if not already present.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> k the index</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> the segment</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="hljs-keyword">private</span> Segment&lt;K,V&gt; <span class="hljs-title function_">ensureSegment</span><span class="hljs-params">(<span class="hljs-type">int</span> k)</span> &#123;<br>    <span class="hljs-keyword">final</span> Segment&lt;K,V&gt;[] ss = <span class="hljs-built_in">this</span>.segments;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">u</span> <span class="hljs-operator">=</span> (k &lt;&lt; SSHIFT) + SBASE; <span class="hljs-comment">// raw offset</span><br>    Segment&lt;K,V&gt; seg;<br>    <span class="hljs-comment">// 判断 u 位置的 Segment 是否为null</span><br>    <span class="hljs-keyword">if</span> ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u)) == <span class="hljs-literal">null</span>) &#123;<br>        Segment&lt;K,V&gt; proto = ss[<span class="hljs-number">0</span>]; <span class="hljs-comment">// use segment 0 as prototype</span><br>        <span class="hljs-comment">// 获取0号 segment 里的 HashEntry&lt;K,V&gt; 初始化长度</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">cap</span> <span class="hljs-operator">=</span> proto.table.length;<br>        <span class="hljs-comment">// 获取0号 segment 里的 hash 表里的扩容负载因子，所有的 segment 的 loadFactor 是相同的</span><br>        <span class="hljs-type">float</span> <span class="hljs-variable">lf</span> <span class="hljs-operator">=</span> proto.loadFactor;<br>        <span class="hljs-comment">// 计算扩容阀值</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">threshold</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>)(cap * lf);<br>        <span class="hljs-comment">// 创建一个 cap 容量的 HashEntry 数组</span><br>        HashEntry&lt;K,V&gt;[] tab = (HashEntry&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>[cap];<br>        <span class="hljs-keyword">if</span> ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u)) == <span class="hljs-literal">null</span>) &#123; <span class="hljs-comment">// recheck</span><br>            <span class="hljs-comment">// 再次检查 u 位置的 Segment 是否为null，因为这时可能有其他线程进行了操作</span><br>            Segment&lt;K,V&gt; s = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Segment</span>&lt;K,V&gt;(lf, threshold, tab);<br>            <span class="hljs-comment">// 自旋检查 u 位置的 Segment 是否为null</span><br>            <span class="hljs-keyword">while</span> ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u))<br>                   == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-comment">// 使用CAS 赋值，只会成功一次</span><br>                <span class="hljs-keyword">if</span> (UNSAFE.compareAndSwapObject(ss, u, <span class="hljs-literal">null</span>, seg = s))<br>                    <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> seg;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面的源码分析了 <code>ConcurrentHashMap</code> 在 put 一个数据时的处理流程，下面梳理下具体流程。</p>
+<ol>
+<li><p>计算要 put 的 key 的位置，获取指定位置的 <code>Segment</code>。</p>
+</li>
+<li><p>如果指定位置的 <code>Segment</code> 为空，则初始化这个 <code>Segment</code>.</p>
+<p><strong>初始化 Segment 流程：</strong></p>
+<ol>
+<li>检查计算得到的位置的 <code>Segment</code> 是否为 null.</li>
+<li>为 null 继续初始化，使用 <code>Segment[0]</code> 的容量和负载因子创建一个 <code>HashEntry</code> 数组。</li>
+<li>再次检查计算得到的指定位置的 <code>Segment</code> 是否为 null.</li>
+<li>使用创建的 <code>HashEntry</code> 数组初始化这个 Segment.</li>
+<li>自旋判断计算得到的指定位置的 <code>Segment</code> 是否为 null，使用 CAS 在这个位置赋值为 <code>Segment</code>.</li>
+</ol>
+</li>
+<li><p><code>Segment.put</code> 插入 key,value 值。</p>
+</li>
+</ol>
+<p>上面探究了获取 <code>Segment</code> 段和初始化 <code>Segment</code> 段的操作。最后一行的 <code>Segment</code> 的 put 方法还没有查看，继续分析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> V <span class="hljs-title function_">put</span><span class="hljs-params">(K key, <span class="hljs-type">int</span> hash, V value, <span class="hljs-type">boolean</span> onlyIfAbsent)</span> &#123;<br>    <span class="hljs-comment">// 获取 ReentrantLock 独占锁，获取不到，scanAndLockForPut 获取。</span><br>    HashEntry&lt;K,V&gt; node = tryLock() ? <span class="hljs-literal">null</span> : scanAndLockForPut(key, hash, value);<br>    V oldValue;<br>    <span class="hljs-keyword">try</span> &#123;<br>        HashEntry&lt;K,V&gt;[] tab = table;<br>        <span class="hljs-comment">// 计算要put的数据位置</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> (tab.length - <span class="hljs-number">1</span>) &amp; hash;<br>        <span class="hljs-comment">// CAS 获取 index 坐标的值</span><br>        HashEntry&lt;K,V&gt; first = entryAt(tab, index);<br>        <span class="hljs-keyword">for</span> (HashEntry&lt;K,V&gt; e = first;;) &#123;<br>            <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-comment">// 检查是否 key 已经存在，如果存在，则遍历链表寻找位置，找到后替换 value</span><br>                K k;<br>                <span class="hljs-keyword">if</span> ((k = e.key) == key ||<br>                    (e.hash == hash &amp;&amp; key.equals(k))) &#123;<br>                    oldValue = e.value;<br>                    <span class="hljs-keyword">if</span> (!onlyIfAbsent) &#123;<br>                        e.value = value;<br>                        ++modCount;<br>                    &#125;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                e = e.next;<br>            &#125;<br>            <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// first 有值没说明 index 位置已经有值了，有冲突，链表头插法。</span><br>                <span class="hljs-keyword">if</span> (node != <span class="hljs-literal">null</span>)<br>                    node.setNext(first);<br>                <span class="hljs-keyword">else</span><br>                    node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>&lt;K,V&gt;(hash, key, value, first);<br>                <span class="hljs-type">int</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> count + <span class="hljs-number">1</span>;<br>                <span class="hljs-comment">// 容量大于扩容阀值，小于最大容量，进行扩容</span><br>                <span class="hljs-keyword">if</span> (c &gt; threshold &amp;&amp; tab.length &lt; MAXIMUM_CAPACITY)<br>                    rehash(node);<br>                <span class="hljs-keyword">else</span><br>                    <span class="hljs-comment">// index 位置赋值 node，node 可能是一个元素，也可能是一个链表的表头</span><br>                    setEntryAt(tab, index, node);<br>                ++modCount;<br>                count = c;<br>                oldValue = <span class="hljs-literal">null</span>;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>        unlock();<br>    &#125;<br>    <span class="hljs-keyword">return</span> oldValue;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于 <code>Segment</code> 继承了 <code>ReentrantLock</code>，所以 <code>Segment</code> 内部可以很方便的获取锁，put 流程就用到了这个功能。</p>
+<ol>
+<li><p><code>tryLock()</code> 获取锁，获取不到使用 <strong><code>scanAndLockForPut</code></strong> 方法继续获取。</p>
+</li>
+<li><p>计算 put 的数据要放入的 index 位置，然后获取这个位置上的 <code>HashEntry</code> 。</p>
+</li>
+<li><p>遍历 put 新元素，为什么要遍历？因为这里获取的 <code>HashEntry</code> 可能是一个空元素，也可能是链表已存在，所以要区别对待。</p>
+<p>如果这个位置上的 <strong><code>HashEntry</code> 不存在</strong>：</p>
+<ol>
+<li>如果当前容量大于扩容阀值，小于最大容量，<strong>进行扩容</strong>。</li>
+<li>直接头插法插入。</li>
+</ol>
+<p>如果这个位置上的 <strong><code>HashEntry</code> 存在</strong>：</p>
+<ol>
+<li>判断链表当前元素 key 和 hash 值是否和要 put 的 key 和 hash 值一致。一致则替换值</li>
+<li>不一致，获取链表下一个节点，直到发现相同进行值替换，或者链表表里完毕没有相同的。<ol>
+<li>如果当前容量大于扩容阀值，小于最大容量，<strong>进行扩容</strong>。</li>
+<li>直接链表头插法插入。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>如果要插入的位置之前已经存在，替换后返回旧值，否则返回 null.</p>
+</li>
+</ol>
+<p>这里面的第一步中的 <code>scanAndLockForPut</code> 操作这里没有介绍，这个方法做的操作就是不断的自旋 <code>tryLock()</code> 获取锁。当自旋次数大于指定次数时，使用 <code>lock()</code> 阻塞获取锁。在自旋时顺表获取下 hash 位置的 <code>HashEntry</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> HashEntry&lt;K,V&gt; <span class="hljs-title function_">scanAndLockForPut</span><span class="hljs-params">(K key, <span class="hljs-type">int</span> hash, V value)</span> &#123;<br>    HashEntry&lt;K,V&gt; first = entryForHash(<span class="hljs-built_in">this</span>, hash);<br>    HashEntry&lt;K,V&gt; e = first;<br>    HashEntry&lt;K,V&gt; node = <span class="hljs-literal">null</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">retries</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>; <span class="hljs-comment">// negative while locating node</span><br>    <span class="hljs-comment">// 自旋获取锁</span><br>    <span class="hljs-keyword">while</span> (!tryLock()) &#123;<br>        HashEntry&lt;K,V&gt; f; <span class="hljs-comment">// to recheck first below</span><br>        <span class="hljs-keyword">if</span> (retries &lt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">if</span> (e == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">null</span>) <span class="hljs-comment">// speculatively create node</span><br>                    node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>&lt;K,V&gt;(hash, key, value, <span class="hljs-literal">null</span>);<br>                retries = <span class="hljs-number">0</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (key.equals(e.key))<br>                retries = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">else</span><br>                e = e.next;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (++retries &gt; MAX_SCAN_RETRIES) &#123;<br>            <span class="hljs-comment">// 自旋达到指定次数后，阻塞等到只到获取到锁</span><br>            lock();<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((retries &amp; <span class="hljs-number">1</span>) == <span class="hljs-number">0</span> &amp;&amp;<br>                 (f = entryForHash(<span class="hljs-built_in">this</span>, hash)) != first) &#123;<br>            e = first = f; <span class="hljs-comment">// re-traverse if entry changed</span><br>            retries = -<span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> node;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-扩容-rehash"><a href="#4-扩容-rehash" class="headerlink" title="4. 扩容 rehash"></a>4. 扩容 rehash</h3><p><code>ConcurrentHashMap</code> 的扩容只会扩容到原来的两倍。老数组里的数据移动到新的数组时，位置要么不变，要么变为 <code>index+ oldSize</code>，参数里的 node 会在扩容之后使用链表<strong>头插法</strong>插入到指定位置。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">rehash</span><span class="hljs-params">(HashEntry&lt;K,V&gt; node)</span> &#123;<br>    HashEntry&lt;K,V&gt;[] oldTable = table;<br>    <span class="hljs-comment">// 老容量</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">oldCapacity</span> <span class="hljs-operator">=</span> oldTable.length;<br>    <span class="hljs-comment">// 新容量，扩大两倍</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">newCapacity</span> <span class="hljs-operator">=</span> oldCapacity &lt;&lt; <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// 新的扩容阀值</span><br>    threshold = (<span class="hljs-type">int</span>)(newCapacity * loadFactor);<br>    <span class="hljs-comment">// 创建新的数组</span><br>    HashEntry&lt;K,V&gt;[] newTable = (HashEntry&lt;K,V&gt;[]) <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>[newCapacity];<br>    <span class="hljs-comment">// 新的掩码，默认2扩容后是4，-1是3，二进制就是11。</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">sizeMask</span> <span class="hljs-operator">=</span> newCapacity - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; oldCapacity ; i++) &#123;<br>        <span class="hljs-comment">// 遍历老数组</span><br>        HashEntry&lt;K,V&gt; e = oldTable[i];<br>        <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>            HashEntry&lt;K,V&gt; next = e.next;<br>            <span class="hljs-comment">// 计算新的位置，新的位置只可能是不便或者是老的位置+老的容量。</span><br>            <span class="hljs-type">int</span> <span class="hljs-variable">idx</span> <span class="hljs-operator">=</span> e.hash &amp; sizeMask;<br>            <span class="hljs-keyword">if</span> (next == <span class="hljs-literal">null</span>)   <span class="hljs-comment">//  Single node on list</span><br>                <span class="hljs-comment">// 如果当前位置还不是链表，只是一个元素，直接赋值</span><br>                newTable[idx] = e;<br>            <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// Reuse consecutive sequence at same slot</span><br>                <span class="hljs-comment">// 如果是链表了</span><br>                HashEntry&lt;K,V&gt; lastRun = e;<br>                <span class="hljs-type">int</span> <span class="hljs-variable">lastIdx</span> <span class="hljs-operator">=</span> idx;<br>                <span class="hljs-comment">// 新的位置只可能是不便或者是老的位置+老的容量。</span><br>                <span class="hljs-comment">// 遍历结束后，lastRun 后面的元素位置都是相同的</span><br>                <span class="hljs-keyword">for</span> (HashEntry&lt;K,V&gt; last = next; last != <span class="hljs-literal">null</span>; last = last.next) &#123;<br>                    <span class="hljs-type">int</span> <span class="hljs-variable">k</span> <span class="hljs-operator">=</span> last.hash &amp; sizeMask;<br>                    <span class="hljs-keyword">if</span> (k != lastIdx) &#123;<br>                        lastIdx = k;<br>                        lastRun = last;<br>                    &#125;<br>                &#125;<br>                <span class="hljs-comment">// ，lastRun 后面的元素位置都是相同的，直接作为链表赋值到新位置。</span><br>                newTable[lastIdx] = lastRun;<br>                <span class="hljs-comment">// Clone remaining nodes</span><br>                <span class="hljs-keyword">for</span> (HashEntry&lt;K,V&gt; p = e; p != lastRun; p = p.next) &#123;<br>                    <span class="hljs-comment">// 遍历剩余元素，头插法到指定 k 位置。</span><br>                    <span class="hljs-type">V</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> p.value;<br>                    <span class="hljs-type">int</span> <span class="hljs-variable">h</span> <span class="hljs-operator">=</span> p.hash;<br>                    <span class="hljs-type">int</span> <span class="hljs-variable">k</span> <span class="hljs-operator">=</span> h &amp; sizeMask;<br>                    HashEntry&lt;K,V&gt; n = newTable[k];<br>                    newTable[k] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashEntry</span>&lt;K,V&gt;(h, p.key, v, n);<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 头插法插入新的节点</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">nodeIndex</span> <span class="hljs-operator">=</span> node.hash &amp; sizeMask; <span class="hljs-comment">// add the new node</span><br>    node.setNext(newTable[nodeIndex]);<br>    newTable[nodeIndex] = node;<br>    table = newTable;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>有些同学可能会对最后的两个 for 循环有疑惑，这里第一个 for 是为了寻找这样一个节点，这个节点后面的所有 next 节点的新位置都是相同的。然后把这个作为一个链表赋值到新位置。第二个 for 循环是为了把剩余的元素通过头插法插入到指定位置链表。这样实现的原因可能是基于概率统计，有深入研究的同学可以发表下意见。</p>
+<h3 id="5-get"><a href="#5-get" class="headerlink" title="5. get"></a>5. get</h3><p>到这里就很简单了，get 方法只需要两步即可。</p>
+<ol>
+<li>计算得到 key 的存放位置。</li>
+<li>遍历指定位置查找相同 key 的 value 值。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> V <span class="hljs-title function_">get</span><span class="hljs-params">(Object key)</span> &#123;<br>    Segment&lt;K,V&gt; s; <span class="hljs-comment">// manually integrate access methods to reduce overhead</span><br>    HashEntry&lt;K,V&gt;[] tab;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">h</span> <span class="hljs-operator">=</span> hash(key);<br>    <span class="hljs-type">long</span> <span class="hljs-variable">u</span> <span class="hljs-operator">=</span> (((h &gt;&gt;&gt; segmentShift) &amp; segmentMask) &lt;&lt; SSHIFT) + SBASE;<br>    <span class="hljs-comment">// 计算得到 key 的存放位置</span><br>    <span class="hljs-keyword">if</span> ((s = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(segments, u)) != <span class="hljs-literal">null</span> &amp;&amp;<br>        (tab = s.table) != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">for</span> (HashEntry&lt;K,V&gt; e = (HashEntry&lt;K,V&gt;) UNSAFE.getObjectVolatile<br>                 (tab, ((<span class="hljs-type">long</span>)(((tab.length - <span class="hljs-number">1</span>) &amp; h)) &lt;&lt; TSHIFT) + TBASE);<br>             e != <span class="hljs-literal">null</span>; e = e.next) &#123;<br>            <span class="hljs-comment">// 如果是链表，遍历查找到相同 key 的 value。</span><br>            K k;<br>            <span class="hljs-keyword">if</span> ((k = e.key) == key || (e.hash == h &amp;&amp; key.equals(k)))<br>                <span class="hljs-keyword">return</span> e.value;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-ConcurrentHashMap-1-8"><a href="#2-ConcurrentHashMap-1-8" class="headerlink" title="2. ConcurrentHashMap 1.8"></a>2. ConcurrentHashMap 1.8</h2><h3 id="1-存储结构-1"><a href="#1-存储结构-1" class="headerlink" title="1. 存储结构"></a>1. 存储结构</h3><p><img src="C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231011161137885.png" srcset="/img/loading.gif" lazyload alt="image-20231011161137885"></p>
+<p>可以发现 Java8 的 ConcurrentHashMap 相对于 Java7 来说变化比较大，不再是之前的 <strong>Segment 数组 + HashEntry 数组 + 链表</strong>，而是 <strong>Node 数组 + 链表 &#x2F; 红黑树</strong>。当冲突链表达到一定长度时，链表会转换成红黑树。</p>
+<h3 id="2-初始化-initTable"><a href="#2-初始化-initTable" class="headerlink" title="2. 初始化 initTable"></a>2. 初始化 initTable</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Initializes table, using the size recorded in sizeCtl.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Node&lt;K,V&gt;[] initTable() &#123;<br>    Node&lt;K,V&gt;[] tab; <span class="hljs-type">int</span> sc;<br>    <span class="hljs-keyword">while</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">if</span> ((sc = sizeCtl) &lt; <span class="hljs-number">0</span>)	<span class="hljs-comment">//正在初始化或者正在扩容</span><br>            <span class="hljs-comment">//使当前线程从执行状态变为可执行状态（就绪状态）即自旋</span><br>            Thread.<span class="hljs-keyword">yield</span>(); <span class="hljs-comment">// lost initialization race; just spin</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-built_in">this</span>, SIZECTL, sc, -<span class="hljs-number">1</span>)) &#123;	<span class="hljs-comment">//sc没变置为-1返回true,否则直接false</span><br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-keyword">if</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>                    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> (sc &gt; <span class="hljs-number">0</span>) ? sc : DEFAULT_CAPACITY;<br>                    <span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br>                    Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;?,?&gt;[n];<br>                    table = tab = nt;<br>                    sc = n - (n &gt;&gt;&gt; <span class="hljs-number">2</span>);<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                sizeCtl = sc;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> tab;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>从源码中可以发现 <code>ConcurrentHashMap</code> 的初始化是通过<strong>自旋和 CAS</strong> 操作完成的。里面需要注意的是变量 <code>sizeCtl</code> ，它的值决定着当前的初始化状态。</p>
+<ol>
+<li>-1 说明正在初始化</li>
+<li>-N 说明有 N-1 个线程正在进行扩容</li>
+<li>0 表示 table 初始化大小，如果 table 没有初始化</li>
+<li>&gt;0 表示 table 扩容的阈值，如果 table 已经初始化。</li>
+</ol>
+<h3 id="3-put-1"><a href="#3-put-1" class="headerlink" title="3. put"></a>3. put</h3><p>直接过一遍 put 源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> V <span class="hljs-title function_">put</span><span class="hljs-params">(K key, V value)</span> &#123;<br>    <span class="hljs-keyword">return</span> putVal(key, value, <span class="hljs-literal">false</span>);<br>&#125;<br><br><span class="hljs-comment">/** Implementation for put and putIfAbsent */</span><br><span class="hljs-keyword">final</span> V <span class="hljs-title function_">putVal</span><span class="hljs-params">(K key, V value, <span class="hljs-type">boolean</span> onlyIfAbsent)</span> &#123;<br>    <span class="hljs-comment">// key 和 value 不能为空</span><br>    <span class="hljs-keyword">if</span> (key == <span class="hljs-literal">null</span> || value == <span class="hljs-literal">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NullPointerException</span>();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">hash</span> <span class="hljs-operator">=</span> spread(key.hashCode());<br>    <span class="hljs-type">int</span> <span class="hljs-variable">binCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (Node&lt;K,V&gt;[] tab = table;;) &#123;<br>        <span class="hljs-comment">// f = 目标位置元素</span><br>        Node&lt;K,V&gt; f; <span class="hljs-type">int</span> n, i, fh;<span class="hljs-comment">// fh 后面存放目标位置的元素 hash 值</span><br>        <span class="hljs-keyword">if</span> (tab == <span class="hljs-literal">null</span> || (n = tab.length) == <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 数组桶为空，初始化数组桶（自旋+CAS)</span><br>            tab = initTable();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((f = tabAt(tab, i = (n - <span class="hljs-number">1</span>) &amp; hash)) == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// 桶内为空，CAS 放入，不加锁，成功了就直接 break 跳出</span><br>            <span class="hljs-keyword">if</span> (casTabAt(tab, i, <span class="hljs-literal">null</span>,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt;(hash, key, value, <span class="hljs-literal">null</span>)))<br>                <span class="hljs-keyword">break</span>;  <span class="hljs-comment">// no lock when adding to empty bin</span><br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((fh = f.hash) == MOVED)<br>            tab = helpTransfer(tab, f);<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">V</span> <span class="hljs-variable">oldVal</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>            <span class="hljs-comment">// 使用 synchronized 加锁加入节点</span><br>            <span class="hljs-keyword">synchronized</span> (f) &#123;<br>                <span class="hljs-keyword">if</span> (tabAt(tab, i) == f) &#123;<br>                    <span class="hljs-comment">// 说明是链表</span><br>                    <span class="hljs-keyword">if</span> (fh &gt;= <span class="hljs-number">0</span>) &#123;<br>                        binCount = <span class="hljs-number">1</span>;<br>                        <span class="hljs-comment">// 循环加入新的或者覆盖节点</span><br>                        <span class="hljs-keyword">for</span> (Node&lt;K,V&gt; e = f;; ++binCount) &#123;<br>                            K ek;<br>                            <span class="hljs-keyword">if</span> (e.hash == hash &amp;&amp;<br>                                ((ek = e.key) == key ||<br>                                 (ek != <span class="hljs-literal">null</span> &amp;&amp; key.equals(ek)))) &#123;<br>                                oldVal = e.val;<br>                                <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                    e.val = value;<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                            Node&lt;K,V&gt; pred = e;<br>                            <span class="hljs-keyword">if</span> ((e = e.next) == <span class="hljs-literal">null</span>) &#123;<br>                                pred.next = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt;(hash, key,<br>                                                          value, <span class="hljs-literal">null</span>);<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                        &#125;<br>                    &#125;<br>                    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (f <span class="hljs-keyword">instanceof</span> TreeBin) &#123;<br>                        <span class="hljs-comment">// 红黑树</span><br>                        Node&lt;K,V&gt; p;<br>                        binCount = <span class="hljs-number">2</span>;<br>                        <span class="hljs-keyword">if</span> ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,<br>                                                       value)) != <span class="hljs-literal">null</span>) &#123;<br>                            oldVal = p.val;<br>                            <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                p.val = value;<br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (binCount != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD)<br>                    treeifyBin(tab, i);<br>                <span class="hljs-keyword">if</span> (oldVal != <span class="hljs-literal">null</span>)<br>                    <span class="hljs-keyword">return</span> oldVal;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    addCount(<span class="hljs-number">1L</span>, binCount);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><p>根据 key 计算出 hashcode 。</p>
+</li>
+<li><p>判断是否需要进行初始化。</p>
+</li>
+<li><p>即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。</p>
+</li>
+<li><p>如果当前位置的 <code>hashcode == MOVED == -1</code>,则需要进行扩容。</p>
+</li>
+<li><p>如果都不满足，则利用 synchronized 锁写入数据。</p>
+</li>
+<li><p>如果数量大于 <code>TREEIFY_THRESHOLD</code> 则要执行树化方法，在 <code>treeifyBin</code> 中会首先判断当前数组长度 ≥64 时才会将链表转换为红黑树。</p>
+</li>
+</ol>
+<h3 id="4-get"><a href="#4-get" class="headerlink" title="4. get"></a>4. get</h3><p>get 流程比较简单，直接过一遍源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> V <span class="hljs-title function_">get</span><span class="hljs-params">(Object key)</span> &#123;<br>    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; e, p; <span class="hljs-type">int</span> n, eh; K ek;<br>    <span class="hljs-comment">// key 所在的 hash 位置</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">h</span> <span class="hljs-operator">=</span> spread(key.hashCode());<br>    <span class="hljs-keyword">if</span> ((tab = table) != <span class="hljs-literal">null</span> &amp;&amp; (n = tab.length) &gt; <span class="hljs-number">0</span> &amp;&amp;<br>        (e = tabAt(tab, (n - <span class="hljs-number">1</span>) &amp; h)) != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-comment">// 如果指定位置元素存在，头结点hash值相同</span><br>        <span class="hljs-keyword">if</span> ((eh = e.hash) == h) &#123;<br>            <span class="hljs-keyword">if</span> ((ek = e.key) == key || (ek != <span class="hljs-literal">null</span> &amp;&amp; key.equals(ek)))<br>                <span class="hljs-comment">// key hash 值相等，key值相同，直接返回元素 value</span><br>                <span class="hljs-keyword">return</span> e.val;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (eh &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 头结点hash值小于0，说明正在扩容或者是红黑树，find查找</span><br>            <span class="hljs-keyword">return</span> (p = e.find(h, key)) != <span class="hljs-literal">null</span> ? p.val : <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">while</span> ((e = e.next) != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// 是链表，遍历查找</span><br>            <span class="hljs-keyword">if</span> (e.hash == h &amp;&amp;<br>                ((ek = e.key) == key || (ek != <span class="hljs-literal">null</span> &amp;&amp; key.equals(ek))))<br>                <span class="hljs-keyword">return</span> e.val;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>总结一下 get 过程：</p>
+<ol>
+<li>根据 hash 值计算位置。</li>
+<li>查找到指定位置，如果头节点就是要找的，直接返回它的 value.</li>
+<li>如果头节点 hash 值小于 0 ，说明正在扩容或者是红黑树，查找之。</li>
+<li>如果是链表，遍历查找之。</li>
+</ol>
+<p>总结：</p>
+<p>总的来说 <code>ConcurrentHashMap</code> 在 Java8 中相对于 Java7 来说变化还是挺大的。</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>Java7 中 <code>ConcurrentHashMap</code> 使用的分段锁，也就是每一个 Segment 上同时只有一个线程可以操作，每一个 <code>Segment</code> 都是一个类似 <code>HashMap</code> 数组的结构，它可以扩容，它的冲突会转化为链表。但是 <code>Segment</code> 的个数一但初始化就不能改变。</p>
+<p>Java8 中的 <code>ConcurrentHashMap</code> 使用的 <code>Synchronized</code> 锁加 CAS 的机制。结构也由 Java7 中的 <strong><code>Segment</code> 数组 + <code>HashEntry</code> 数组 + 链表</strong> 进化成了 <strong>Node 数组 + 链表 &#x2F; 红黑树</strong>，Node 是类似于一个 HashEntry 的结构。它的冲突在达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。</p>
+<p><code>Synchronized</code> 锁自从引入锁升级策略后，性能不再是问题</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JUC/" class="category-chain-item">JUC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JUC/" class="print-no-link">#JUC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ConcurrentHashMap</div>
+      <div>http://example.com/2021/04/06/JUC/并发容器/ConcurrentHashMap/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E5%B8%B8%E8%A7%81%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB/CyclicBarrier/" title="CyclicBarrier">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CyclicBarrier</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/ConcurrentSkipListMap/" title="ConcurrentSkipListMap">
+                        <span class="hidden-mobile">ConcurrentSkipListMap</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

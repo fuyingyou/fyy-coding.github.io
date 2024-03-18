@@ -1,0 +1,882 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="进程与线程进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。 在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。 线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题目">
+<meta property="og:url" content="http://example.com/2021/04/06/JUC/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="进程与线程进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。 在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。 线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-06T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:54:57.223Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>面试题目 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="面试题目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 12:13" pubdate>
+          2021年4月6日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">面试题目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p>
+<p>在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
+<p>线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享进程的<strong>堆</strong>和<strong>方法区</strong>资源，但每个线程有自己的<strong>程序计数器</strong>、<strong>虚拟机栈</strong>和<strong>本地方法栈</strong>，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p>
+<p>一个进程中可以有多个线程，多个线程共享进程的<strong>堆</strong>和<strong>方法区 (JDK1.8 之后的元空间)<strong>资源，但是每个线程有自己的</strong>程序计数器、虚拟机栈</strong>和<strong>本地方法栈</strong>。</p>
+<p><strong>总结：</strong> <strong>线程是进程划分成的更小的运行单位。线程和进程最大的不同在于基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程极有可能会相互影响。线程执行开销小，但不利于资源的管理和保护；而进程正相反。</strong></p>
+<h3 id="程序计数器为什么是私有的"><a href="#程序计数器为什么是私有的" class="headerlink" title="程序计数器为什么是私有的?"></a>程序计数器为什么是私有的?</h3><blockquote>
+<p>程序计数器私有主要是为了<strong>线程切换后能恢复到正确的执行位置</strong></p>
+</blockquote>
+<p>程序计数器主要有下面两个作用：</p>
+<ol>
+<li>字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</li>
+<li>在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</li>
+</ol>
+<p>需要注意的是，如果执行的是 native 方法，那么程序计数器记录的是 undefined 地址，只有执行的是 Java 代码时程序计数器记录的才是下一条指令的地址。</p>
+<h3 id="虚拟机栈和本地方法栈为什么是私有的"><a href="#虚拟机栈和本地方法栈为什么是私有的" class="headerlink" title="虚拟机栈和本地方法栈为什么是私有的?"></a>虚拟机栈和本地方法栈为什么是私有的?</h3><blockquote>
+<p>为了<strong>保证线程中的局部变量不被别的线程访问到</strong></p>
+</blockquote>
+<ul>
+<li><strong>虚拟机栈：</strong> 每个 Java 方法在执行之前会创建一个栈帧用于存储局部变量表、操作数栈、常量池引用等信息。从方法调用直至执行完成的过程，就对应着一个栈帧在 Java 虚拟机栈中入栈和出栈的过程。</li>
+<li><strong>本地方法栈：</strong> 和虚拟机栈所发挥的作用非常相似，区别是：<strong>虚拟机栈为虚拟机执行 Java 方法 （也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。</strong> 在 HotSpot 虚拟机中和 Java 虚拟机栈合二为一。</li>
+</ul>
+<p>堆和方法区是所有线程共享的资源</p>
+<ul>
+<li>堆是进程中最大的一块内存，主要用于存放新创建的对象 (几乎所有对象都在这里分配内存)</li>
+<li>方法区主要用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</li>
+</ul>
+<h3 id="并发与并行的区别"><a href="#并发与并行的区别" class="headerlink" title="并发与并行的区别"></a>并发与并行的区别</h3><ul>
+<li><strong>并发</strong>：两个及两个以上的作业在同一 <strong>时间段</strong> 内执行。</li>
+<li><strong>并行</strong>：两个及两个以上的作业在同一 <strong>时刻</strong> 执行。</li>
+</ul>
+<h3 id="同步和异步的区别"><a href="#同步和异步的区别" class="headerlink" title="同步和异步的区别"></a>同步和异步的区别</h3><ul>
+<li><strong>同步</strong>：发出一个调用之后，在没有得到结果之前， 该调用就不可以返回，一直等待。</li>
+<li><strong>异步</strong>：调用在发出之后，不用等待返回结果，该调用直接返回。</li>
+</ul>
+<h3 id="为什么要使用多线程"><a href="#为什么要使用多线程" class="headerlink" title="为什么要使用多线程?"></a>为什么要使用多线程?</h3><p>先从总体上来说：</p>
+<ul>
+<li><strong>从计算机底层来说：</strong> 线程可以比作是轻量级的进程，是程序执行的最小单位,线程间的切换和调度的成本远远小于进程。另外，多核 CPU 时代意味着多个线程可以同时运行，这减少了线程上下文切换的开销。</li>
+<li><strong>从当代互联网发展趋势来说：</strong> 现在的系统动不动就要求百万级甚至千万级的并发量，而多线程并发编程正是开发高并发系统的基础，利用好多线程机制可以大大提高系统整体的并发能力以及性能。</li>
+</ul>
+<p>再深入到计算机底层来探讨：</p>
+<ul>
+<li><strong>单核时代</strong>：在单核时代多线程主要是为了提高单进程利用 CPU 和 IO 系统的效率。 假设只运行了一个 Java 进程的情况，当我们请求 IO 的时候，如果 Java 进程中只有一个线程，此线程被 IO 阻塞则整个进程被阻塞。CPU 和 IO 设备只有一个在运行，那么可以简单地说系统整体效率只有 50%。当使用多线程的时候，一个线程被 IO 阻塞，其他线程还可以继续使用 CPU。从而提高了 Java 进程利用系统资源的整体效率。</li>
+<li><strong>多核时代</strong>: 多核时代多线程主要是为了提高进程利用多核 CPU 的能力。举个例子：假如我们要计算一个复杂的任务，我们只用一个线程的话，不论系统有几个 CPU 核心，都只会有一个 CPU 核心被利用到。而创建多个线程，这些线程可以被映射到底层多个 CPU 上执行，在任务中的多个线程没有资源竞争的情况下，任务执行的效率会有显著性的提高，约等于（单核时执行时间&#x2F;CPU 核心数）。</li>
+</ul>
+<h3 id="使用多线程可能带来什么问题"><a href="#使用多线程可能带来什么问题" class="headerlink" title="使用多线程可能带来什么问题?"></a>使用多线程可能带来什么问题?</h3><p>并发编程的目的就是为了能提高程序的执行效率提高程序运行速度，但是并发编程并不总是能提高程序运行速度的，而且并发编程可能会遇到很多问题，比如：内存泄漏、死锁、线程不安全等等。</p>
+<h3 id="如何理解线程安全和不安全？"><a href="#如何理解线程安全和不安全？" class="headerlink" title="如何理解线程安全和不安全？"></a>如何理解线程安全和不安全？</h3><p>线程安全和不安全是在多线程环境下对于同一份数据的访问是否能够保证其正确性和一致性的描述。</p>
+<ul>
+<li>线程安全指的是在多线程环境下，对于同一份数据，不管有多少个线程同时访问，都能保证这份数据的正确性和一致性。</li>
+<li>线程不安全则表示在多线程环境下，对于同一份数据，多个线程同时访问时可能会导致数据混乱、错误或者丢失。</li>
+</ul>
+<h3 id="单核-CPU-上运行多个线程效率一定会高吗？"><a href="#单核-CPU-上运行多个线程效率一定会高吗？" class="headerlink" title="单核 CPU 上运行多个线程效率一定会高吗？"></a>单核 CPU 上运行多个线程效率一定会高吗？</h3><p>单核CPU同时运行多个线程的效率是否会高，取决于线程的类型和任务的性质。一般来说，有两种类型的线程：CPU密集型和IO密集型。CPU密集型的线程主要进行计算和逻辑处理，需要占用大量的CPU资源。IO密集型的线程主要进行输入输出操作，如读写文件、网络通信等，需要等待IO设备的响应，而不占用太多的CPU资源。</p>
+<p>在单核CPU上，同一时刻只能有一个线程在运行，其他线程需要等待CPU的时间片分配。如果线程是CPU密集型的，那么多个线程同时运行会导致频繁的线程切换，增加了系统的开销，降低了效率。如果线程是IO密集型的，那么多个线程同时运行可以利用CPU在等待IO时的空闲时间，提高了效率。</p>
+<p>因此，对于单核CPU来说，如果任务是CPU密集型的，那么开很多线程会影响效率；如果任务是IO密集型的，那么开很多线程会提高效率。当然，这里的“很多”也要适度，不能超过系统能够承受的上限。</p>
+<h3 id="说说线程的生命周期和状态"><a href="#说说线程的生命周期和状态" class="headerlink" title="说说线程的生命周期和状态?"></a>说说线程的生命周期和状态?</h3><p>Java 线程在运行的生命周期中的指定时刻只可能处于下面 6 种不同状态的其中一个状态：</p>
+<ul>
+<li>NEW: 初始状态，线程被创建出来但没有被调用 <code>start()</code> 。</li>
+<li>RUNNABLE: 运行状态，线程被调用了 <code>start()</code>等待运行的状态。</li>
+<li>BLOCKED：阻塞状态，需要等待锁释放。</li>
+<li>WAITING：等待状态，表示该线程需要等待其他线程做出一些特定动作（通知或中断）。</li>
+<li>TIME_WAITING：超时等待状态，可以在指定的时间后自行返回而不是像 WAITING 那样一直等待。</li>
+<li>TERMINATED：终止状态，表示该线程已经运行完毕。</li>
+</ul>
+<p>线程在生命周期中并不是固定处于某一个状态而是随着代码的执行在不同状态之间切换。</p>
+<p>线程创建之后它将处于 <strong>NEW（新建）</strong> 状态，调用 <code>start()</code> 方法后开始运行，线程这时候处于 <strong>READY（可运行）</strong> 状态。可运行状态的线程获得了 CPU 时间片（timeslice）后就处于 <strong>RUNNING（运行）</strong> 状态。</p>
+<blockquote>
+<p>在操作系统层面，线程有 READY 和 RUNNING 状态；而在 JVM 层面，只能看到 RUNNABLE 状态（图源：<a target="_blank" rel="noopener" href="https://howtodoinjava.com/">HowToDoInJavaopen in new window</a>：<a target="_blank" rel="noopener" href="https://howtodoinjava.com/Java/multi-threading/Java-thread-life-cycle-and-thread-states/">Java Thread Life Cycle and Thread Statesopen in new window</a>），所以 Java 系统一般将这两个状态统称为 <strong>RUNNABLE（运行中）</strong> 状态 。</p>
+<p><strong>为什么 JVM 没有区分这两种状态呢？</strong> （摘自：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/56494969/answer/154053599">Java 线程运行怎么有第六种状态？ - Dawell 的回答open in new window</a> ） 现在的时分（time-sharing）多任务（multi-task）操作系统架构通常都是用所谓的“时间分片（time quantum or time slice）”方式进行抢占式（preemptive）轮转调度（round-robin 式）。这个时间分片通常是很小的，一个线程一次最多只能在 CPU 上运行比如 10-20ms 的时间（此时处于 running 状态），也即大概只有 0.01 秒这一量级，时间片用后就要被切换下来放入调度队列的末尾等待再次调度。（也即回到 ready 状态）。线程切换的如此之快，区分这两种状态就没什么意义了。</p>
+</blockquote>
+<ul>
+<li>当线程执行 <code>wait()</code>方法之后，线程进入 <strong>WAITING（等待）</strong> 状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态。</li>
+<li><strong>TIMED_WAITING(超时等待)</strong> 状态相当于在等待状态的基础上增加了超时限制，比如通过 <code>sleep（long millis）</code>方法或 <code>wait（long millis）</code>方法可以将线程置于 TIMED_WAITING 状态。当超时时间结束后，线程将会返回到 RUNNABLE 状态。</li>
+<li>当线程进入 <code>synchronized</code> 方法&#x2F;块或者调用 <code>wait</code> 后（被 <code>notify</code>）重新进入 <code>synchronized</code> 方法&#x2F;块，但是锁被其它线程占有，这个时候线程就会进入 <strong>BLOCKED（阻塞）</strong> 状态。</li>
+<li>线程在执行完了 <code>run()</code>方法之后将会进入到 <strong>TERMINATED（终止）</strong> 状态。</li>
+</ul>
+<h3 id="什么是线程上下文切换"><a href="#什么是线程上下文切换" class="headerlink" title="什么是线程上下文切换?"></a>什么是线程上下文切换?</h3><p>线程在执行过程中会有自己的运行条件和状态（也称上下文），比如上文所说到过的程序计数器，栈信息等。当出现如下情况的时候，线程会从占用 CPU 状态中退出。</p>
+<ul>
+<li>主动让出 CPU，比如调用了 <code>sleep()</code>, <code>wait()</code> 等。</li>
+<li>时间片用完，因为操作系统要防止一个线程或者进程长时间占用 CPU 导致其他线程或者进程饿死。</li>
+<li>调用了阻塞类型的系统中断，比如请求 IO，线程被阻塞。</li>
+<li>被终止或结束运行</li>
+</ul>
+<p>这其中前三种都会发生线程切换，线程切换意味着需要保存当前线程的上下文，留待线程下次占用 CPU 的时候恢复现场。并加载下一个将要占用 CPU 的线程上下文。这就是所谓的 <strong>上下文切换</strong>。</p>
+<p>上下文切换是现代操作系统的基本功能，因其每次需要保存信息恢复信息，这将会占用 CPU，内存等系统资源进行处理，也就意味着效率会有一定损耗，如果频繁切换就会造成整体效率低下。</p>
+<h3 id="sleep-方法和-wait-方法对比"><a href="#sleep-方法和-wait-方法对比" class="headerlink" title="sleep() 方法和 wait() 方法对比"></a>sleep() 方法和 wait() 方法对比</h3><p><strong>共同点</strong>：两者都可以暂停线程的执行。</p>
+<p><strong>区别</strong>：</p>
+<ul>
+<li><strong><code>sleep()</code> 方法没有释放锁，而 <code>wait()</code> 方法释放了锁</strong> 。</li>
+<li><code>wait()</code> 通常被用于线程间交互&#x2F;通信，<code>sleep()</code>通常被用于暂停执行。</li>
+<li><code>wait()</code> 方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的 <code>notify()</code>或者 <code>notifyAll()</code> 方法。<code>sleep()</code>方法执行完成后，线程会自动苏醒，或者也可以使用 <code>wait(long timeout)</code> 超时后线程会自动苏醒。</li>
+<li><code>sleep()</code> 是 <code>Thread</code> 类的静态本地方法，<code>wait()</code> 则是 <code>Object</code> 类的本地方法。为什么这样设计呢？下一个问题就会聊到。</li>
+</ul>
+<h3 id="为什么-wait-方法不定义在-Thread-中？"><a href="#为什么-wait-方法不定义在-Thread-中？" class="headerlink" title="为什么 wait() 方法不定义在 Thread 中？"></a>为什么 wait() 方法不定义在 Thread 中？</h3><p><code>wait()</code> 是让获得对象锁的线程实现等待，会自动释放当前线程占有的对象锁。每个对象（<code>Object</code>）都拥有对象锁，既然要释放当前线程占有的对象锁并让其进入 WAITING 状态，自然是要操作对应的对象（<code>Object</code>）而非当前的线程（<code>Thread</code>）。</p>
+<p>类似的问题：<strong>为什么 <code>sleep()</code> 方法定义在 <code>Thread</code> 中？</strong></p>
+<p>因为 <code>sleep()</code> 是让当前线程暂停执行，不涉及到对象类，也不需要获得对象锁。</p>
+<h3 id="可以直接调用-Thread-类的-run-方法吗？"><a href="#可以直接调用-Thread-类的-run-方法吗？" class="headerlink" title="可以直接调用 Thread 类的 run 方法吗？"></a>可以直接调用 Thread 类的 run 方法吗？</h3><p>new 一个 <code>Thread</code>，线程进入了新建状态。调用 <code>start()</code>方法，会启动一个线程并使线程进入了就绪状态，当分配到时间片后就可以开始运行了。 <code>start()</code> 会执行线程的相应准备工作，然后自动执行 <code>run()</code> 方法的内容，这是真正的多线程工作。 但是，直接执行 <code>run()</code> 方法，会把 <code>run()</code> 方法当成一个 main 线程下的普通方法去执行，并不会在某个线程中执行它，所以这并不是多线程工作。</p>
+<p><strong>总结：调用 <code>start()</code> 方法方可启动线程并使线程进入就绪状态，直接执行 <code>run()</code> 方法的话不会以多线程的方式执行。</strong></p>
+<h3 id="如何保证变量的可见性？"><a href="#如何保证变量的可见性？" class="headerlink" title="如何保证变量的可见性？"></a>如何保证变量的可见性？</h3><p>将一个变量使用 <code>volatile</code> 修饰，这就指示 编译器，这个变量是共享且不稳定的，每次使用它都到主存中进行读取。</p>
+<p><code>volatile</code> 关键字能保证数据的可见性，但不能保证数据的原子性。<code>synchronized</code> 关键字两者都能保证.</p>
+<h3 id="如何禁止指令重排序？"><a href="#如何禁止指令重排序？" class="headerlink" title="如何禁止指令重排序？"></a>如何禁止指令重排序？</h3><p><strong><code>volatile</code> 关键字除了可以保证变量的可见性，还有一个重要的作用就是防止 JVM 的指令重排序。</strong> 如果我们将变量声明为 <strong><code>volatile</code></strong> ，在对这个变量进行读写操作的时候，会通过插入特定的 <strong>内存屏障</strong> 的方式来禁止指令重排序。</p>
+<p><strong>双重校验锁实现对象单例（线程安全）</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> Singleton uniqueInstance;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-title function_">Singleton</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span>  <span class="hljs-keyword">static</span> Singleton <span class="hljs-title function_">getUniqueInstance</span><span class="hljs-params">()</span> &#123;<br>       <span class="hljs-comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span><br>        <span class="hljs-keyword">if</span> (uniqueInstance == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">//类对象加锁</span><br>            <span class="hljs-keyword">synchronized</span> (Singleton.class) &#123;<br>                <span class="hljs-keyword">if</span> (uniqueInstance == <span class="hljs-literal">null</span>) &#123;<br>                    uniqueInstance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Singleton</span>();<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> uniqueInstance;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>uniqueInstance &#x3D; new Singleton(); </p>
+<p>这段代码其实是分为三步执行：</p>
+<ul>
+<li>为 uniqueInstance 分配内存空间</li>
+<li>初始化 uniqueInstance</li>
+<li>将 uniqueInstance 指向分配的内存地址</li>
+</ul>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
+</blockquote>
+<h3 id="构造方法可以用-synchronized-修饰么？"><a href="#构造方法可以用-synchronized-修饰么？" class="headerlink" title="构造方法可以用 synchronized 修饰么？"></a>构造方法可以用 synchronized 修饰么？</h3><p>先说结论：<strong>构造方法不能使用 synchronized 关键字修饰。</strong></p>
+<p>构造方法本身就属于线程安全的，不存在同步的构造方法一说。</p>
+<h3 id="synchronized-底层原理了解吗"><a href="#synchronized-底层原理了解吗" class="headerlink" title="synchronized 底层原理了解吗"></a>synchronized 底层原理了解吗</h3><p><strong><code>synchronized</code> 同步语句块的实现使用的是 <code>monitorenter</code> 和 <code>monitorexit</code> 指令，其中 <code>monitorenter</code> 指令指向同步代码块的开始位置，<code>monitorexit</code> 指令则指明同步代码块的结束位置。</strong></p>
+<p>字节码中包含一个 <code>monitorenter</code> 指令以及两个 <code>monitorexit</code> 指令，这是为了保证锁在同步代码块代码正常执行以及出现异常的这两种情况下都能被正确释放。</p>
+<p>当执行 <code>monitorenter</code> 指令时，线程试图获取锁也就是获取 <strong>对象监视器 <code>monitor</code></strong> 的持有权。</p>
+<blockquote>
+<p>在 Java 虚拟机(HotSpot)中，Monitor 是基于 C++实现的，由<a target="_blank" rel="noopener" href="https://github.com/openjdk-mirror/jdk7u-hotspot/blob/50bdefc3afe944ca74c3093e7448d6b889cd20d1/src/share/vm/runtime/objectMonitor.cpp">ObjectMonitoropen in new window</a>实现的。每个对象中都内置了一个 <code>ObjectMonitor</code>对象。</p>
+<p>另外，<code>wait/notify</code>等方法也依赖于<code>monitor</code>对象，这就是为什么只有在同步的块或者方法中才能调用<code>wait/notify</code>等方法，否则会抛出<code>java.lang.IllegalMonitorStateException</code>的异常的原因。</p>
+</blockquote>
+<p>在执行<code>monitorenter</code>时，会尝试获取对象的锁，如果锁的计数器为 0 则表示锁可以被获取，获取后将锁计数器设为 1 也就是加 1。</p>
+<p>对象锁的的拥有者线程才可以执行 <code>monitorexit</code> 指令来释放锁。在执行 <code>monitorexit</code> 指令后，将锁计数器设为 0，表明锁被释放，其他线程可以尝试获取锁。如果获取对象锁失败，那当前线程就要阻塞等待，直到锁被另外一个线程释放为止。</p>
+<p><code>synchronized</code> 修饰的方法并没有 <code>monitorenter</code> 指令和 <code>monitorexit</code> 指令，取得代之的确实是 <code>ACC_SYNCHRONIZED</code> 标识，该标识指明了该方法是一个同步方法。JVM 通过该 <code>ACC_SYNCHRONIZED</code> 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。</p>
+<p>如果是实例方法，JVM 会尝试获取实例对象的锁。如果是静态方法，JVM 会尝试获取当前 class 的锁。</p>
+<p><strong>总结</strong></p>
+<p><code>synchronized</code> 同步语句块的实现使用的是 <code>monitorenter</code> 和 <code>monitorexit</code> 指令，其中 <code>monitorenter</code> 指令指向同步代码块的开始位置，<code>monitorexit</code> 指令则指明同步代码块的结束位置。</p>
+<p><code>synchronized</code> 修饰的方法并没有 <code>monitorenter</code> 指令和 <code>monitorexit</code> 指令，取得代之的确实是 <code>ACC_SYNCHRONIZED</code> 标识，该标识指明了该方法是一个同步方法。</p>
+<p><strong>两者的本质都是对对象监视器 monitor 的获取</strong>。</p>
+<h3 id="JDK1-6-之后的-synchronized-底层做了哪些优化？"><a href="#JDK1-6-之后的-synchronized-底层做了哪些优化？" class="headerlink" title="JDK1.6 之后的 synchronized 底层做了哪些优化？"></a>JDK1.6 之后的 synchronized 底层做了哪些优化？</h3><p>JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、自旋锁、适应性自旋锁、锁消除、锁粗化等技术来减少锁操作的开销。</p>
+<p>锁主要存在四种状态，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态，他们会随着竞争的激烈而逐渐升级。注意锁可以升级不可降级，这种策略是为了提高获得锁和释放锁的效率。</p>
+<h3 id="synchronized-和-volatile-有什么区别？"><a href="#synchronized-和-volatile-有什么区别？" class="headerlink" title="synchronized 和 volatile 有什么区别？"></a>synchronized 和 volatile 有什么区别？</h3><p><code>synchronized</code> 关键字和 <code>volatile</code> 关键字是两个互补的存在，而不是对立的存在！</p>
+<ul>
+<li><p><code>volatile</code> 关键字是线程同步的轻量级实现，所以 <code>volatile</code>性能肯定比<code>synchronized</code>关键字要好 。但是 <code>volatile</code> 关键字只能用于变量而 <code>synchronized</code> 关键字可以修饰方法以及代码块 。</p>
+</li>
+<li><p><code>volatile</code> 关键字能保证数据的可见性，但不能保证数据的原子性。<code>synchronized</code> 关键字两者都能保证。</p>
+</li>
+<li><p><code>volatile</code>关键字主要用于解决变量在多个线程之间的可见性，而 <code>synchronized</code> 关键字解决的是多个线程之间访问资源的同步性。</p>
+</li>
+<li></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JUC/" class="category-chain-item">JUC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JUC/" class="print-no-link">#JUC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>面试题目</div>
+      <div>http://example.com/2021/04/06/JUC/面试题目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/%E9%94%81%E7%9A%84%E5%AE%9A%E4%B9%89/" title="锁的定义">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">锁的定义</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/Linux/Linux%E5%AD%A6%E4%B9%A0/" title="Linux学习">
+                        <span class="hidden-mobile">Linux学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,893 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Drools 通常规则文件的后缀为.drl  规则体语法结构1234567rule &quot;ruleName&quot;    attributes    when        LHS     then        RHSend     rule：关键字，表示规则开始，参数为规则的唯一名称。  attributes：规则属性，是rule与when之间的参数，为可选项。  when：关键字，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="规则引擎">
+<meta property="og:url" content="http://example.com/2022/09/09/others/%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="Drools 通常规则文件的后缀为.drl  规则体语法结构1234567rule &quot;ruleName&quot;    attributes    when        LHS     then        RHSend     rule：关键字，表示规则开始，参数为规则的唯一名称。  attributes：规则属性，是rule与when之间的参数，为可选项。  when：关键字，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-09T14:46:32.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:42:57.074Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="规则引擎">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>规则引擎 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="规则引擎"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-09 22:46" pubdate>
+          2022年9月9日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">规则引擎</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Drools"><a href="#Drools" class="headerlink" title="Drools"></a>Drools</h1><blockquote>
+<p>通常规则文件的后缀为.drl</p>
+</blockquote>
+<h3 id="规则体语法结构"><a href="#规则体语法结构" class="headerlink" title="规则体语法结构"></a>规则体语法结构</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">rule <span class="hljs-string">&quot;ruleName&quot;</span><br>    attributes<br>    when<br>        LHS <br>    then<br>        RHS<br>end<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p><strong>rule</strong>：关键字，表示规则开始，参数为规则的唯一名称。</p>
+</li>
+<li><p><strong>attributes</strong>：规则属性，是rule与when之间的参数，为可选项。</p>
+</li>
+<li><p><strong>when</strong>：关键字，后面跟规则的条件部分。</p>
+</li>
+<li><p><strong>LHS</strong>(Left Hand Side)：是规则的条件部分的通用名称。它由零个或多个条件元素组成。<strong>如果LHS为空，则它将被视为始终为true的条件元素</strong>。 （左手边）</p>
+</li>
+<li><p><strong>then</strong>：关键字，后面跟规则的结果部分。</p>
+</li>
+<li><p><strong>RHS</strong>(Right Hand Side)：是规则的后果或行动部分的通用名称。 （右手边）</p>
+</li>
+<li><p><strong>end</strong>：关键字，表示一个规则结束。</p>
+</li>
+</ul>
+<blockquote>
+<p>在drl形式的规则文件中使用注释和Java类中使用注释一致，分为单行注释和多行注释。</p>
+</blockquote>
+<blockquote>
+<p>在规则体的LHS部分定义规则并进行模式匹配。LHS部分由一个或者多个条件组成，条件又称为pattern。</p>
+</blockquote>
+<ul>
+<li><strong>pattern的语法结构为：绑定变量名:Object(Field约束)</strong></li>
+</ul>
+<p>​	其中绑定变量名可以省略，通常绑定变量名的命名一般建议以$开始。</p>
+<p>​	如果定义了绑定变量名，就可以在规则体的RHS部分使用此绑定变量名来操作相应的Fact对象。</p>
+<p>​	Field约束部分是需要返回true或者false的0个或	多个表达式。</p>
+<h3 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a>比较操作符</h3><p>包括Java的  &gt;，&lt; ，&gt;&#x3D; ，&lt;&#x3D;，&#x3D;&#x3D;，!&#x3D;</p>
+<table>
+<thead>
+<tr>
+<th align="center">符号</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">contains</td>
+<td align="center">是否包含一个指定的对象值</td>
+</tr>
+<tr>
+<td align="center">not  contains</td>
+<td align="center">是否不包含一个指定的对象值</td>
+</tr>
+<tr>
+<td align="center">memberOf</td>
+<td align="center">是否在一个或多个集合中</td>
+</tr>
+<tr>
+<td align="center">not memberOf</td>
+<td align="center">是否不在一个或多个集合中</td>
+</tr>
+<tr>
+<td align="center">matches</td>
+<td align="center">是否与提供的标准的Java正则表达式进行匹配</td>
+</tr>
+<tr>
+<td align="center">not matches</td>
+<td align="center">是否不与提供的标准的Java正则表达式进行匹配</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//测试比较操作符contains</span><br>rule <span class="hljs-string">&quot;rule_comparison_contains&quot;</span><br>    when<br>        <span class="hljs-title function_">ComparisonEntity</span><span class="hljs-params">(names contains <span class="hljs-string">&quot;张三&quot;</span>)</span><br>        ComparisonEntity(list contains names)<br>    then<br>        System.out.println(<span class="hljs-string">&quot;规则rule_comparison_contains触发&quot;</span>);<br>end<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="规则属性-attributes"><a href="#规则属性-attributes" class="headerlink" title="规则属性 attributes"></a><strong>规则属性 attributes</strong></h3><ul>
+<li><p><strong>enabled</strong></p>
+<p>对应的取值为true和false，默认值为true。</p>
+<p>用于指定当前规则是否启用，如果设置的值为false则当前规则无论是否匹配成功都不会触发</p>
+</li>
+<li><p><strong>dialect</strong></p>
+<p>用于指定当前规则使用的语言类型，取值为java和mvel，默认值为java。</p>
+</li>
+<li><p><strong>salience</strong></p>
+<p>用于指定规则的执行优先级，<strong>取值类型为Integer</strong>。<strong>数值越大越优先执行</strong>。每个规则都有一个默认的执行顺序，如果不设置salience属性，规则体的执行顺序为由上到下。</p>
+</li>
+<li><p><strong>no-loop</strong></p>
+<p>用于防止死循环，当规则通过update之类的函数修改了Fact对象时，可能使当前规则再次被激活从而导致死循环。取值类型为Boolean，默认值为false。</p>
+</li>
+<li><p><strong>lock-on-active</strong></p>
+<p>用于限制当前规则只会被执行一次，包括当前规则的重复执行不是本身触发的。取值类型为Boolean，默认值为false。</p>
+<ul>
+<li>no-loop的作用是限制因为modify等更新操作导致规则重复执行，但是有一个限定条件，是当前规则中进行更新导致当前规则重复执行。而不是防止其他规则更新相同的fact对象，导致当前规则更新。</li>
+<li>lock-on-active可以看作是no-loop的加强版，不仅能限制自己的更新，还能限制别人的更新造成的死循环。</li>
+</ul>
+</li>
+<li><p><strong>activation-group</strong></p>
+<p>用于<strong>激活分组</strong>，取值为String类型。具有相同分组名称的规则只能有一个规则被触发。同一个分组中的多个规则如果都能够匹配成功，具体哪一个最终能够被触发可以通过salience属性确定。</p>
+</li>
+<li><p><strong>agenda-group</strong></p>
+<p>用于<strong>议程分组</strong>，属于另一种可控的规则执行方式。用户可以通过设置agenda-group来控制规则的执行，只有获取焦点的组中的规则才会被触发。</p>
+<p>activation-group定义的分组中只能够有一个规则可以被触发</p>
+<p>agenda-group分组中的多个规则都可以被触发。</p>
+</li>
+<li><p><strong>auto-focus</strong></p>
+<p><strong>自动获取焦点</strong>，取值类型为Boolean，默认值为false。一般结合agenda-group属性使用，当一个议程分组未获取焦点时，可以设置auto-focus属性来控制。</p>
+</li>
+<li><p><strong>timer</strong></p>
+<p>timer属性可以通过定时器的方式指定规则执行的时间，使用方式有两种：</p>
+<p><strong>方式一</strong>：timer (int: ?) 	&#x2F;&#x2F;timer(5s 2s)</p>
+<p>遵循java.util.Timer对象的使用方式，第一个参数表示几秒后执行，第二个参数表示每隔几秒执行一次，第二个参数为可选。</p>
+<p><strong>方式二</strong>：timer(cron: )	&#x2F;&#x2F;timer(cron:0&#x2F;1 * * * * ?)</p>
+<p>使用cron表达式来定义规则执行的规则。</p>
+<blockquote>
+<p>注意：如果规则中有用到了timer属性，匹配规则需要调用<a href="https://link.zhihu.com/?target=https://shimo.im/docs/m8AZVyE97DIz04Ab">kieSession.fireUntilHalt()</a>;这里涉及一个规则引擎的执行模式和线程问题</p>
+</blockquote>
+</li>
+<li><p><strong>date-effective</strong></p>
+<p><strong>用于指定规则的生效时间</strong>，即只有当前系统时间大于等于设置的时间或者日期规则才有可能触发。默认日期格式为：dd-MMM-yyyy。用户也可以自定义日期格式。</p>
+<blockquote>
+<p>注意：需要在VM参数上加上日期格式:-Ddrools.dateformat&#x3D;yyyy-MM-dd，在生产环境所在规则引擎的JVM设置中，也需要设置此参数，以保证开发和生产的一致性。</p>
+</blockquote>
+</li>
+<li><p><strong>date-expires</strong></p>
+<p>用于指定规则的<strong>失效时间</strong>，即只有当前系统时间小于设置的时间或者日期规则才有可能触发。默认日期格式为：dd-MMM-yyyy。用户也可以自定义日期格式。</p>
+<blockquote>
+<p>注意：需要在VM参数上加上日期格式:-Ddrools.dateformat&#x3D;yyyy-MM-dd，在生产环境所在规则引擎的JVM设置中，也需要设置此参数，以保证开发和生产的一致性。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="Jexl"><a href="#Jexl" class="headerlink" title="Jexl"></a>Jexl</h1><ol>
+<li>导入依赖</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.commons<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>commons-jexl<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>公共方法  &#x2F;&#x2F; 例：正则表达式匹配</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Util</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">regMatch</span><span class="hljs-params">(String regEx, String str)</span> &#123;<br>        <span class="hljs-type">Pattern</span> <span class="hljs-variable">pattern</span> <span class="hljs-operator">=</span> Pattern.compile(regEx);<br>        <span class="hljs-keyword">return</span> pattern.matcher(str).matches();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>调用示例</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">RL</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">JexlContext</span> <span class="hljs-variable">jc</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MapContext</span>();<br>    <span class="hljs-type">String</span> <span class="hljs-variable">str</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;一二三四五六七八九十&quot;</span>;<br>    jc.set(<span class="hljs-string">&quot;Util&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Util</span>());<br>    jc.set(<span class="hljs-string">&quot;str&quot;</span>, str);<br>    jc.set(<span class="hljs-string">&quot;ans&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);<br>    <span class="hljs-comment">//可以动态编译的表达式</span><br>    <span class="hljs-comment">//表达式中出现的所有变量,都需要事先set进JexlContext中</span><br>  <span class="hljs-comment">//&quot; \u4e00”和“\u9fa5”是unicode编码，并且正好是中文编码的开始和结束的两个值，所以这个正则表达式可以用来判断字符串中是否包含中文。&#123;10, &#125; 表示重复10次或更多次</span><br>    <span class="hljs-type">String</span> <span class="hljs-variable">expression</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;ans = Util.regMatch(&quot;</span>[u4e00-u9fa5]&#123;<span class="hljs-number">10</span>,&#125;<span class="hljs-string">&quot;,str)&quot;</span>;<br>    <span class="hljs-type">Expression</span> <span class="hljs-variable">e</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JexlEngine</span>().createExpression(expression);<br>    e.evaluate(jc);<br>    System.out.println(jc.get(<span class="hljs-string">&quot;ans&quot;</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>Jexl支持两种循环方式:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span> (item : list)&#123;<br>    x = x + item;<br>&#125;<br><br><br><span class="hljs-keyword">for</span> ( x lt <span class="hljs-number">10</span> )&#123;<br>    x = x + <span class="hljs-number">2</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>Jexl支持传入对象，并调用对象的<strong>get&#x2F;set</strong>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">getSet</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">TmpTest</span> <span class="hljs-variable">tmpTest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TmpTest</span>();<br>    tmpTest.setA(<span class="hljs-number">1</span>);<br>    <span class="hljs-type">JexlContext</span> <span class="hljs-variable">jc</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MapContext</span>();<br>    jc.set(<span class="hljs-string">&quot;tmpTest&quot;</span>, tmpTest);<br>    jc.set(<span class="hljs-string">&quot;ans&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);<br>    <span class="hljs-type">Expression</span> <span class="hljs-variable">e</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JexlEngine</span>().createExpression(<span class="hljs-string">&quot;ans = tmpTest.getA()&quot;</span>);<br>    e.evaluate(jc);<br>    System.out.println(jc.get(<span class="hljs-string">&quot;ans&quot;</span>));<br>    e = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JexlEngine</span>().createExpression(<span class="hljs-string">&quot;ans = tmpTest.setA(2)&quot;</span>);<br>    e.evaluate(jc);<br>    <span class="hljs-type">TmpTest</span> <span class="hljs-variable">tmpTest1</span> <span class="hljs-operator">=</span> (TmpTest) jc.get(<span class="hljs-string">&quot;tmpTest&quot;</span>);<br>    System.out.println(tmpTest1.getA());<br>&#125;<br><span class="hljs-comment">//先输出1，再输出2</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E/" class="category-chain-item">规则引擎</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E/" class="print-no-link">#规则引擎</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>规则引擎</div>
+      <div>http://example.com/2022/09/09/others/规则引擎/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/21/%E7%AE%97%E6%B3%95/LeetCode/Leetcode%20779.%20%E7%AC%ACK%E4%B8%AA%E8%AF%AD%E6%B3%95%E7%AC%A6%E5%8F%B7/" title="Leetcode 779. 第K个语法符号">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Leetcode 779. 第K个语法符号</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/09/others/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="问题解决方案">
+                        <span class="hidden-mobile">问题解决方案</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy-coding">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue学习">
+<meta property="og:url" content="http://example.com/2021/04/06/Web/Vue%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-06T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T12:22:13.935Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Vue学习 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Vue学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 12:13" pubdate>
+          2021年4月6日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Vue学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># 初识Vue</span><br><br><span class="hljs-bullet">1.</span> 想让Vue工作，就必须创建一个Vue实例，且要传入一个配置对象。<br><span class="hljs-bullet">2.</span> root容器里的代码依然符合html规范，但混入一些特殊的Vue语法<br><span class="hljs-bullet">3.</span> root容器里的代码被称为Vue模板<br><span class="hljs-bullet">4.</span> Vue实例和容器是一一对应的<br><span class="hljs-bullet">5.</span> 真实开发只有一个Vue实例，并且会配合组件一起使用。<br><span class="hljs-bullet">6.</span> &#123;&#123;xxxx&#125;&#125; 中的xxx要写js表达式， 且xxx可以自动读取到data里的所有属性<br><span class="hljs-bullet">7.</span> 一旦data里的数据发生改变，页面中用到该数据的地方会自动更新<br><span class="hljs-bullet">8.</span> js表达式和js代码（语句）的区分<br><span class="hljs-bullet">    1.</span> 表达式：一个表达式会产生一个值，可以放在任何一个需要值的地方<br><span class="hljs-bullet">        1.</span> a<br><span class="hljs-bullet">        2.</span> a+b<br><span class="hljs-bullet">        3.</span> demo(1)<br><span class="hljs-bullet">        4.</span> x === y ？ &#x27;a&#x27; : &#x27;b&#x27;<br><span class="hljs-bullet">    2.</span> js代码（语句）<br><span class="hljs-bullet">        1.</span> if()&#123;&#125;<br><span class="hljs-bullet">        2.</span> for()&#123;&#125;<br><br><span class="hljs-section">### 模板语法</span><br><br><span class="hljs-bullet">1.</span> 插值语法：<br><span class="hljs-bullet">    -</span> 功能：用于解析标签体内容<br><span class="hljs-bullet">    -</span> 写法：&#123;&#123;xxx&#125;&#125;，xxx是js表达式，且可以直接读取到data中的所有区域<br><span class="hljs-bullet">2.</span> 指令语法：<br><span class="hljs-bullet">    -</span> 功能：用于解析标签（包括：标签属性、标签体内容、绑定事件…）<br><span class="hljs-bullet">    -</span> 举例：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">v-bind:href</span>=<span class="hljs-string">&quot;xxx&quot;</span>&gt;</span></span>或简写为<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">:href</span>=<span class="hljs-string">&quot;xxx&quot;</span>&gt;</span></span>，xxx同样要写js表达式，且可以直接读取到data中的所有属性<br><br><span class="hljs-section">### 数据绑定</span><br><br><span class="hljs-bullet">1.</span> 单向绑定（v-bind）：数据只能从data流向页面<br><br><span class="hljs-bullet">2.</span> 双向绑定（v-model）：数据不仅能从data流向页面，还可以从页面流向data<br><br><span class="hljs-code">    &gt; 双向绑定一般都应用在表单类元素（可以输入的元素）上（如：&lt;input&gt;、&lt;select&gt;、&lt;textarea&gt;等）</span><br><span class="hljs-code">    &gt; v-model:value可以简写为v-model，因为v-model默认收集的就是value值</span><br><span class="hljs-code"></span><br><span class="hljs-section">### el与data的两种写法</span><br><br><span class="hljs-bullet">1.</span> el<br><br><span class="hljs-code">    ```Vue</span><br><span class="hljs-code">    const vm = new Vue(&#123;</span><br><span class="hljs-code">    	el:&#x27;#root&#x27;, //第一种写法</span><br><span class="hljs-code">    	data:&#123;</span><br><span class="hljs-code">    		name:&#x27;JOJO&#x27;</span><br><span class="hljs-code">    	&#125;</span><br><span class="hljs-code">    &#125;)</span><br><span class="hljs-code">    vm.$mount(&#x27;#root&#x27;)//第二种写法</span><br><span class="hljs-code">    ```</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">2.</span> data<br><br><span class="hljs-code">    ```vue</span><br><span class="hljs-code">    data:&#123;</span><br><span class="hljs-code">    	name:&#x27;JOJO&#x27;</span><br><span class="hljs-code">    &#125;</span><br><span class="hljs-code">    ```</span><br><span class="hljs-code"></span><br><span class="hljs-code">    ```vue</span><br><span class="hljs-code">    data()&#123;</span><br><span class="hljs-code">    	return&#123;</span><br><span class="hljs-code">    		name:&#x27;JOJO&#x27;</span><br><span class="hljs-code">    	&#125;</span><br><span class="hljs-code">    &#125;</span><br><span class="hljs-code">    ```</span><br><span class="hljs-code"></span><br><span class="hljs-code">    </span><br><span class="hljs-code"></span><br><span class="hljs-section">### 数据代理</span><br><br>![<span class="hljs-string">image-20220925215057541</span>](<span class="hljs-link">C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20220925215057541.png</span>)<br><br><span class="hljs-bullet">1.</span> 通过vm对象来代理data对象中属性的操作（读/写）<br><span class="hljs-bullet">2.</span> 代理的好处是更加方便的操作data中的数据<br><span class="hljs-bullet">3.</span> 原理：通过Object.defineProperty()把data对象中的所有属性添加到vm上，为每一个添加到vm上的属性都指定一个getter/setter，在getter/setter的内部去操作读写data中对应的属性。<br><br><br><br><span class="hljs-section">### 事件处理</span><br><br><span class="hljs-bullet">1.</span> 使用v-on:xxx或@xxx绑定事件，其中xxx是事件名<br><span class="hljs-bullet">2.</span> 事件的回调需要配置在methods对象中，最终会在vm上<br><span class="hljs-bullet">3.</span> methods中配置的函数，==不要用箭头函数！==否则this就不是vm了<br><span class="hljs-bullet">4.</span> methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象<br><span class="hljs-bullet">5.</span> @click=&quot;demo和@click=&quot;demo($event)&quot;效果一致，但后者可以传参<br><br><span class="hljs-section">### 事件修饰符</span><br><br><span class="hljs-bullet">1.</span> prevent：阻止默认事件（常用）<br><br><span class="hljs-bullet">2.</span> stop：阻止事件冒泡（常用）<br><br><span class="hljs-bullet">3.</span> once：事件只触发一次（常用）<br><br><span class="hljs-bullet">4.</span> capture：使用事件的捕获模式<br><br><span class="hljs-bullet">5.</span> self：只有event.target是当前操作的元素时才触发事件<br><br><span class="hljs-bullet">6.</span> passive：事件的默认行为立即执行，无需等待事件回调执行完毕<br><br><span class="hljs-code">    &gt; 修饰符可以连续写，比如可以这么用：@click.prevent.stop=&quot;showInfo&quot;</span><br><span class="hljs-code"></span><br><span class="hljs-section">### 常用的按键别名</span><br><br><span class="hljs-bullet">1.</span> 回车：enter<br><span class="hljs-bullet">2.</span> 删除：delete (捕获“删除”和“退格”键)<br><span class="hljs-bullet">3.</span> 退出：esc<br><span class="hljs-bullet">4.</span> 空格：space<br><span class="hljs-bullet">5.</span> 换行：tab (特殊，必须配合keydown去使用)<br><span class="hljs-bullet">6.</span> 上：up<br><span class="hljs-bullet">7.</span> 下：down<br><span class="hljs-bullet">8.</span> 左：left<br><span class="hljs-bullet">9.</span> 右：right<br><br><span class="hljs-quote">&gt; 注意：</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; - 系统修饰键（用法特殊）：ctrl、alt、shift、meta</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; - 配合keyup使用：按下修饰键的同时，再按下其他键，随后释放其他键，事件才被触发</span><br><span class="hljs-quote">&gt;     配合keydown使用：正常触发事件</span><br><span class="hljs-quote">&gt;     可以使用keyCode去指定具体的按键，比如：@keydown.13=&quot;showInfo&quot;，但不推荐这样使用</span><br><span class="hljs-quote">&gt; - Vue.config.keyCodes.自定义键名 = 键码，可以自定义按键别名</span><br><br><br><br><br><br><span class="hljs-section">### 计算属性</span><br><br>定义：要用的属性不存在，需要通过已有属性计算得来。<br><br>原理：底层借助了Objcet.defineproperty()方法提供的getter和setter。<br><br>get函数什么时候执行？ <br><br><span class="hljs-bullet">-</span> 初次读取时会执行一次<br><span class="hljs-bullet">-</span> 当依赖的数据发生改变时会被再次调用<br><br>优势：与methods实现相比，内部有缓存机制（复用），效率更高，调试方便<br><br><span class="hljs-quote">&gt; 备注：</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; 计算属性最终会出现在vm上，直接读取使用即可</span><br><span class="hljs-quote">&gt; 如果计算属性要被修改，那必须写set函数去响应修改，且set中要引起计算时依赖的数据发生改变</span><br><span class="hljs-quote">&gt; 如果计算属性确定不考虑修改，可以使用计算属性的简写形式</span><br><br><br><br><span class="hljs-section">### 监视属性watch</span><br><br><span class="hljs-bullet">1.</span> 当被监视的属性变化时，回调函数自动调用，进行相关操作<br><span class="hljs-bullet">2.</span> 监视的属性必须存在，才能进行监视<br><span class="hljs-bullet">3.</span> 监视有两种写法：<br><span class="hljs-bullet">    1.</span> 创建Vue时传入watch配置<br><span class="hljs-bullet">    2.</span> 通过<span class="hljs-code">`vm.$watch`</span>监视<br><br><br><br><span class="hljs-section">### 深度监视</span><br><br><span class="hljs-bullet">1.</span> Vue中的watch默认不监测对象内部值的改变（一层）<br><span class="hljs-bullet">2.</span> 在watch中配置deep:true可以监测对象内部值的改变（多层）<br><br><span class="hljs-quote">&gt; 备注：</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; Vue自身可以监测对象内部值的改变，但Vue提供的watch默认不可以</span><br><span class="hljs-quote">&gt; 使用watch时根据监视数据的具体结构，决定是否采用深度监视</span><br><br><br><br><span class="hljs-section">### 监视属性简写</span><br><br>如果监视属性除了handler没有其他配置项的话，可以进行简写。<br><br><br><br><span class="hljs-section">#### computed和watch之间的区别</span><br><br><span class="hljs-bullet">1.</span> computed能完成的功能，watch都可以完成<br><span class="hljs-bullet">2.</span> watch能完成的功能，computed不一定能完成，例如：watch可以进行异步操作<br><br><span class="hljs-quote">&gt; 两个重要的小原则：</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; - 所有被Vue管理的函数，最好写成普通函数，这样this的指向才是vm 或 组件实例对象</span><br><span class="hljs-quote">&gt; - 所有不被Vue所管理的函数（定时器的回调函数、ajax的回调函数等、Promise的回调函数），最好写成箭头函数，这样this的指向才是vm 或 组件实例对象。</span><br><br><br><br><span class="hljs-section">### 绑定样式</span><br><br>class样式：<br><br>写法：class=&quot;xxx&quot;，xxx可以是字符串、对象、数组<br><br>字符串写法适用于：类名不确定，要动态获取<br><br>对象写法适用于：要绑定多个样式，个数不确定，名字也不确定<br><br>数组写法适用于：要绑定多个样式，个数确定，名字也确定，但不确定用不用<br><br>style样式：<br><br><span class="hljs-code">```vue</span><br><span class="hljs-code">:style=&quot;&#123;fontSize: xxx&#125;&quot;  #其中xxx是动态值</span><br><span class="hljs-code">:style=&quot;[a,b]&quot; #其中a、b是样式对</span><br><span class="hljs-code">```</span><br><br><span class="hljs-section">### 条件渲染</span><br><br><span class="hljs-bullet">1.</span> v-if：<br><br><span class="hljs-bullet">    -</span> 写法：<br><br><span class="hljs-bullet">    -</span> v-if=&quot;表达式&quot;<br><span class="hljs-code">        v-else-if=&quot;表达式&quot;</span><br><span class="hljs-code">        v-else</span><br><span class="hljs-code">        适用于：切换频率较低的场景</span><br><span class="hljs-code">    - 特点：不展示的DOM元素直接被移除</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">    -</span> 注意：v-if可以和v-else-if、v-else一起使用，但要求结构不能被打断<br><br><span class="hljs-bullet">2.</span> v-show：<br><br><span class="hljs-bullet">    -</span> 写法：v-show=&quot;表达式&quot;<br><span class="hljs-bullet">    -</span> 适用于：切换频率较高的场景<br><span class="hljs-bullet">    -</span> 特点：不展示的DOM元素未被移除，仅仅是使用样式隐藏掉<br><span class="hljs-code">        使用v-if的时，元素可能无法获取到，而使用v-show一定可以获取到</span><br><span class="hljs-code"></span><br><span class="hljs-section">### 列表渲染</span><br><br><span class="hljs-section">#### 基本列表</span><br><br><span class="hljs-code">`v-for`</span>指令：<br><br><span class="hljs-bullet">1.</span> 用于展示列表数据<br><span class="hljs-bullet">2.</span> 语法：<span class="hljs-code">`&lt;li v-for=&quot;(item, index) in xxx&quot; :key=&quot;yyy&quot;&gt;`</span>，其中key可以是index，也可以是遍历对象的唯一标识<br><span class="hljs-bullet">3.</span> 可遍历：数组、对象、字符串（用的少）、指定次数（用的少）<br><br><span class="hljs-section">#### key的作用与原理</span><br><br>面试题：react、vue中的key有什么作用？（key的内部原理）<br><br>虚拟DOM中key的作用：key是虚拟DOM中对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】，随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下：<br><br>对比规则：<br><br>旧虚拟DOM中找到了与新虚拟DOM相同的key：<br><br>若虚拟DOM中内容没变, 直接使用之前的真实DOM<br>若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM<br>旧虚拟DOM中未找到与新虚拟DOM相同的key：创建新的真实DOM，随后渲染到到页面<br><br>用index作为key可能会引发的问题：<br><br>若对数据进行逆序添加、逆序删除等破坏顺序操作：会产生没有必要的真实DOM更新 ==&gt; 界面效果没问题, 但效率低<br>若结构中还包含输入类的DOM：会产生错误DOM更新 ==&gt; 界面有问题<br>开发中如何选择key?<br><br>最好使用每条数据的唯一标识作为key，比如id、手机号、身份证号、学号等唯一值<br>如果不存在对数据的逆序添加、逆序删除等破坏顺序的操作，仅用于渲染列表，使用index作为key是没有问题的<br><br><br><br><span class="hljs-section">#### 列表过滤</span><br><br><span class="hljs-section">#### 列表排序</span><br><br><span class="hljs-section">#### 数据监视</span><br><br><span class="hljs-bullet">1.</span> Vue监视数据的原理：<br><br><span class="hljs-code">    ​	vue会监视data中所有层次的数据</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">2.</span> 如何监测对象中的数据？、<br><br><span class="hljs-code">    ​	通过setter实现监视，且要在new Vue时就传入要监测的数据</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">    1.</span> 对象中后追加的属性，Vue默认不做响应式处理<br><br><span class="hljs-bullet">    2.</span> 如需给后添加的属性做响应式，请使用如下API：<br><br><span class="hljs-bullet">        -</span> Vue.set(target,propertyName/index,value)<br><br><span class="hljs-bullet">        -</span> vm.$set(target,propertyName/index,value)<br><br><span class="hljs-bullet">3.</span> 如何监测数组中的数据？<br><br><span class="hljs-bullet">4.</span> 通过包裹数组更新元素的方法实现，本质就是做了两件事：<br><br><span class="hljs-bullet">    1.</span> 调用原生对应的方法对数组进行更新<br><span class="hljs-bullet">    2.</span> 重新解析模板，进而更新页面<br><br><span class="hljs-bullet">5.</span> 在Vue修改数组中的某个元素一定要用如下方法：<br><br><span class="hljs-bullet">    1.</span> 使用这些API：push()、pop()、shift()、unshift()、splice()、sort()、reverse()<br><br><span class="hljs-bullet">    2.</span> Vue.set() 或 vm.$set()<br><br><span class="hljs-code">        &gt; 特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象（data等） 添加属性</span><br><span class="hljs-code"></span><br><br><br><span class="hljs-section">### 收集表单数据</span><br><br>收集表单数据：<br><br><span class="hljs-bullet">-</span> 若：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>/&gt;</span></span>，则v-model收集的是value值，用户输入的内容就是value值<br><span class="hljs-bullet">-</span> 若：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span>/&gt;</span></span>，则v-model收集的是value值，且要给标签配置value属性<br><span class="hljs-bullet">-</span> 若：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span>/&gt;</span></span><br><span class="hljs-bullet">    -</span> 没有配置value属性，那么收集的是checked属性（勾选 or 未勾选，是布尔值）<br><span class="hljs-bullet">    -</span> 配置了value属性：<br><span class="hljs-bullet">        -</span> v-model的初始值是非数组，那么收集的就是checked（勾选 or 未勾选，是布尔值）<br><span class="hljs-bullet">        -</span> v-model的初始值是数组，那么收集的就是value组成的数组<br><br>v-model的三个修饰符(v-model.xxx)：<br><br><span class="hljs-bullet">1.</span> lazy：失去焦点后再收集数据<br><span class="hljs-bullet">2.</span> number：输入字符串转为有效的数字<br><span class="hljs-bullet">3.</span> trim：输入首尾空格过滤<br><br><span class="hljs-section">#### 过滤器：</span><br><br><span class="hljs-bullet">-</span> 定义：对要显示的数据进行特定格式化后再显示（适用于一些简单逻辑的处理）。<br><br><span class="hljs-bullet">-</span> 语法：<br><br><span class="hljs-bullet">    1.</span> 注册过滤器：Vue.filter(name,callback) 或 new Vue&#123;filters:&#123;&#125;&#125;<br><br><span class="hljs-bullet">    2.</span> 使用过滤器：&#123;&#123; xxx | 过滤器名&#125;&#125; 或 v-bind:属性 = &quot;xxx | 过滤器名&quot;<br><br><br><span class="hljs-quote">&gt; 备注：</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; 过滤器可以接收额外参数，多个过滤器也可以串联</span><br><span class="hljs-quote">&gt; 并没有改变原本的数据，而是产生新的对应的数据</span><br><br><span class="hljs-section">### 内置指令</span><br><br><span class="hljs-section">#### v-text指令</span><br><br><span class="hljs-bullet">-</span> 之前学过的指令：<br><br><span class="hljs-bullet">    -</span> v-bind：单向绑定解析表达式，可简写为:<br><br><span class="hljs-bullet">    -</span> v-model：双向数据绑定<br><br><span class="hljs-bullet">    -</span> v-for：遍历数组 / 对象 / 字符串<br><br><span class="hljs-bullet">    -</span> v-on：绑定事件监听，可简写为@<br><br><span class="hljs-bullet">    -</span> v-if：条件渲染（动态控制节点是否存存在）<br><br><span class="hljs-bullet">    -</span> v-else：条件渲染（动态控制节点是否存存在）<br><br><span class="hljs-bullet">    -</span> v-show：条件渲染 (动态控制节点是否展示)<br><br><span class="hljs-bullet">-</span> v-text指令：<br><br><span class="hljs-bullet">    -</span> 作用：向其所在的节点中渲染文本内容<br><br><span class="hljs-bullet">    -</span> 与插值语法的区别：v-text会替换掉节点中的内容，&#123;&#123;xx&#125;&#125;则不会。<br><br><br><br><span class="hljs-section">#### v-html指令</span><br><br><span class="hljs-bullet">1.</span> 作用：向指定节点中渲染包含html结构的内容<br><span class="hljs-bullet">2.</span> 与插值语法的区别：<br><span class="hljs-bullet">    -</span> v-html会替换掉节点中所有的内容，&#123;&#123;xx&#125;&#125;则不会<br><span class="hljs-bullet">    -</span> v-html可以识别html结构<br><span class="hljs-bullet">3.</span> 严重注意：<br><span class="hljs-bullet">    -</span> v-html有安全性问题！！！<br><span class="hljs-bullet">    -</span> 在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击<br><span class="hljs-bullet">    -</span> 一定要在可信的内容上使用v-html，永远不要用在用户提交的内容上！！！<br><br><br><br><span class="hljs-section">#### v-cloak指令</span><br><br><span class="hljs-code">`v-cloak`</span>指令（没有值）：<br><br><span class="hljs-bullet">1.</span> 本质是一个特殊属性，Vue实例创建完毕并接管容器后，会删掉<span class="hljs-code">`v-cloak`</span>属性<br><span class="hljs-bullet">2.</span> 使用css配合<span class="hljs-code">`v-cloak`</span>可以解决网速慢时页面展示出<span class="hljs-code">`&#123;&#123;xxx&#125;&#125;`</span>的问题<br><br><span class="hljs-section">#### v-once指令</span><br><br><span class="hljs-code">`v-once`</span>指令：<br><br><span class="hljs-bullet">1.</span> <span class="hljs-code">`v-once`</span>所在节点在初次动态渲染后，就视为静态内容了<br><span class="hljs-bullet">2.</span> 以后数据的改变不会引起<span class="hljs-code">`v-once`</span>所在结构的更新，可以用于优化性能<br><br><span class="hljs-section">#### v-pre指令</span><br><br><span class="hljs-code">`v-pre`</span>指令：<br><br><span class="hljs-bullet">1.</span> 跳过其所在节点的编译过程。<br><span class="hljs-bullet">2.</span> 可利用它跳过：没有使用指令语法、没有使用插值语法的节点，会加快编译<br><br><span class="hljs-section">#### 自定义指令</span><br><br>总结：<br><br>自定义指令定义语法：<br><br>局部指令：<br><br><span class="hljs-code">```Vue</span><br><span class="hljs-code">new Vue(&#123;</span><br><span class="hljs-code">	directives:&#123;指令名:配置对象&#125;   </span><br><span class="hljs-code">&#125;) 	</span><br><span class="hljs-code">new Vue(&#123;</span><br><span class="hljs-code">	directives:&#123;指令名:回调函数&#125;   </span><br><span class="hljs-code">&#125;)</span><br><span class="hljs-code">```</span><br><br><br>全局指令：<br><br><span class="hljs-code">```Vue</span><br><span class="hljs-code">Vue.directive(指令名,配置对象)</span><br><span class="hljs-code">Vue.directive(指令名,回调函数)</span><br><span class="hljs-code">```</span><br><br>配置对象中常用的3个回调函数：<br><br>bind(element,binding) ：指令与元素成功绑定时调用<br>inserted(element,binding)：指令所在元素被插入页面时调用<br>update(element,binding)：指令所在模板结构被重新解析时调用<br>备注：<br><br>指令定义时不加“v-”，但使用时要加“v-”<br><br>指令名如果是多个单词，要使用kebab-case命名方式，不要用camelCase命名<br><br><span class="hljs-section">### Vue生命周期</span><br><br><span class="hljs-bullet">1.</span> 生命周期：<br><span class="hljs-bullet">    1.</span> 又名：生命周期回调函数、生命周期函数、生命周期钩子<br><span class="hljs-bullet">    2.</span> 是什么：Vue在关键时刻帮我们调用的一些特殊名称的函数<br><span class="hljs-bullet">    3.</span> 生命周期函数的名字不可更改，但函数的具体内容是程序员根据需求编写的<br><span class="hljs-bullet">    4.</span> 生命周期函数中的this指向是vm 或 组件实例对象<br><span class="hljs-bullet">2.</span> 常用的生命周期钩子：<br><span class="hljs-bullet">    1.</span> mounted：发送ajax请求、启动定时器、绑定自定义事件、订阅消息等初始化操作（如页面标签挂载后，启动定时器）<br><span class="hljs-bullet">    2.</span> beforeDestroy：清除定时器、解绑自定义事件、取消订阅消息等收尾工作<br><span class="hljs-bullet">3.</span> 销毁Vue实例：<br><span class="hljs-bullet">    1.</span> 销毁后借助Vue开发者工具看不到任何信息<br><span class="hljs-bullet">    2.</span> 销毁后自定义事件会失效，但原生DOM事件依然有效<br><span class="hljs-bullet">    3.</span> 一般不会在beforeDestroy操作数据，因为即便操作数据，也不会再触发更新流程了<br><br><br><br><br><br><span class="hljs-section"># Vue组件化编程</span><br><br><span class="hljs-section">### 模块与组件、模块化与组件化</span><br><br><span class="hljs-bullet">-</span> 模块<br><br><span class="hljs-bullet">    -</span> 理解：向外提供特定功能的 js 程序，一般就是一个 js 文件	<br><span class="hljs-bullet">    -</span> 为什么：js 文件很多很复杂<br><span class="hljs-bullet">    -</span> 作用：复用 js，简化 js 的编写，提高 js 运行效率<br><span class="hljs-bullet">-</span> 组件<br><span class="hljs-bullet">    -</span> 定义：用来实现局部功能的代码和资源的集合（html/css/js/image…）<br><span class="hljs-bullet">    -</span> 为什么：一个界面的功能很复杂<br><span class="hljs-bullet">    -</span> 作用：复用编码，简化项目编码，提高运行效率<br><span class="hljs-bullet">-</span> 模块化<br><span class="hljs-bullet">    -</span> 当应用中的 js 都以模块来编写的，那这个应用就是一个模块化的应用<br><br><span class="hljs-bullet">-</span> 组件化<br><span class="hljs-bullet">    -</span> 当应用中的功能都是多组件的方式来编写的，那这个应用就是一个组件化的应用<br><br><br><br><span class="hljs-section">### Vue中使用组件的三大步骤</span><br><br><span class="hljs-bullet">1.</span> 定义组件(创建组件)<br><br><span class="hljs-bullet">2.</span> 注册组件<br><span class="hljs-bullet">3.</span> 使用组件(写组件标签)<br><br><span class="hljs-bullet">-</span> 如何定义一个组件？<br><span class="hljs-bullet">    -</span> 使用Vue.extend(options)创建，其中options和new Vue(options)时传入的options几乎一样，但也有点区别：<br><br><span class="hljs-bullet">-</span> el不要写，为什么？<br><br><span class="hljs-bullet">    -</span> 最终所有的组件都要经过一个vm的管理，由vm中的el决定服务哪个容器<br><br><span class="hljs-bullet">-</span> data必须写成函数，为什么？<br><br><span class="hljs-bullet">    -</span> 避免组件被复用时，数据存在引用关系<br><br><span class="hljs-bullet">-</span> 如何注册组件？<br><br><span class="hljs-bullet">    -</span> 局部注册：new Vue的时候传入components选项<br><span class="hljs-bullet">    -</span> 全局注册：Vue.component(&#x27;组件名&#x27;,组件)<br><span class="hljs-bullet">-</span> 编写组件标签：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>&gt;</span></span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">school</span>&gt;</span></span><br><br><br><br><span class="hljs-section">### 关于组件名</span><br><br><span class="hljs-strong">**一个单词组成**</span><br><br>第一种写法（首字母小写）：school<br><br>第二种写法（首字母大写）：School<br><br><span class="hljs-strong">**多个单词组成**</span><br><br>第一种写法（kebab-case命名）：my-school<br>第二种写法（CamelCase命名）：MySchool （需要Vue脚手架支持）<br><br><span class="hljs-quote">&gt; 备注：组件名尽可能回避HTML中已有的元素名称，</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; 例如：h2、H2都不行</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; options中可以使用name配置项指定组件在开发者工具中呈现的名字</span><br><br><span class="hljs-section">### 关于组件标签</span><br><br>第一种写法：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>&gt;</span></span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">school</span>&gt;</span></span><br>第二种写法：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>/&gt;</span></span><br><br><span class="hljs-quote">&gt; 备注：不使用脚手架时，<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>/&gt;</span></span>会导致后续组件不能渲染</span><br><span class="hljs-quote">&gt; 一个简写方式：const school = Vue.extend(options)可简写为：const school = options</span><br><br><br><br><br><br><span class="hljs-section">### 关于VueComponent</span><br><br>school组件本质是一个名为VueComponent的构造函数，且不是程序员定义的，是Vue.extend生成的<br><br>我们只需要写<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>/&gt;</span></span>或<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">school</span>&gt;</span></span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">school</span>&gt;</span></span>，Vue解析时会帮我们创建school组件的实例对象，即Vue帮我们执行的：new VueComponent(options)<br><br>特别注意：每次调用Vue.extend，返回的都是一个全新的VueComponent！<br><br><span class="hljs-strong">**关于this指向**</span><br><br><span class="hljs-bullet">-</span> 组件配置中：data函数、methods中的函数、watch中的函数、computed中的函数 它们的this均是VueComponent实例对象new<br><span class="hljs-bullet">-</span> Vue(options)配置中：data函数、methods中的函数、watch中的函数、computed中的函数 它们的this均是Vue实例对象<br><br>Vue的实例对象，以后简称vm。<br><br><span class="hljs-quote">&gt; VueComponent的实例对象，以后简称vc（也可称之为：组件实例对象）</span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; 只有在本笔记中VueComponent的实例对象才简称为vc</span><br><br><br><br><span class="hljs-section">### 一个重要的内置关系</span><br><br><span class="hljs-bullet">1.</span> 一个重要的内置关系：<span class="hljs-code">`VueComponent.prototype.__proto__ === Vue.prototype`</span><br><br><span class="hljs-code">    &gt; VueComponent（构造函数）的prototype（即VueComponent的原型对象）的_ _proto _ _(即Vue的原型对象) === Vue（构造函数）的 prototype（Vue的原型对象）</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">2.</span> 为什么要有这个关系：让组件实例对象（vc）可以访问到 Vue 原型上的属性、方法<br><br><span class="hljs-code">    &gt; 访问实例对象vc的数据时，找不到会到vc的_ _proto _ _里面找，即找到Vue</span><br><span class="hljs-code"></span><br><span class="hljs-section"># Vue CLI</span><br><br><span class="hljs-bullet">1.</span> Vue 脚手架是 Vue 官方提供的标准化开发工具（开发平台）<br><br><span class="hljs-bullet">2.</span> 步骤<br><br><span class="hljs-bullet">    -</span> 如果下载缓慢请配置 npm 淘宝镜像：npm config set registry http://registry.npm.taobao.org<br><br><span class="hljs-bullet">    -</span> 全局安装@vue/cli：npm install -g @vue/cli<br><br><span class="hljs-bullet">    -</span> 切换到你要创建项目的目录，然后使用命令创建项目：vue create xxxx<br><span class="hljs-bullet">    -</span> 选择使用vue的版本<br><br><span class="hljs-bullet">    -</span> 启动项目：npm run serve<br><br><span class="hljs-bullet">    -</span> 暂停项目：Ctrl+C<br><br><span class="hljs-code">    &gt; Vue 脚手架隐藏了所有 webpack 相关的配置，若想查看具体的 webpakc 配置，请执行：</span><br><span class="hljs-code">    &gt;</span><br><span class="hljs-code">    &gt; ```</span><br><span class="hljs-code">    &gt; vue inspect &gt; output.js</span><br><span class="hljs-code">    &gt; ```</span><br><span class="hljs-code"></span><br><span class="hljs-bullet">3.</span> 脚手架文件结构<br><br><span class="hljs-code">    ```txt</span><br><span class="hljs-code">    .文件目录</span><br><span class="hljs-code">    ├── node_modules </span><br><span class="hljs-code">    ├── public</span><br><span class="hljs-code">    │   ├── favicon.ico: 页签图标</span><br><span class="hljs-code">    │   └── index.html: 主页面</span><br><span class="hljs-code">    ├── src</span><br><span class="hljs-code">    │   ├── assets: 存放静态资源</span><br><span class="hljs-code">    │   │   └── logo.png</span><br><span class="hljs-code">    │   │── component: 存放组件</span><br><span class="hljs-code">    │   │   └── HelloWorld.vue</span><br><span class="hljs-code">    │   │── App.vue: 汇总所有组件</span><br><span class="hljs-code">    │   └── main.js: 入口文件</span><br><span class="hljs-code">    ├── .gitignore: git版本管制忽略的配置</span><br><span class="hljs-code">    ├── babel.config.js: babel的配置文件</span><br><span class="hljs-code">    ├── package.json: 应用包配置文件 </span><br><span class="hljs-code">    ├── README.md: 应用描述文件</span><br><span class="hljs-code">    └── package-lock.json: 包版本控制文件</span><br><span class="hljs-code">    ```</span><br><span class="hljs-code"></span><br><span class="hljs-code">    </span><br><span class="hljs-code"></span><br><span class="hljs-section">### Vue的不同版本js</span><br><br><span class="hljs-strong">**vue.js 与 vue.runtime.xxx.js的区别**</span><br><br><span class="hljs-bullet">-</span> vue.js 是完整版的 Vue，包含：核心功能+模板解析器<br><br><span class="hljs-bullet">-</span> vue.runtime.xxx.js 是运行版的 Vue，只包含核心功能，没有模板解析器。<br><br><span class="hljs-code">    &gt; 因为 vue.runtime.xxx.js 没有模板解析器，所以不能使用 template 配置项，</span><br><span class="hljs-code">    &gt;</span><br><span class="hljs-code">    &gt; 需要使用 render函数接收到的createElement 函数去指定具体内容</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Vue/" class="category-chain-item">Vue</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Vue/" class="print-no-link">#Vue</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Vue学习</div>
+      <div>http://example.com/2021/04/06/Web/Vue学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy-coding</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/SpringBoot/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" title="Java集合框架">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java集合框架</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/ReentrantLock/" title="ReentrantLock">
+                        <span class="hidden-mobile">ReentrantLock</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

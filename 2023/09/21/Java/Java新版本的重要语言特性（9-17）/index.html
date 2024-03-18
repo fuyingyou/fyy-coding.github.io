@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();   声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java新版本的重要语言特性（9-17）">
+<meta property="og:url" content="http://example.com/2023/09/21/Java/Java%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E9%87%8D%E8%A6%81%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7%EF%BC%889-17%EF%BC%89/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="JDK9允许在接口中使用私有方法JDK10局部变量类型推断1var list &#x3D; new ArrayList&lt;String&gt;();   声明时必须初始化  可以使用在：  具有初始化器的局部变量 增强型 for 循环中的索引变量 传统 for 循环中声明的局部变量  不能使用在：  推断方法的参数类型 构造函数参数类型推断 推断方法返回类型 字段类型推断 捕获表达式（或任何其他类型的变">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-21T01:06:04.000Z">
+<meta property="article:modified_time" content="2024-03-18T12:06:14.002Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java新版本的重要语言特性（9-17） - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java新版本的重要语言特性（9-17）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-21 09:06" pubdate>
+          2023年9月21日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java新版本的重要语言特性（9-17）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="JDK9"><a href="#JDK9" class="headerlink" title="JDK9"></a>JDK9</h2><h4 id="允许在接口中使用私有方法"><a href="#允许在接口中使用私有方法" class="headerlink" title="允许在接口中使用私有方法"></a>允许在接口中使用私有方法</h4><h2 id="JDK10"><a href="#JDK10" class="headerlink" title="JDK10"></a>JDK10</h2><h4 id="局部变量类型推断"><a href="#局部变量类型推断" class="headerlink" title="局部变量类型推断"></a>局部变量类型推断</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;<span class="hljs-title class_">String</span>&gt;();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>声明时必须初始化</li>
+</ul>
+<p>可以使用在：</p>
+<ul>
+<li>具有初始化器的局部变量</li>
+<li>增强型 for 循环中的索引变量</li>
+<li>传统 for 循环中声明的局部变量</li>
+</ul>
+<p>不能使用在：</p>
+<ul>
+<li>推断方法的参数类型</li>
+<li>构造函数参数类型推断</li>
+<li>推断方法返回类型</li>
+<li>字段类型推断</li>
+<li>捕获表达式（或任何其他类型的变量声明）</li>
+</ul>
+<p>建议：为了程序的易读性和可维护性，尽量显式定义变量类型。</p>
+<h2 id="JDK11"><a href="#JDK11" class="headerlink" title="JDK11"></a>JDK11</h2><h4 id="用于-Lambda-参数的局部变量语法"><a href="#用于-Lambda-参数的局部变量语法" class="headerlink" title="用于 Lambda 参数的局部变量语法"></a>用于 Lambda 参数的局部变量语法</h4><p>将局部变量和 Lambda 表达式的用法进行了统一，并且可以将注释应用于局部变量和 Lambda 表达式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">@<span class="hljs-title class_">Nonnull</span> <span class="hljs-keyword">var</span> x = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>();<br><br>(@<span class="hljs-title class_">Nonnull</span> <span class="hljs-keyword">var</span> x, @<span class="hljs-title class_">Nullable</span> <span class="hljs-keyword">var</span> y) -&gt; x.<span class="hljs-title function_">process</span>(y)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>@NonNull 注解可以标注在方法、字段、参数之上，表示对应的值不能为空；</li>
+<li>@Nullable 注解可以标注在方法、字段、参数之上，表示对应的值可以为空；</li>
+</ul>
+<h2 id="JDK12"><a href="#JDK12" class="headerlink" title="JDK12"></a>JDK12</h2><h2 id="JDK13"><a href="#JDK13" class="headerlink" title="JDK13"></a>JDK13</h2><h2 id="JDK14"><a href="#JDK14" class="headerlink" title="JDK14"></a>JDK14</h2><h4 id="Switch-表达式"><a href="#Switch-表达式" class="headerlink" title="Switch 表达式"></a>Switch 表达式</h4><p>旧版：</p>
+<ul>
+<li>一般使用冒号 ：来作为语句分支代码的开始。</li>
+<li>在每个分支结束之前，需要加上 break 关键字进行分支跳出，以防 switch 语句一直往后执行到整个 switch 语句结束。</li>
+</ul>
+<p>新版：</p>
+<ul>
+<li>提供了新的分支切换方式，即 -&gt; 符号右则表达式方法体。</li>
+<li>在执行完分支方法之后，自动结束 switch 分支。</li>
+<li>-&gt; 右则方法块中可以是表达式、代码块或者是手动抛出的异常。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//旧版：</span><br>int dayOfWeek;<br><span class="hljs-keyword">switch</span> (day) &#123;<br>    <br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">MONDAY</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">TUESDAY</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">WEDNESDAY</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">THURSDAY</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">FRIDAY</span>:<br>        dayOfWeek = <span class="hljs-number">5</span>;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">SATURDAY</span>:<br>        dayOfWeek = <span class="hljs-number">6</span>;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">SUNDAY</span>:<br>        dayOfWeek = <span class="hljs-number">7</span>;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-attr">default</span>:<br>        dayOfWeek = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">break</span>;<br>&#125;<br><br><span class="hljs-comment">//新版：</span><br>int dayOfWeek = <span class="hljs-keyword">switch</span> (day) &#123;<br>    <br>    <span class="hljs-keyword">case</span> <span class="hljs-variable constant_">MONDAY</span>, <span class="hljs-variable constant_">TUESDAY</span>, <span class="hljs-variable constant_">WEDNESDAY</span>, <span class="hljs-variable constant_">THURSDAY</span>, <span class="hljs-variable constant_">FRIDAY</span> -&gt; <span class="hljs-number">5</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-variable constant_">SATURDAY</span> -&gt; <span class="hljs-number">6</span>;<br>	<span class="hljs-keyword">case</span> <span class="hljs-variable constant_">SUNDAY</span> -&gt; <span class="hljs-number">7</span>;<br>    <span class="hljs-keyword">default</span> -&gt; <span class="hljs-number">0</span>;<br>&#125;;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>之前需要用变量来接收返回值，现在直接返回需要返回的结果。</li>
+<li>不再需要显式地跳出当前分支，表达式执行完后会自动跳出，不会继续往后执行。</li>
+<li>对于多个相同的 case 方法块，可以将 case 条件并列，不再通过每个 case 后面故意不加 break 关键字来使用相同方法块。</li>
+</ul>
+<h2 id="JDK15"><a href="#JDK15" class="headerlink" title="JDK15"></a>JDK15</h2><h4 id="文本块"><a href="#文本块" class="headerlink" title="文本块"></a>文本块</h4><p>文本块就是以三个引号开始，并以三个引号结束的字符串字面量。<br>文本块减少了转义，大大提高了代码可读性，尤其是代码中对SQL、HTML、JSON字符串进行拼接的情况。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 旧版</span><br><span class="hljs-title class_">String</span> sqlTemplate = <span class="hljs-string">&quot;SELECT\n&quot;</span> +<br>        <span class="hljs-string">&quot;    name,\n&quot;</span> +<br>        <span class="hljs-string">&quot;    age,\n&quot;</span> +<br>        <span class="hljs-string">&quot;    phone,\n&quot;</span> +<br>        <span class="hljs-string">&quot;    wechat\n&quot;</span> +<br>        <span class="hljs-string">&quot;FROM\n&quot;</span> +<br>        <span class="hljs-string">&quot;    csdn_user;&quot;</span>;<br><span class="hljs-comment">// 新版</span><br><span class="hljs-title class_">String</span> sqlTemplate = <span class="hljs-string">&quot;&quot;</span><span class="hljs-string">&quot;</span><br><span class="hljs-string">        SELECT</span><br><span class="hljs-string">            name,</span><br><span class="hljs-string">            age,</span><br><span class="hljs-string">            phone,</span><br><span class="hljs-string">            wechat</span><br><span class="hljs-string">        FROM</span><br><span class="hljs-string">            csdn_user;</span><br><span class="hljs-string">        &quot;</span><span class="hljs-string">&quot;&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="JDK16"><a href="#JDK16" class="headerlink" title="JDK16"></a>JDK16</h2><h4 id="instanceof-模式匹配"><a href="#instanceof-模式匹配" class="headerlink" title="instanceof 模式匹配"></a>instanceof 模式匹配</h4><p>对 instanceof 的改进，主要目的是为了让创建对象更简单、简洁和高效，并且可读性更强、提高安全性。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 旧版</span><br><span class="hljs-comment">// 每次在检查类型之后，都需要强制进行类型转换。</span><br><span class="hljs-comment">// 类型转换后，需要提前创建一个局部变量来接收转换后的结果，代码显得多余且繁琐。</span><br><span class="hljs-keyword">if</span> (person <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Student</span>) &#123;<br>    <br>    <span class="hljs-title class_">Student</span> student = (<span class="hljs-title class_">Student</span>) person;<br>    student.<span class="hljs-title function_">say</span>();<br>   <span class="hljs-comment">// other student operations</span><br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (person <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Teacher</span>) &#123;<br>    <br>    <span class="hljs-title class_">Teacher</span> teacher = (<span class="hljs-title class_">Teacher</span>) person;<br>    teacher.<span class="hljs-title function_">say</span>();<br>    <span class="hljs-comment">// other teacher operations</span><br>&#125;<br><br><span class="hljs-comment">// 新版</span><br><span class="hljs-comment">// 对 person 对象进行类型匹配，校验 person 对象是否为 Student 类型</span><br><span class="hljs-comment">// 如果类型匹配成功，则会转换为 Student 类型，并赋值给模式局部变量 student</span><br><span class="hljs-keyword">if</span> (person <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Student</span> student) &#123;<br>    <br>	<span class="hljs-comment">//这里的 student 变量只能在 if 块中使用，而不能在 else if/else 中使用</span><br>    student.<span class="hljs-title function_">say</span>();<br>   <span class="hljs-comment">// other student operations</span><br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (person <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Teacher</span> teacher) &#123;<br>    <br>    teacher.<span class="hljs-title function_">say</span>();<br>    <span class="hljs-comment">// other teacher operations</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果 if 条件中有 &amp;&amp; 运算符时，当 instanceof 类型匹配成功，模式局部变量的作用范围也可以相应延长，如下面代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">if</span> (obj <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">String</span> s &amp;&amp; s.<span class="hljs-title function_">length</span>() &gt; <span class="hljs-number">5</span>) &#123;<br>    .. s.<span class="hljs-title function_">contains</span>(..) ..&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意：这种作用范围延长，并不适用于或 || 运算符，因为即便 || 运算符左边的 instanceof 类型匹配没有成功也不会造成短路，依旧会执行到||运算符右边的表达式.但是如果左边instanceof 类型匹配没有成功，局部变量并未定义赋值，此时使用会产生问题。</p>
+<h4 id="Records类型"><a href="#Records类型" class="headerlink" title="Records类型"></a>Records类型</h4><ul>
+<li>Record 类型允许在代码中使用紧凑的语法形式来声明类，而这些类能够作为不可变数据类型的封装持有者。Record 这一特性主要用在特定领域的类上；</li>
+<li>与枚举类型一样，Record 类型是一种受限形式的类型，主要用于存储、保存数据，并且没有其它额外自定义行为的场景下。</li>
+<li>效果有些类似 Lombok 的 @Data 注解、Kotlin 中的 data class，但是又不尽完全相同，它们的共同点都是类的部分或者全部可以直接在类头中定义、描述，并且这个类只用于存储数据而已。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 示例</span><br>public record <span class="hljs-title class_">Person</span>(<span class="hljs-title class_">String</span> name, int age) &#123;<br>    <br>    public <span class="hljs-keyword">static</span> <span class="hljs-title class_">String</span> address;<br><br>    public <span class="hljs-title class_">String</span> <span class="hljs-title function_">getName</span>(<span class="hljs-params"></span>) &#123;<br>    <br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-comment">// 编译后反编译的结果</span><br>public final <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">java.lang.Record</span> &#123;<br>    <br>    private final java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> name;<br>    private final java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> age;<br><br>    public <span class="hljs-title class_">Person</span>(java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> name, java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> age) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> <span class="hljs-title function_">getName</span>(<span class="hljs-params"></span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public final int <span class="hljs-title function_">hashCode</span>(<span class="hljs-params"></span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public final boolean <span class="hljs-title function_">equals</span>(<span class="hljs-params">java.lang.<span class="hljs-built_in">Object</span> o</span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> <span class="hljs-title function_">name</span>(<span class="hljs-params"></span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br><br>    public java.<span class="hljs-property">lang</span>.<span class="hljs-property">String</span> <span class="hljs-title function_">age</span>(<span class="hljs-params"></span>) &#123;<br>     <span class="hljs-comment">/* compiled code */</span> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以得出，当用 Record 来声明一个类时，该类将自动拥有下面特征：</p>
+<ul>
+<li>拥有一个构造方法</li>
+<li>获取成员属性值的方法：name()、age()</li>
+<li>hashCode() 方法和 euqals() 方法</li>
+<li>toString() 方法类</li>
+<li>对象被 final 关键字修饰，不能被继承；类的成员变量也都被 final 修饰，不能再被赋值使用。</li>
+<li>可以在 Record 声明的类中定义静态属性和方法。</li>
+<li>注意，不能在 Record 声明的类中定义成员变量，类也不能声明为抽象类等。</li>
+</ul>
+<h2 id="JDK17"><a href="#JDK17" class="headerlink" title="JDK17"></a>JDK17</h2><h4 id="密封的类和接口"><a href="#密封的类和接口" class="headerlink" title="密封的类和接口"></a>密封的类和接口</h4><p>用来增强 Java 编程语言，防止其他类或接口扩展或实现它们。</p>
+<p>使用修饰符<strong>sealed</strong>，您可以将一个类声明为密封类。<br>密封的类使用关键字<strong>permits</strong>列出可以直接扩展它的类。<br>子类可以是最终的、非密封的或密封的。<br><strong>继承了密封类的子类可以使用non-sealed修饰，这样任何类都可以继承这个子类。</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 旧版</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>     &#125; <span class="hljs-comment">//人</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;<span class="hljs-comment">//教师</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;  <span class="hljs-comment">//工人</span><br> <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span>&#123;<br>     &#125; <span class="hljs-comment">//学生</span><br><br><br><span class="hljs-comment">// 新版</span><br><span class="hljs-comment">// 添加sealed修饰符，permits后面跟上只能被继承的子类名称</span><br>public sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> permits <span class="hljs-title class_">Teacher</span>, <span class="hljs-title class_">Worker</span>, <span class="hljs-title class_">Student</span>&#123;<br>     &#125; <span class="hljs-comment">//人</span><br> <br><span class="hljs-comment">// 子类可以被修饰为 final</span><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;<span class="hljs-comment">//教师</span><br> <br><span class="hljs-comment">// 子类可以被修饰为 non-sealed，此时 Worker类就成了普通类，谁都可以继承它</span><br>non-sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> &#123;<br>     &#125;  <span class="hljs-comment">//工人</span><br><span class="hljs-comment">// 任何类都可以继承Worker</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AnyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Worker</span>&#123;<br>    &#125;<br> <br><span class="hljs-comment">//子类可以被修饰为 sealed,同上</span><br>sealed <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Person</span> permits <span class="hljs-title class_">MiddleSchoolStudent</span>,<span class="hljs-title class_">GraduateStudent</span>&#123;<br>     &#125; <span class="hljs-comment">//学生</span><br><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">MiddleSchoolStudent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Student</span> &#123;<br>     &#125;  <span class="hljs-comment">//中学生</span><br><br>final <span class="hljs-keyword">class</span> <span class="hljs-title class_">GraduateStudent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Student</span> &#123;<br>     &#125;  <span class="hljs-comment">//研究生</span><br></code></pre></td></tr></table></figure>
+
+<p>可以限制类的层次结构。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java新版本的重要语言特性（9-17）</div>
+      <div>http://example.com/2023/09/21/Java/Java新版本的重要语言特性（9-17）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/23/%E7%AE%97%E6%B3%95/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95/" title="遗传算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">遗传算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/28/DB/MySQL/MySQL%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" title="MySQL基本语法">
+                        <span class="hidden-mobile">MySQL基本语法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
