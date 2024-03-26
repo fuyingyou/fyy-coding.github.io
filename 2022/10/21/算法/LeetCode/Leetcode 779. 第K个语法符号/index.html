@@ -25,9 +25,9 @@
 <meta property="og:description" content="题目来源： Leetcode 779. 第K个语法符号https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;k-th-symbol-in-grammar&#x2F;题目描述我们构建了一个包含 n 行( 索引从 1 开始 )的表。首先在第一行我们写上一个 0。接下来的每一行，将前一行中的0替换为01，1替换为10。 例如，对于 n &#x3D; 3 ，第 1 行是 0 ，第 2 行是 01 ，第3行是 0">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-21T05:14:05.000Z">
-<meta property="article:modified_time" content="2024-03-18T12:24:44.900Z">
+<meta property="article:modified_time" content="2024-03-26T13:03:46.674Z">
 <meta property="article:author" content="fyy">
-<meta property="article:tag" content="LeeCode">
+<meta property="article:tag" content="LeetCode">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -321,6 +321,7 @@
 </ul>
 <p>代码</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <br>    public int <span class="hljs-title function_">kthGrammar</span>(<span class="hljs-params">int n, int k</span>) &#123;<br>    <br>        <span class="hljs-keyword">if</span>(n==<span class="hljs-number">1</span>)&#123;<br>    <br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br><br>		<span class="hljs-comment">//处于前半部分还是后半部分</span><br>        <span class="hljs-keyword">if</span>(k &gt; <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>,n-<span class="hljs-number">2</span>))&#123;<br>    <br>            <span class="hljs-keyword">return</span> (<span class="hljs-number">1</span>-<span class="hljs-title function_">kthGrammar</span>(n-<span class="hljs-number">1</span>, k-(int)<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>,n-<span class="hljs-number">2</span>)));<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>    <br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_">kthGrammar</span>(n-<span class="hljs-number">1</span>,k);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>没想到这辈子还能赶上一次绿的题。</p>
 
                 
@@ -340,8 +341,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/LeeCode/" class="category-chain-item">LeeCode</a>
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AE%97%E6%B3%95/LeetCode/" class="category-chain-item">LeetCode</a>
+  
+  
+
   
 
       </span>
@@ -355,7 +363,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/LeeCode/" class="print-no-link">#LeeCode</a>
+        <a href="/tags/LeetCode/" class="print-no-link">#LeetCode</a>
       
     </div>
   
