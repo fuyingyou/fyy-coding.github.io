@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实验二、数据处理之Matplotlib一、实验目的1. 了解matplotlib库的基本功能2. 掌握matplotlib库的使用方法二、实验工具：1. Anaconda2. Numpy，matplotlib三、Matplotlib简介Matplotlib 包含了几十个不同的模块， 如 matlab、mathtext、finance、dates 等，而 pylot 则是我们最常用的绘图模块 四、实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据处理之Matplotlib-入门篇">
+<meta property="og:url" content="http://example.com/2021/04/06/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8BMatplotlib-%E5%85%A5%E9%97%A8%E7%AF%87/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="实验二、数据处理之Matplotlib一、实验目的1. 了解matplotlib库的基本功能2. 掌握matplotlib库的使用方法二、实验工具：1. Anaconda2. Numpy，matplotlib三、Matplotlib简介Matplotlib 包含了几十个不同的模块， 如 matlab、mathtext、finance、dates 等，而 pylot 则是我们最常用的绘图模块 四、实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/743812c8-1d7b-47e0-9c35-d998c65ed92c.png">
+<meta property="og:image" content="http://example.com/images/4ddd2da8-542b-492f-86a7-abd2f7a137f5.png">
+<meta property="og:image" content="http://example.com/images/27a39cd0-9e1c-49a0-bbca-24a6e89f8112.png">
+<meta property="og:image" content="http://example.com/images/5e0672f1-e3a7-421e-a7a5-da23eca2efc2.png">
+<meta property="og:image" content="http://example.com/images/9e0e5204-ce44-4e69-8735-4034466896be.png">
+<meta property="og:image" content="http://example.com/images/099c75eb-f805-4e69-9a76-62a8fcf6afcc.png">
+<meta property="og:image" content="http://example.com/images/1a7561d1-dfa9-4595-9ec1-1fd8c97edec9.png">
+<meta property="article:published_time" content="2021-04-06T01:30:59.000Z">
+<meta property="article:modified_time" content="2024-03-18T11:52:21.542Z">
+<meta property="article:author" content="fyy">
+<meta property="article:tag" content="matplotlib">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/743812c8-1d7b-47e0-9c35-d998c65ed92c.png">
+  
+  
+  
+  <title>数据处理之Matplotlib-入门篇 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据处理之Matplotlib-入门篇"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-06 09:30" pubdate>
+          2021年4月6日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          705 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">数据处理之Matplotlib-入门篇</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="实验二、数据处理之Matplotlib"><a href="#实验二、数据处理之Matplotlib" class="headerlink" title="实验二、数据处理之Matplotlib"></a>实验二、数据处理之Matplotlib</h2><h3 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h3><h4 id="1-了解matplotlib库的基本功能"><a href="#1-了解matplotlib库的基本功能" class="headerlink" title="1. 了解matplotlib库的基本功能"></a>1. 了解matplotlib库的基本功能</h4><h4 id="2-掌握matplotlib库的使用方法"><a href="#2-掌握matplotlib库的使用方法" class="headerlink" title="2. 掌握matplotlib库的使用方法"></a>2. 掌握matplotlib库的使用方法</h4><h3 id="二、实验工具："><a href="#二、实验工具：" class="headerlink" title="二、实验工具："></a>二、实验工具：</h3><h4 id="1-Anaconda"><a href="#1-Anaconda" class="headerlink" title="1. Anaconda"></a>1. Anaconda</h4><h4 id="2-Numpy，matplotlib"><a href="#2-Numpy，matplotlib" class="headerlink" title="2. Numpy，matplotlib"></a>2. Numpy，matplotlib</h4><h3 id="三、Matplotlib简介"><a href="#三、Matplotlib简介" class="headerlink" title="三、Matplotlib简介"></a>三、Matplotlib简介</h3><p>Matplotlib 包含了几十个不同的模块， 如 matlab、mathtext、finance、dates 等，而 pylot 则是我们最常用的绘图模块</p>
+<h3 id="四、实验内容"><a href="#四、实验内容" class="headerlink" title="四、实验内容"></a>四、实验内容</h3><h4 id="1-绘制正弦曲线，并设置标题、坐标轴名称、坐标轴范围"><a href="#1-绘制正弦曲线，并设置标题、坐标轴名称、坐标轴范围" class="headerlink" title="1.绘制正弦曲线，并设置标题、坐标轴名称、坐标轴范围"></a>1.绘制正弦曲线，并设置标题、坐标轴名称、坐标轴范围</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> pylab <span class="hljs-keyword">import</span> mpl<br>mpl.<span class="hljs-property">rcParams</span>[<span class="hljs-string">&#x27;font.sans-serif&#x27;</span>] = [<span class="hljs-string">&#x27;FangSong&#x27;</span>]<br>mpl.<span class="hljs-property">rcParams</span>[<span class="hljs-string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="hljs-title class_">False</span><br>x=np.<span class="hljs-title function_">arange</span>(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>*np.<span class="hljs-property">pi</span>, <span class="hljs-number">0.01</span>)<br>y=np.<span class="hljs-title function_">sin</span>(x)<br>plt.<span class="hljs-title function_">plot</span>(x, y)<br>plt.<span class="hljs-title function_">title</span>(u<span class="hljs-string">&#x27;正弦曲线&#x27;</span>, fontdict=&#123;<span class="hljs-string">&#x27;size&#x27;</span>: <span class="hljs-number">20</span>&#125;)<br>plt.<span class="hljs-title function_">xlabel</span>(u<span class="hljs-string">&#x27;弧度&#x27;</span>, fontdict=&#123;<span class="hljs-string">&#x27;size&#x27;</span>: <span class="hljs-number">16</span>&#125;)<br>plt.<span class="hljs-title function_">ylabel</span>(u<span class="hljs-string">&#x27;正弦值&#x27;</span>, fontdict=&#123;<span class="hljs-string">&#x27;size&#x27;</span>: <span class="hljs-number">16</span>&#125;)<br>plt.<span class="hljs-title function_">axis</span>([-<span class="hljs-number">0.1</span>*np.<span class="hljs-property">pi</span>, <span class="hljs-number">2.1</span>*np.<span class="hljs-property">pi</span>, -<span class="hljs-number">1.1</span>, <span class="hljs-number">1.1</span>])<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/743812c8-1d7b-47e0-9c35-d998c65ed92c.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="2-同一坐标系中绘制多种曲线并通过样式、宽度、颜色加以区分"><a href="#2-同一坐标系中绘制多种曲线并通过样式、宽度、颜色加以区分" class="headerlink" title="2. 同一坐标系中绘制多种曲线并通过样式、宽度、颜色加以区分"></a>2. 同一坐标系中绘制多种曲线并通过样式、宽度、颜色加以区分</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> pylab <span class="hljs-keyword">import</span> mpl<br>mpl.<span class="hljs-property">rcParams</span>[<span class="hljs-string">&#x27;font.sans-serif&#x27;</span>] = [<span class="hljs-string">&#x27;FangSong&#x27;</span>]<br>mpl.<span class="hljs-property">rcParams</span>[<span class="hljs-string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="hljs-title class_">False</span><br>x = np.<span class="hljs-title function_">linspace</span>(-<span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-number">200</span>)<br>f1 =  np.<span class="hljs-title function_">power</span>(<span class="hljs-number">10</span>, x)<br>f2 = np.<span class="hljs-title function_">power</span>(np.<span class="hljs-property">e</span>, x)<br>f3 = np.<span class="hljs-title function_">power</span>(<span class="hljs-number">2</span>, x)<br>plt.<span class="hljs-title function_">plot</span>(x, f1, <span class="hljs-string">&#x27;r&#x27;</span>, ls=<span class="hljs-string">&#x27;-&#x27;</span>, linewidth=<span class="hljs-number">2</span>, label=<span class="hljs-string">&#x27;$10^x$&#x27;</span>)<br>plt.<span class="hljs-title function_">plot</span>(x, f2, <span class="hljs-string">&#x27;b&#x27;</span>, ls=<span class="hljs-string">&#x27;--&#x27;</span>, linewidth=<span class="hljs-number">2</span>, label=<span class="hljs-string">&#x27;$e^x$&#x27;</span>)<br>plt.<span class="hljs-title function_">plot</span>(x, f3, <span class="hljs-string">&#x27;g&#x27;</span>, ls=<span class="hljs-string">&#x27;:&#x27;</span>, linewidth=<span class="hljs-number">2</span>, label=<span class="hljs-string">&#x27;$2^x$&#x27;</span>)<br>plt.<span class="hljs-title function_">axis</span>([-<span class="hljs-number">4</span>, <span class="hljs-number">4</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">8</span>])<br>plt.<span class="hljs-title function_">title</span>(<span class="hljs-string">&#x27;幂函数曲线&#x27;</span>, fontsize=<span class="hljs-number">16</span>)<br>plt.<span class="hljs-title function_">legend</span>(loc=<span class="hljs-string">&#x27;lower right&#x27;</span>)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/4ddd2da8-542b-492f-86a7-abd2f7a137f5.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="3-绘制多轴图，即将多幅子图绘制在同一画板。"><a href="#3-绘制多轴图，即将多幅子图绘制在同一画板。" class="headerlink" title="3.绘制多轴图，即将多幅子图绘制在同一画板。"></a>3.绘制多轴图，即将多幅子图绘制在同一画板。</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br>plt.<span class="hljs-title function_">subplot</span>(<span class="hljs-number">221</span>)<br>x = np.<span class="hljs-title function_">arange</span>(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>*np.<span class="hljs-property">pi</span>, <span class="hljs-number">0.01</span>)<br>y = np.<span class="hljs-title function_">cos</span>(x)<br>plt.<span class="hljs-title function_">plot</span>(x, y)<br>plt.<span class="hljs-title function_">subplot</span>(<span class="hljs-number">222</span>)<br>plt.<span class="hljs-title function_">axis</span>([-<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])<br>plt.<span class="hljs-title function_">axvline</span>(x=<span class="hljs-number">0</span>, ymin=<span class="hljs-number">0</span>, linewidth=<span class="hljs-number">4</span>, color=<span class="hljs-string">&#x27;g&#x27;</span>)<br>plt.<span class="hljs-title function_">axvline</span>(x=<span class="hljs-number">1.0</span>, ymin=-<span class="hljs-number">0.5</span>, ymax=<span class="hljs-number">0.5</span>, linewidth=<span class="hljs-number">4</span>, color=<span class="hljs-string">&#x27;y&#x27;</span>)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/27a39cd0-9e1c-49a0-bbca-24a6e89f8112.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h4 id="4-直方图的绘制-数据自己定义）"><a href="#4-直方图的绘制-数据自己定义）" class="headerlink" title="4.直方图的绘制(数据自己定义）"></a>4.直方图的绘制(数据自己定义）</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br>bins = np.<span class="hljs-title function_">arange</span>(-<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">3</span>)<br>plt.<span class="hljs-title function_">hist</span>(bins)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/5e0672f1-e3a7-421e-a7a5-da23eca2efc2.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h4 id="5-绘制散点图"><a href="#5-绘制散点图" class="headerlink" title="5.绘制散点图"></a>5.绘制散点图</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br>x = np.<span class="hljs-property">random</span>.<span class="hljs-title function_">rand</span>(<span class="hljs-number">30</span>)<br>y = np.<span class="hljs-property">random</span>.<span class="hljs-title function_">rand</span>(<span class="hljs-number">30</span>)<br>area = np.<span class="hljs-property">pi</span>*(<span class="hljs-number">15</span>*np.<span class="hljs-property">random</span>.<span class="hljs-title function_">rand</span>(<span class="hljs-number">30</span>))**<span class="hljs-number">2</span><br>color = <span class="hljs-number">2</span>*np.<span class="hljs-property">pi</span>*np.<span class="hljs-property">random</span>.<span class="hljs-title function_">rand</span>(<span class="hljs-number">30</span>)<br>plt.<span class="hljs-title function_">scatter</span>(x, y, s=area, c=color, alpha=<span class="hljs-number">0.5</span>, cmap=plt.<span class="hljs-property">cm</span>.<span class="hljs-property">hsv</span>)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/9e0e5204-ce44-4e69-8735-4034466896be.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="6-绘制盒状图"><a href="#6-绘制盒状图" class="headerlink" title="6.绘制盒状图"></a>6.绘制盒状图</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br>data = np.<span class="hljs-property">random</span>.<span class="hljs-title function_">randn</span>(<span class="hljs-number">200</span>)<br>fig, (ax2) = plt.<span class="hljs-title function_">subplots</span>(<span class="hljs-number">1</span>, figsize=(<span class="hljs-number">8</span>, <span class="hljs-number">6</span>))<br>ax2.<span class="hljs-title function_">boxplot</span>(data)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/099c75eb-f805-4e69-9a76-62a8fcf6afcc.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="7-尝试matplotlib库的其它功能，如2D-3D等"><a href="#7-尝试matplotlib库的其它功能，如2D-3D等" class="headerlink" title="7.尝试matplotlib库的其它功能，如2D,3D等"></a>7.尝试matplotlib库的其它功能，如2D,3D等</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt<br>y,x = np.<span class="hljs-property">ogrid</span>[-<span class="hljs-number">2</span>:<span class="hljs-number">2</span>:200j, -<span class="hljs-number">3</span>:<span class="hljs-number">3</span>:300j]<br>z = x*np.<span class="hljs-title function_">exp</span>(-x**<span class="hljs-number">2</span> - y**<span class="hljs-number">2</span>)<br>extent = [np.<span class="hljs-title function_">min</span>(x), np.<span class="hljs-title function_">max</span>(x), np.<span class="hljs-title function_">min</span>(y), np.<span class="hljs-title function_">max</span>(y)]<br>plt.<span class="hljs-title function_">subplot</span>(<span class="hljs-number">211</span>)<br>cs = plt.<span class="hljs-title function_">contour</span>(z, <span class="hljs-number">10</span>, extent=extent)<br>plt.<span class="hljs-title function_">clabel</span>(cs)<br>plt.<span class="hljs-title function_">subplot</span>(<span class="hljs-number">111</span>)<br>plt.<span class="hljs-title function_">contourf</span>(x.<span class="hljs-title function_">reshape</span>(-<span class="hljs-number">1</span>), y.<span class="hljs-title function_">reshape</span>(-<span class="hljs-number">1</span>), z, <span class="hljs-number">20</span>)<br>plt.<span class="hljs-title function_">show</span>()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/1a7561d1-dfa9-4595-9ec1-1fd8c97edec9.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="五、实验总结（写出本次实验的收获，遇到的问题等"><a href="#五、实验总结（写出本次实验的收获，遇到的问题等" class="headerlink" title="五、实验总结（写出本次实验的收获，遇到的问题等)"></a>五、实验总结（写出本次实验的收获，遇到的问题等)</h3><p>了解到matplotlib库不是只要你安装了numpy就有了这个库，刚开始做的时候因为没有导入matplotlib库而频频报错。在网上搜索了简易的安装matplotlib库的办法，直接在电脑cmd里面敲两行命令安装即可，不用再很繁琐的在电脑上还要配置环境变量。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%85%B6%E5%AE%83/" class="category-chain-item">其它</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/matplotlib/" class="print-no-link">#matplotlib</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据处理之Matplotlib-入门篇</div>
+      <div>http://example.com/2021/04/06/课程实验/数据处理之Matplotlib-入门篇/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/JUC/StampedLock/" title="StampedLock">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">StampedLock</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/06/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B9%8BNumpy-%E5%85%A5%E9%97%A8%E7%AF%87/" title="数据处理之Numpy-入门篇">
+                        <span class="hidden-mobile">数据处理之Numpy-入门篇</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
