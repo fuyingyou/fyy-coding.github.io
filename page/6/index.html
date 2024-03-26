@@ -256,15 +256,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/3.%20Channel/" target="_self">
-          3. Channel
+        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/2.%20Future%E3%80%81ChannelFuture/" target="_self">
+          2. Future、ChannelFuture
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/3.%20Channel/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/2.%20Future%E3%80%81ChannelFuture/" target="_self">
         <div>
-          Channel Netty 网络通信的组件，能够用于执行网络 I&#x2F;O 操作。  通过 Channel 可获得当前网络连接的通道的状态。  通过 Channel 可获得网络连接的配置参数 （例如接收缓冲区大小）。  Channel 提供异步的网络 I&#x2F;O 操作(如建立连接，读写，绑定端口)，异步调用意味着任何 I&#x2F;O 调用都将立即返回，并且不保证在调用结束时所请求的 I
+          Future、ChannelFutureNetty 中所有的 IO 操作都是异步的，不能立刻得知消息是否被正确处理。但是可以过一会等它执行完成或者直接注册一个监听，具体的实现就是通过 Future 和 ChannelFutures，他们可以注册一个监听，当操作执行成功或失败时监听会自动触发注册的监听事件。 常见的方法有   Channel channel()，返回当前正在进行 IO 操作的通道
         </div>
       </a>
 

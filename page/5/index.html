@@ -256,128 +256,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/5.%20%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_self">
-          5. 单Reactor多线程
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/5.%20%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_self">
-        <div>
-          单 Reactor 多线程原理图 对上图的总结：  Reactor 对象通过 select 监控客户端请求事件, 收到事件后，通过 dispatch 进行分发  如果建立连接请求, 则 用 Acceptor 通过 accept 处理连接请求, 然后创建一个 Handler 对象处理完成连接后的各种事件 如果不是连接请求，则由 reactor 的 dispatch 分发调用连接对应的 handler
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/6.%20%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_self">
-          6. 主从Reactor多线程
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/6.%20%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_self">
-        <div>
-          主从 Reactor 多线程工作原理图 总结：  Reactor 主线程 MainReactor 对象通过 select 监听连接事件, 收到事件后，通过 Acceptor 处理连接事件 当 Acceptor 处理连接事件后，MainReactor 将连接分配给 SubReactor subreactor 将连接加入到连接队列进行监听,并创建 handler 进行各种事件处理 当有新事件发生时，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
         <a href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/7.%20Reactor%E6%A8%A1%E5%BC%8F%E5%B0%8F%E7%BB%93/" target="_self">
           7. Reactor模式小结
         </a>
@@ -500,15 +378,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/1.%20BootStrap%E3%80%81ServerBootStrap/" target="_self">
-          1. BootStrap、ServerBootStrap
+        <a href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/9.%20%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9E%8B/" target="_self">
+          9. 异步模型
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/1.%20BootStrap%E3%80%81ServerBootStrap/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/9.%20%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9E%8B/" target="_self">
         <div>
-          Bootstrap、ServerBootstrap Bootstrap 意思是引导，一个 Netty 应用通常由一个 Bootstrap 开始，主要作用是配置整个 Netty 程序，串联 各个组件，Netty 中 Bootstrap 类是客户端程序的启动引导类，ServerBootstrap 是服务端启动引导类 常见的方法有  public ServerBootstrap group(EventL
+          异步模型基本介绍 异步的概念和同步相对。当一个异步过程调用发出后，调用者不能立刻得到结果。实际处理这个调用的组件在完成后，通过状态、通知和回调来通知调用者。  Netty 中的 I&#x2F;O 操作是异步的，包括 Bind、Write、Connect 等操作会简单的返回一个 ChannelFuture。   调用者并不能立刻获得结果，而是通过 Future-Listener 机制，用户可以方便的
         </div>
       </a>
 
@@ -561,15 +439,137 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/9.%20%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9E%8B/" target="_self">
-          9. 异步模型
+        <a href="/2022/09/06/Netty/1.%20%E5%8E%9F%E7%94%9FNIO%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8ENetty%E7%9A%84%E4%BC%98%E7%82%B9/1.%20%E5%8E%9F%E7%94%9FNIO%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/" target="_self">
+          1. 原生NIO存在的问题
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/2.%20Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/9.%20%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9E%8B/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/1.%20%E5%8E%9F%E7%94%9FNIO%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8ENetty%E7%9A%84%E4%BC%98%E7%82%B9/1.%20%E5%8E%9F%E7%94%9FNIO%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/" target="_self">
         <div>
-          异步模型基本介绍 异步的概念和同步相对。当一个异步过程调用发出后，调用者不能立刻得到结果。实际处理这个调用的组件在完成后，通过状态、通知和回调来通知调用者。  Netty 中的 I&#x2F;O 操作是异步的，包括 Bind、Write、Connect 等操作会简单的返回一个 ChannelFuture。   调用者并不能立刻获得结果，而是通过 Future-Listener 机制，用户可以方便的
+          原生NIO存在的问题 NIO 的类库和 API 繁杂，使用麻烦：需要熟练掌握 Selector、ServerSocketChannel、SocketChannel、ByteBuffer 等。  需要具备其他的额外技能：要熟悉 Java 多线程编程，因为 NIO 编程涉及到 Reactor 模式，你必须对多线程 和网络编程非常熟悉，才能编写出高质量的 NIO 程序。  开发工作量和难度都非常大：例如
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/06/Netty/1.%20%E5%8E%9F%E7%94%9FNIO%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8ENetty%E7%9A%84%E4%BC%98%E7%82%B9/2.%20Netty%E7%9A%84%E4%BC%98%E7%82%B9/" target="_self">
+          2. Netty的优点
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/1.%20%E5%8E%9F%E7%94%9FNIO%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8ENetty%E7%9A%84%E4%BC%98%E7%82%B9/2.%20Netty%E7%9A%84%E4%BC%98%E7%82%B9/" target="_self">
+        <div>
+          Netty的优点Netty 对 JDK 自带的 NIO 的 API 进行了封装，解决了上述问题。  设计优雅- 适用于各种传输类型的统一 API 阻塞和非阻塞 Socket- 基于灵活且可扩展的事件模型，可以清晰地分离关注点- 高度可定制的线程模型 - 单线程，一个或多个线程池. 使用方便： 详细记录的 Javadoc，用户指南和示例； 没有其他依赖项，JDK 5（Netty 3.x）或 6（Ne
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/1.%20BootStrap%E3%80%81ServerBootStrap/" target="_self">
+          1. BootStrap、ServerBootStrap
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/1.%20BootStrap%E3%80%81ServerBootStrap/" target="_self">
+        <div>
+          Bootstrap、ServerBootstrap Bootstrap 意思是引导，一个 Netty 应用通常由一个 Bootstrap 开始，主要作用是配置整个 Netty 程序，串联 各个组件，Netty 中 Bootstrap 类是客户端程序的启动引导类，ServerBootstrap 是服务端启动引导类 常见的方法有  public ServerBootstrap group(EventL
         </div>
       </a>
 
@@ -805,15 +805,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/2.%20Future%E3%80%81ChannelFuture/" target="_self">
-          2. Future、ChannelFuture
+        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/3.%20Channel/" target="_self">
+          3. Channel
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/2.%20Future%E3%80%81ChannelFuture/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/3.%20Channel/" target="_self">
         <div>
-          Future、ChannelFutureNetty 中所有的 IO 操作都是异步的，不能立刻得知消息是否被正确处理。但是可以过一会等它执行完成或者直接注册一个监听，具体的实现就是通过 Future 和 ChannelFutures，他们可以注册一个监听，当操作执行成功或失败时监听会自动触发注册的监听事件。 常见的方法有   Channel channel()，返回当前正在进行 IO 操作的通道
+          Channel Netty 网络通信的组件，能够用于执行网络 I&#x2F;O 操作。  通过 Channel 可获得当前网络连接的通道的状态。  通过 Channel 可获得网络连接的配置参数 （例如接收缓冲区大小）。  Channel 提供异步的网络 I&#x2F;O 操作(如建立连接，读写，绑定端口)，异步调用意味着任何 I&#x2F;O 调用都将立即返回，并且不保证在调用结束时所请求的 I
         </div>
       </a>
 
