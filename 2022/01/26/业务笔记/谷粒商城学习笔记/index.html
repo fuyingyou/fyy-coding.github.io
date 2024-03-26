@@ -14,25 +14,26 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="fyy">
+  <meta name="author" content="fyy-coding">
   <meta name="keywords" content="">
   
-    <meta name="description" content="题目 去除重复字母给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。 示例1输入：s &#x3D; “bcabc”输出：“abc” 示例2输入：s &#x3D; “cbacdcbc”输出：“acdb” 数据范围1 &lt;&#x3D; s.length &lt;&#x3D; 104s 由小写英文字母组成 来源：">
+    <meta name="description" content="谷粒商城学习笔记异步初始化线程的四种方式  继承Thread 实现Runnable接口 实现Callable接口 + FutureTask （可以拿到返回结果，可以处理异常） 线程池 Executors.newFixedThreadPool(10); ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 316. 去除重复字母">
-<meta property="og:url" content="http://example.com/2021/04/06/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%20316.%20%E5%8E%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%AD%97%E6%AF%8D/index.html">
+<meta property="og:title" content="谷粒商城学习笔记">
+<meta property="og:url" content="http://example.com/2022/01/26/%E4%B8%9A%E5%8A%A1%E7%AC%94%E8%AE%B0/%E8%B0%B7%E7%B2%92%E5%95%86%E5%9F%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="fyy-coding">
-<meta property="og:description" content="题目 去除重复字母给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。 示例1输入：s &#x3D; “bcabc”输出：“abc” 示例2输入：s &#x3D; “cbacdcbc”输出：“acdb” 数据范围1 &lt;&#x3D; s.length &lt;&#x3D; 104s 由小写英文字母组成 来源：">
+<meta property="og:description" content="谷粒商城学习笔记异步初始化线程的四种方式  继承Thread 实现Runnable接口 实现Callable接口 + FutureTask （可以拿到返回结果，可以处理异常） 线程池 Executors.newFixedThreadPool(10); ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTi">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-06T01:16:38.000Z">
-<meta property="article:modified_time" content="2024-03-18T12:24:36.172Z">
+<meta property="article:published_time" content="2022-01-26T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-03-18T14:28:47.794Z">
 <meta property="article:author" content="fyy">
-<meta property="article:tag" content="LeeCode">
+<meta property="article:tag" content="项目">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>LeetCode 316. 去除重复字母 - fyy-coding</title>
+  <title>谷粒商城学习笔记 - fyy-coding</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -227,7 +228,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 316. 去除重复字母"></span>
+            <span id="subtitle" data-typed-text="谷粒商城学习笔记"></span>
           
         </div>
 
@@ -238,8 +239,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-06 09:16" pubdate>
-          2021年4月6日 上午
+        <time datetime="2022-01-26 12:13" pubdate>
+          2022年1月26日 中午
         </time>
       </span>
     
@@ -250,7 +251,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          361 字
+          1.1k 字
         
       </span>
     
@@ -261,7 +262,7 @@
         
         
         
-          4 分钟
+          10 分钟
         
       </span>
     
@@ -306,17 +307,73 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">LeetCode 316. 去除重复字母</h1>
+            <h1 id="seo-header">谷粒商城学习笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="题目-去除重复字母"><a href="#题目-去除重复字母" class="headerlink" title="题目 去除重复字母"></a>题目 去除重复字母</h3><p>给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。</p>
-<h5 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h5><p>输入：s &#x3D; “bcabc”<br>输出：“abc”</p>
-<h5 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h5><p>输入：s &#x3D; “cbacdcbc”<br>输出：“acdb”</p>
-<h5 id="数据范围"><a href="#数据范围" class="headerlink" title="数据范围"></a>数据范围</h5><p>1 &lt;&#x3D; s.length &lt;&#x3D; 104<br>s 由小写英文字母组成</p>
-<p>来源：力扣（LeetCode）<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-duplicate-letters/">https://leetcode-cn.com/problems/remove-duplicate-letters/</a></p>
-<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * 算法思想</span><br><span class="hljs-comment"> * 当字典序最小时，即12341 12351 主要看4，5的位置</span><br><span class="hljs-comment"> * 用栈存储，当栈空时直接入栈</span><br><span class="hljs-comment"> * 栈不为空时，</span><br><span class="hljs-comment"> * 	若栈中包含当前要入栈的元素直接跳到下一次循环。（结果字符串每个字符只含有一次）</span><br><span class="hljs-comment"> * 	若当前要入栈的字母比栈顶字母大时，考虑是否栈顶元素出栈</span><br><span class="hljs-comment"> * 	若栈顶元素在剩余字符串中仍然存在，那么就可以出栈，出栈后继续判断新的栈顶元素是否出栈。</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">Stack</span>;<br><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">RemoveDuplicateLetters</span> &#123;<br><br>    public <span class="hljs-keyword">static</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">removeDuplicateLetters</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> s</span>)&#123;<br>        <span class="hljs-title class_">Stack</span>&lt;<span class="hljs-title class_">Character</span>&gt; stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;<span class="hljs-title class_">Character</span>&gt;();<br>            <span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-title function_">length</span>(); i++) &#123;<br>                char c=s.<span class="hljs-title function_">charAt</span>(i);<br>                <span class="hljs-keyword">if</span>(stack.<span class="hljs-title function_">contains</span>(c))<br>                    <span class="hljs-keyword">continue</span>;<br>                <span class="hljs-keyword">while</span>(!stack.<span class="hljs-title function_">isEmpty</span>() &amp;&amp; stack.<span class="hljs-title function_">peek</span>()&gt;c &amp;&amp; s.<span class="hljs-title function_">indexOf</span>(stack.<span class="hljs-title function_">peek</span>(),i)!=-<span class="hljs-number">1</span>)<br>                    stack.<span class="hljs-title function_">pop</span>();<br>                stack.<span class="hljs-title function_">push</span>(c);<br>            &#125;<br>            char chars[]=<span class="hljs-keyword">new</span> char[stack.<span class="hljs-title function_">size</span>()];<br>            <span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; stack.<span class="hljs-title function_">size</span>(); i++) &#123;<br>                chars[i]=stack.<span class="hljs-title function_">get</span>(i);<br>            &#125;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(chars);<br>    &#125;<br><br>    public <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-built_in">String</span>[] args</span>) &#123;<br>        <span class="hljs-title class_">String</span> string = <span class="hljs-string">&quot;bbcaac&quot;</span>;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title function_">removeDuplicateLetters</span>(string));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+                <h1 id="谷粒商城学习笔记"><a href="#谷粒商城学习笔记" class="headerlink" title="谷粒商城学习笔记"></a>谷粒商城学习笔记</h1><h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><p>初始化线程的四种方式</p>
+<ul>
+<li>继承Thread</li>
+<li>实现Runnable接口</li>
+<li>实现Callable接口 + FutureTask （可以拿到返回结果，可以处理异常）</li>
+<li>线程池<ul>
+<li><code>Executors.newFixedThreadPool(10);</code></li>
+<li><code>ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)</code></li>
+<li>好处：<ul>
+<li>降低资源的消耗：重复利用已经创建好的线程，降低线程的创建和销毁带来的损耗。</li>
+<li>提高响应速度：在有核心线程或者空闲线程未超时时，任务来时可以直接执行，无需创建新的线程。包括CPU不停的在线程中来进行切换，如果线程数较少，那么响应速度就会变快。（比如200线程，很快会被轮到）</li>
+<li>提高线程的可管理性：1、系统资源紧张时，可以直接把非核心任务池优化掉。2、解决了无限创建线程降低系统稳定性的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>继承Thread和实现Runnable：无法获取线程的运行结果</p>
+<p>实现Callable接口 + FutureTask：可以获取线程的运算结果，但不利于控制服务器中的线程资源。可能导致服务器资源耗尽。</p>
+<p>线程池：可以控制资源，系统的性能稳定。</p>
+</blockquote>
+<blockquote>
+<p>使用线程池而不是Thread、Runnable、Callable，为了避免系统资源耗尽。</p>
+<p><code>将所有的多线程异步任务都交给线程池</code>，让线程池执行。</p>
+<p>当前系统中的池一般为少数个，比如两个：核心任务池和非核心任务池。(系统资源紧张时，可以直接把非核心任务池优化掉)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">ThreadPoolExecutor(<span class="hljs-type">int</span> corePoolSize, <span class="hljs-type">int</span> maximumPoolSize, <span class="hljs-type">long</span> keepAliveTime, TimeUnit unit, BlockingQueue workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)<br><span class="hljs-comment">//corePoolSize: 核心线程数。[一直存在，除非设置(allowCoreThreadTimeOut)]，创建好以后就准备的线程数量，就等待来接						受异步任务去执行</span><br><span class="hljs-comment">//maximumPoolSize: 最大线程数量，控制资源。</span><br><span class="hljs-comment">//keepAliveTime: 存活时间，如果当前线程数量大于核心线程数，只要线程空闲大于指定的时间(keepAliveTime)，就会释放空						闲的核心线程外的线程(maximumPoolSize - corePoolSize)。</span><br><span class="hljs-comment">//unit： 时间单位</span><br><span class="hljs-comment">//BlockingQueue workQueue：阻塞队列，如果任务很多，线程都在工作，将目前多的任务放在队列里面。只要有线程空闲，								就会去队列里面取出新的任务继续执行。</span><br><span class="hljs-comment">//ThreadFactory： 线程创建的工厂</span><br><span class="hljs-comment">//RejectedExecutionHandler：拒绝策略。如果队列满了，按照我们指定的拒绝策略，拒绝执行任务。</span><br>	<span class="hljs-comment">//AbortPolicy ：抛出运行时异常RejectedExecutionException。这种策略丢弃任务，并抛出异常。（jdk默认策略）</span><br>	<span class="hljs-comment">//CallerRunsPolicy : 线程调用运行该任务的 execute 本身。此策略提供简单的反馈控制机制，能够减缓新任务的提交速度。</span><br>	<span class="hljs-comment">//DiscardOldestPolicy（弃老策略）jdk：如果执行程序尚未关闭，则位于工作队列头部的任务将被删除，然后重试执行程序。</span><br>	<span class="hljs-comment">//DiscardPolicy ：发生拒绝策略时，不触发任何动作</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="线程池的工作流程"><a href="#线程池的工作流程" class="headerlink" title="线程池的工作流程"></a>线程池的工作流程</h3><ol>
+<li><p>线程池创建，准备好数量为corePoolSize的核心线程，准备接受任务。</p>
+</li>
+<li><p>新的任务进来，用准备好的核心线程执行</p>
+<ol>
+<li>核心线程满了，进来的任务放入阻塞队列中。空闲下来的核心线程会自己到阻塞队列获取任务执行。</li>
+<li>阻塞队列满了，开新线程执行，最大开启线程的数量为maximumPoolSize<ol>
+<li>new LinkedBlockingDeque&lt;&gt;()：默认是Integer的最大值，可能会导致内存不够</li>
+</ol>
+</li>
+<li>线程数量已满，使用RejectedExecutionHandler拒绝任务。</li>
+</ol>
+</li>
+<li><p>任务都执行完，有很多空闲，在到达keepAliveTime后，释放空闲的线程，但不会释放核心线程。</p>
+<blockquote>
+<p>面试题：一个线程池 core 7, max 20, queue 50, 100并发进来怎么分配的</p>
+<ul>
+<li>7个会立即执行</li>
+<li>50个进入阻塞队列</li>
+<li>再开13个线程进行执行</li>
+<li>剩下的30个就使用拒绝策略</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h4 id="常见的四种线程池"><a href="#常见的四种线程池" class="headerlink" title="常见的四种线程池"></a>常见的四种线程池</h4><ul>
+<li>newCachedThreadPool<br>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。core是0，所有的都可以回收。</li>
+<li>newFixedThreadPool<br>创建一个定长线程池，可控制线程最大并发数，超出的线程会在对队列中等待。固定大小，core&#x3D;max。都不可回收。</li>
+<li>newScheduledThreadPool<br>创建一个定长线程池。支持定时及周期性去执行。定时任务的线程池。</li>
+<li>newSingleThreadExecutor<br>创建一个单线程化的线程池，他只会用唯一的工作线程来执行任务，保证所有任务。后台从队列里面获取任务，挨个执行。</li>
+</ul>
 
                 
               </div>
@@ -335,7 +392,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/LeeCode/" class="category-chain-item">LeeCode</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
 
@@ -350,7 +407,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/LeeCode/" class="print-no-link">#LeeCode</a>
+        <a href="/tags/%E9%A1%B9%E7%9B%AE/" class="print-no-link">#项目</a>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
       
     </div>
   
@@ -362,20 +421,20 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 316. 去除重复字母</div>
-      <div>http://example.com/2021/04/06/算法/LeetCode/LeetCode 316. 去除重复字母/</div>
+      <div>谷粒商城学习笔记</div>
+      <div>http://example.com/2022/01/26/业务笔记/谷粒商城学习笔记/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>fyy</div>
+          <div>fyy-coding</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年4月6日</div>
+          <div>2022年1月26日</div>
         </div>
       
       
@@ -407,9 +466,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/06/JUC/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/BlockingQueue/PriorityBlockingQueue/" title="PriorityBlockingQueue">
+                      <a href="/2022/03/28/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%206.%20Z%E5%AD%97%E5%8F%98%E6%8D%A2/" title="Leetcode 6. Z字变换">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">PriorityBlockingQueue</span>
+                        <span class="hidden-mobile">Leetcode 6. Z字变换</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -417,8 +476,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/06/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%20103.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%94%AF%E9%BD%BF%E5%BD%A2%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/" title="LeeCode 103. 二叉树的锯齿形层序遍历">
-                        <span class="hidden-mobile">LeeCode 103. 二叉树的锯齿形层序遍历</span>
+                      <a href="/2022/01/15/%E7%AE%97%E6%B3%95/LeetCode/LeetCode%201716.%20%E8%AE%A1%E7%AE%97%E5%8A%9B%E6%89%A3%E9%93%B6%E8%A1%8C%E7%9A%84%E9%92%B1/" title="LeetCode 1716. 计算力扣银行的钱">
+                        <span class="hidden-mobile">LeetCode 1716. 计算力扣银行的钱</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
