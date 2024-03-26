@@ -14,27 +14,24 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="fyy-coding">
+  <meta name="author" content="fyy">
   <meta name="keywords" content="">
   
-    <meta name="description" content="三个操作：  选择 交叉 变异">
+    <meta name="description" content="方法一：自定义mapper.xmlmapper.xml 1234567891011121314151617&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-&#x2F;&#x2F;mybatis.org&#x2F;&#x2F;DTD Mapper 3.0&#x2F;&#x2F;EN&quot; &quot;htt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="遗传算法">
-<meta property="og:url" content="http://example.com/2023/11/23/%E7%AE%97%E6%B3%95/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:title" content="fyy-coding">
+<meta property="og:url" content="http://example.com/2024/03/21/others/mybatisplus%E6%A0%B9%E6%8D%AEin%E6%9F%A5%E8%AF%A2%E7%9A%84%E9%A1%BA%E5%BA%8F%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C/index.html">
 <meta property="og:site_name" content="fyy-coding">
-<meta property="og:description" content="三个操作：  选择 交叉 变异">
+<meta property="og:description" content="方法一：自定义mapper.xmlmapper.xml 1234567891011121314151617&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-&#x2F;&#x2F;mybatis.org&#x2F;&#x2F;DTD Mapper 3.0&#x2F;&#x2F;EN&quot; &quot;htt">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231025164709391.png">
-<meta property="article:published_time" content="2023-11-23T03:04:06.000Z">
-<meta property="article:modified_time" content="2024-03-18T11:49:46.830Z">
+<meta property="article:published_time" content="2024-03-21T06:47:18.822Z">
+<meta property="article:modified_time" content="2024-03-21T06:55:21.175Z">
 <meta property="article:author" content="fyy">
-<meta property="article:tag" content="智能算法">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231025164709391.png">
   
   
   
-  <title>遗传算法 - fyy-coding</title>
+  <title>fyy-coding</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -229,7 +226,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="遗传算法"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -240,8 +237,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-23 11:04" pubdate>
-          2023年11月23日 上午
+        <time datetime="2024-03-21 14:47" pubdate>
+          2024年3月21日 下午
         </time>
       </span>
     
@@ -252,7 +249,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          10 字
+          233 字
         
       </span>
     
@@ -263,7 +260,7 @@
         
         
         
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -308,19 +305,27 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">遗传算法</h1>
+            <h1 id="seo-header"></h1>
             
             
               <div class="markdown-body">
                 
-                <p>三个操作：</p>
-<ul>
-<li>选择</li>
-<li>交叉</li>
-<li>变异</li>
-</ul>
-<p><img src="C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20231025164709391.png" srcset="/img/loading.gif" lazyload alt="image-20231025164709391"></p>
+                <h3 id="方法一：自定义mapper-xml"><a href="#方法一：自定义mapper-xml" class="headerlink" title="方法一：自定义mapper.xml"></a>方法一：自定义mapper.xml</h3><p>mapper.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">mapper</span> <span class="hljs-keyword">PUBLIC</span> <span class="hljs-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="hljs-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">mapper</span> <span class="hljs-attr">namespace</span>=<span class="hljs-string">&quot;com.hmdp.mapper.ShopMapper&quot;</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;queryShopAndSortByIds&quot;</span> <span class="hljs-attr">resultType</span>=<span class="hljs-string">&quot;com.hmdp.entity.Shop&quot;</span> <span class="hljs-attr">parameterType</span>=<span class="hljs-string">&quot;java.util.List&quot;</span>&gt;</span><br>        SELECT * FROM tb_shop WHERE id in<br>           <span class="hljs-tag">&lt;<span class="hljs-name">foreach</span> <span class="hljs-attr">collection</span>=<span class="hljs-string">&quot;shopIds&quot;</span> <span class="hljs-attr">item</span>=<span class="hljs-string">&quot;shopId&quot;</span> <span class="hljs-attr">open</span>=<span class="hljs-string">&quot;(&quot;</span> <span class="hljs-attr">separator</span>=<span class="hljs-string">&quot;,&quot;</span> <span class="hljs-attr">close</span>=<span class="hljs-string">&quot;)&quot;</span>&gt;</span><br>                #&#123;shopId&#125;<br>            <span class="hljs-tag">&lt;/<span class="hljs-name">foreach</span>&gt;</span><br>        ORDER BY field(id,<br>            <span class="hljs-tag">&lt;<span class="hljs-name">foreach</span> <span class="hljs-attr">collection</span>=<span class="hljs-string">&quot;shopIds&quot;</span> <span class="hljs-attr">item</span>=<span class="hljs-string">&quot;shopId&quot;</span> <span class="hljs-attr">separator</span>=<span class="hljs-string">&quot;,&quot;</span>&gt;</span><br>                #&#123;shopId&#125;<br>            <span class="hljs-tag">&lt;/<span class="hljs-name">foreach</span>&gt;</span><br>        )<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">mapper</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
 
+
+
+<p>mapper</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.hmdp.mapper;<br><br><span class="hljs-keyword">import</span> com.hmdp.entity.Shop;<br><span class="hljs-keyword">import</span> com.baomidou.mybatisplus.core.mapper.BaseMapper;<br><span class="hljs-keyword">import</span> org.apache.ibatis.annotations.Param;<br><br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">ShopMapper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">BaseMapper</span>&lt;Shop&gt; &#123;<br>    List&lt;Shop&gt; <span class="hljs-title function_">queryShopAndSortByIds</span><span class="hljs-params">(<span class="hljs-meta">@Param(&quot;shopIds&quot;)</span> List&lt;Long&gt; shopIds)</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<p>impl</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;Long&gt; ids = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(list.size());<br>List&lt;Shop&gt; shops = getBaseMapper().queryShopAndSortByIds(ids);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="方法二：利用last-拼接order-by-field-id-id1-id2-id3…-的sql语句"><a href="#方法二：利用last-拼接order-by-field-id-id1-id2-id3…-的sql语句" class="headerlink" title="方法二：利用last()拼接order by field(id, id1, id2, id3…)的sql语句"></a>方法二：利用last()拼接order by field(id, id1, id2, id3…)的sql语句</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;Long&gt; ids = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(list.size());<br><span class="hljs-type">String</span> <span class="hljs-variable">idStr</span> <span class="hljs-operator">=</span> StrUtil.join(<span class="hljs-string">&quot;,&quot;</span>, ids);<br>List&lt;Shop&gt; shops = lambdaQuery().in(Shop::getId, ids).last(<span class="hljs-string">&quot;ORDER BY FIELD(id,&quot;</span> + idStr + <span class="hljs-string">&quot;)&quot;</span>).list();<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -328,34 +333,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%99%BA%E8%83%BD%E7%AE%97%E6%B3%95/" class="category-chain-item">智能算法</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E6%99%BA%E8%83%BD%E7%AE%97%E6%B3%95/" class="print-no-link">#智能算法</a>
-      
-    </div>
   
 </div>
 
@@ -365,20 +342,20 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>遗传算法</div>
-      <div>http://example.com/2023/11/23/算法/路径规划/遗传算法/</div>
+      <div></div>
+      <div>http://example.com/2024/03/21/others/mybatisplus根据in查询的顺序返回结果/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>fyy-coding</div>
+          <div>fyy</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月23日</div>
+          <div>2024年3月21日</div>
         </div>
       
       
@@ -410,9 +387,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/27/DB/basic_knowledge/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="数据库基础知识.md">
+                      <a href="/2024/03/26/Redis/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" title="Redi面试题整理">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据库基础知识.md</span>
+                        <span class="hidden-mobile">Redi面试题整理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -420,8 +397,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/09/21/Java/Java%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E9%87%8D%E8%A6%81%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7%EF%BC%889-17%EF%BC%89/" title="Java新版本的重要语言特性（9-17）">
-                        <span class="hidden-mobile">Java新版本的重要语言特性（9-17）</span>
+                      <a href="/2024/03/19/Redis/Redis%E5%AE%9E%E6%88%98/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

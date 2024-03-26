@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/fyy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="fyy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="性能调优   发现Redis好像变慢了   可能的原因有两个  网络问题：业务服务器到Redis服务器的网络质量问题 Redis本身的问题   基准性能首先了解Redis在生产环境服务器上的基准性能：直接在 Redis 服务器上测试实例的响应延迟情况。 60 秒内的最大响应延迟： 1234567redis-cli -h127.0.0.1 -p6379 --intrinsic-latencyMax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redi面试题整理">
+<meta property="og:url" content="http://example.com/2024/03/26/Redis/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="fyy-coding">
+<meta property="og:description" content="性能调优   发现Redis好像变慢了   可能的原因有两个  网络问题：业务服务器到Redis服务器的网络质量问题 Redis本身的问题   基准性能首先了解Redis在生产环境服务器上的基准性能：直接在 Redis 服务器上测试实例的响应延迟情况。 60 秒内的最大响应延迟： 1234567redis-cli -h127.0.0.1 -p6379 --intrinsic-latencyMax">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20240325145953718.png">
+<meta property="article:published_time" content="2024-03-26T12:18:27.000Z">
+<meta property="article:modified_time" content="2024-03-26T12:21:07.536Z">
+<meta property="article:author" content="fyy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20240325145953718.png">
+  
+  
+  
+  <title>Redi面试题整理 - fyy-coding</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","app_key":"96APiPOtZEiCQlv5h3jjZfbC","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>fyy-coding</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Redi面试题整理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-26 20:18" pubdate>
+          2024年3月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Redi面试题整理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="性能调优"><a href="#性能调优" class="headerlink" title="性能调优"></a>性能调优</h1><blockquote>
+<p>  发现Redis好像变慢了</p>
+<p>  可能的原因有两个</p>
+<ul>
+<li>网络问题：业务服务器到Redis服务器的网络质量问题</li>
+<li>Redis本身的问题</li>
+</ul>
+</blockquote>
+<h2 id="基准性能"><a href="#基准性能" class="headerlink" title="基准性能"></a>基准性能</h2><p>首先了解Redis在生产环境服务器上的基准性能：直接在 Redis 服务器上测试实例的响应延迟情况。</p>
+<p>60 秒内的最大响应延迟：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -h127.0.0.1 -p6379 --intrinsic-latency<br><br>Max latency so far: 1 microseconds.<br>Max latency so far: 15 microseconds.<br>Max latency so far: 53 microseconds.<br>Max latency so far: 60 microseconds.<br>Max latency so far: 99 microseconds.<br></code></pre></td></tr></table></figure>
+
+
+
+<p>查看一段时间内 Redis 的最小、最大、平均访问延迟：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -h 127.0.0.1 -p 6379 --latency-history -i 1<br><br>min: 0, max: 1, avg: 0.39 (66 samples) -- 1.01 seconds range<br>min: 0, max: 1, avg: 0.43 (65 samples) -- 1.01 seconds range<br>min: 0, max: 1, avg: 0.40 (65 samples) -- 1.00 seconds range<br>min: 0, max: 2, avg: 0.54 (65 samples) -- 1.01 seconds range<br></code></pre></td></tr></table></figure>
+
+
+
+<p>判断你的 Redis 是否真的变慢了：</p>
+<ul>
+<li>在相同配置的服务器上，测试一个正常 Redis 实例的基准性能</li>
+<li>找到你认为可能变慢的 Redis 实例，测试这个实例的基准性能</li>
+<li>如果这个实例的运行延迟是正常 Redis 基准性能的 2 倍以上，即可认为这个 Redis 实例确实变慢了</li>
+</ul>
+<h2 id="Redis-变慢的因素"><a href="#Redis-变慢的因素" class="headerlink" title="Redis 变慢的因素"></a>Redis 变慢的因素</h2><h3 id="使用复杂度过高的命令"><a href="#使用复杂度过高的命令" class="headerlink" title="使用复杂度过高的命令"></a>使用复杂度过高的命令</h3><h4 id="慢日志查询"><a href="#慢日志查询" class="headerlink" title="慢日志查询"></a>慢日志查询</h4><ol>
+<li><p>查询慢日志，首先配置慢日志的参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">命令执行耗时超过 5 毫秒，记录慢日志（单位微秒）</span><br>CONFIG SET slowlog-log-slower-than 5000<br><span class="hljs-meta prompt_"># </span><span class="language-bash">只保留最近 500 条慢日志</span><br>CONFIG SET slowlog-max-len 500<br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>查询到最近记录的慢日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">单位毫秒</span><br>SLOWLOG get 5<br></code></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\69425\AppData\Roaming\Typora\typora-user-images\image-20240325145953718.png" srcset="/img/loading.gif" lazyload alt="image-20240325145953718"></p>
+</li>
+<li><p>可能会导致操作延迟变大：</p>
+<ul>
+<li>经常使用 O(N) 以上复杂度的命令，例如 SORT、SUNION、ZUNIONSTORE 聚合类命令</li>
+<li>使用 O(N) 复杂度的命令，但 N 的值非常大</li>
+</ul>
+<p>第一种情况导致变慢的原因在于，Redis 在操作内存数据时，时间复杂度过高，要花费更多的 CPU 资源。</p>
+<p>第二种情况导致变慢的原因在于，Redis 一次需要返回给客户端的数据过多，更多时间花费在数据协议的组装和网络传输过程中。</p>
+<p>另外，我们还可以从资源使用率层面来分析，如果你的应用程序操作 Redis 的 OPS 不是很大，但 Redis 实例的 CPU 使用率却很高，那么很有可能是使用了复杂度过高的命令导致的。</p>
+<p>除此之外，我们都知道，Redis 是单线程处理客户端请求的，如果你经常使用以上命令，那么当 Redis 处理客户端请求时，一旦前面某个命令发生耗时，就会导致后面的请求发生排队，对于客户端来说，响应延迟也会变长。</p>
+</li>
+</ol>
+<h4 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h4><ul>
+<li>尽量不使用 O(N) 以上复杂度过高的命令，对于数据的聚合操作，放在客户端做</li>
+<li>执行 O(N) 命令，保证 N 尽量的小（推荐 N &lt;&#x3D; 300），每次获取尽量少的数据，让 Redis 可以及时处理返回</li>
+</ul>
+<h3 id="BigKey"><a href="#BigKey" class="headerlink" title="BigKey"></a>BigKey</h3><blockquote>
+<p>  查询慢日志发现，并不是复杂度过高的命令导致的，而都是 SET &#x2F; DEL 这种简单命令出现在慢日志中，那么你就要怀疑你的实例否写入了 bigkey。</p>
+</blockquote>
+<p>Redis 在写入数据时，需要为新的数据分配内存，相对应的，当从 Redis 中删除数据时，它会释放对应的内存空间。</p>
+<p><strong>如果一个 key 写入的 value 非常大，那么 Redis 在分配内存时就会比较耗时</strong>。同样的，当删除这个 key 时，释放内存也会比较耗时，这种类型的 key 我们一般称之为 bigkey。</p>
+<p>检查业务代码是否存在写入 bigkey 的情况，评估写入一个 key 的数据大小，尽量避免一个 key 存入过大的数据。</p>
+<p><strong>如果已经写入了 bigkey，那有没有什么办法可以扫描出实例中 bigkey 的分布情况呢</strong>？</p>
+<p>答案是可以的。</p>
+<h4 id="扫描-BigKey"><a href="#扫描-BigKey" class="headerlink" title="扫描 BigKey"></a>扫描 BigKey</h4><p>Redis 提供了扫描 bigkey 的命令，执行以下命令就可以扫描出，一个实例中 bigkey 的分布情况，输出结果是以类型维度展示的：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -h 127.0.0.1 -p 6379 --bigkeys -i 0.01<br><br><br>[00.00%] Biggest zset   found so far &#x27;&quot;shop:geo:1&quot;&#x27; with 9 members<br><br>-------- summary -------<br><br>Sampled 3 keys in the keyspace!<br>Total key length in bytes is 33 (avg len 11.00)<br><br>Biggest   zset found &#x27;&quot;shop:geo:1&quot;&#x27; has 9 members<br><br>0 lists with 0 items (00.00% of keys, avg size 0.00)<br>0 hashs with 0 fields (00.00% of keys, avg size 0.00)<br>0 strings with 0 bytes (00.00% of keys, avg size 0.00)<br>1 streams with 0 entries (33.33% of keys, avg size 0.00)<br>0 sets with 0 members (00.00% of keys, avg size 0.00)<br>2 zsets with 14 members (66.67% of keys, avg size 7.00)<br></code></pre></td></tr></table></figure>
+
+<p>可以看到每种数据类型所占用的最大内存 &#x2F; 拥有最多元素的 key 是哪一个，以及每种数据类型在整个实例中的占比和平均大小 &#x2F; 元素数量。原理是 Redis 在内部执行了 SCAN 命令，遍历整个实例中所有的 key，然后针对 key 的类型，分别执行 STRLEN、LLEN、HLEN、SCARD、ZCARD 命令，来获取 String 类型的长度、容器类型（List、Hash、Set、ZSet）的元素个数。</p>
+<p>当执行这个命令时，要注意 2 个问题：</p>
+<ul>
+<li>对线上实例进行 bigkey 扫描时，Redis 的 OPS 会突增，为了降低扫描过程中对 Redis 的影响，最好控制一下扫描的频率，指定 -i 参数即可，它表示扫描过程中每次扫描后休息的时间间隔，单位是秒</li>
+<li>扫描结果中，对于容器类型（List、Hash、Set、ZSet）的 key，<strong>只能扫描出元素最多的 key</strong>。但一个 key 的元素多，<strong>不一定表示占用内存也多</strong>，你还需要根据业务情况，进一步评估内存占用情况。</li>
+</ul>
+<h4 id="优化方案-1"><a href="#优化方案-1" class="headerlink" title="优化方案"></a>优化方案</h4><ul>
+<li><p>尽量避免写入 bigkey</p>
+</li>
+<li><p>如果你使用的 Redis 是 4.0 以上版本，用 UNLINK 命令替代 DEL，此命令可以把释放 key 内存的操作，放到后台线程中去执行，从而降低对 Redis 的影响</p>
+</li>
+<li><p>如果你使用的 Redis 是 6.0 以上版本，可以开启 lazy-free 机制（lazyfree-lazy-user-del &#x3D; yes），在执行 DEL 命令时，释放内存也会放到后台线程中执行</p>
+</li>
+</ul>
+<blockquote>
+<p>  bigkey 在很多场景下，依旧会产生性能问题。例如，bigkey 在分片集群模式下，对于数据的迁移也会有性能影响，以及我后面即将讲到的数据过期、数据淘汰、透明大页，都会受到 bigkey 的影响。</p>
+</blockquote>
+<h3 id="集中过期"><a href="#集中过期" class="headerlink" title="集中过期"></a>集中过期</h3><blockquote>
+<p>  平时在操作 Redis 时，并没有延迟很大的情况发生，但在某个时间点突然出现一波延时，其现象表现为：<strong>变慢的时间点很有规律，例如某个整点，或者每间隔多久就会发生一波延迟</strong>。如果是出现这种情况，那么你需要排查一下，业务代码中是否存在设置大量 key 集中过期的情况。</p>
+</blockquote>
+<p>如果有大量的 key 在某个固定时间点集中过期，在这个时间点访问 Redis 时，就有可能导致延时变大。</p>
+<p><strong>为什么集中过期会导致 Redis 延迟变大</strong>？</p>
+<p>Redis 的过期数据采用被动过期 + 主动过期两种策略：</p>
+<ul>
+<li><strong>被动过期</strong>：只有当访问某个 key 时，才判断这个 key 是否已过期，如果已过期，则从实例中删除</li>
+<li><strong>主动过期</strong>：Redis 内部维护了一个定时任务，默认每隔 100 毫秒（1秒10次）就会从全局的过期哈希表中随机取出 20 个 key，然后删除其中过期的 key，如果过期 key 的比例超过了 25%，则继续重复此过程，直到过期 key 的比例下降到 25% 以下，或者这次任务的执行耗时超过了 25 毫秒，才会退出循环。</li>
+</ul>
+<p>注意，<strong>这个主动过期 key 的定时任务，是在 Redis 主线程中执行的</strong>。</p>
+<p>也就是说如果在执行主动过期的过程中，出现了需要大量删除过期 key 的情况，那么此时应用程序在访问 Redis 时，必须要等待这个定时任务执行结束，Redis 才可以服务这个客户端请求。此时就会出现，应用访问 Redis 延时变大。</p>
+<p>如果此时过期需要删除的是一个 bigkey，那么这个耗时会更久。而且，这个<strong>操作延迟的命令并不会记录在慢日志</strong>中。</p>
+<p>因为<strong>慢日志中只记录一个命令真正操作内存数据的耗时</strong>，而 Redis 主动删除过期 key 的逻辑，是在命令真正执行之前执行的。</p>
+<p>所以，此时你会看到，<strong>慢日志中没有操作耗时的命令，但我们的应用程序却感知到了延迟变大，其实时间都花费在了删除过期 key 上</strong>。</p>
+<h4 id="分析与排查"><a href="#分析与排查" class="headerlink" title="分析与排查"></a>分析与排查</h4><p>业务层面： 一般集中过期使用的是 expireat &#x2F; pexpireat 命令，你需要在代码中搜索这个关键字，检查是否存在会导致key集中过期的逻辑。</p>
+<p>运维层面： 监控Redis实例的运行状态，查看expired_keys的大小，<strong>当这个指标在很短时间内出现了突增，需要及时报警出来</strong>，然后与业务应用报慢的时间点进行对比分析，确认时间是否一致，如果一致，则可以确认确实是因为集中过期 key 导致的延迟变大。</p>
+<h4 id="优化方案-2"><a href="#优化方案-2" class="headerlink" title="优化方案"></a>优化方案</h4><ul>
+<li><p>随机过期时间</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">在过期时间点之后的 5 分钟内随机过期掉</span><br>redis.expireat(key, expire_time + random(300))<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>Redis 4.0以上，可以开启 lazy-free 机制，当删除过期 key 时，把释放内存的操作放到后台线程中执行，避免阻塞主线程</p>
+</li>
+</ul>
+<pre><code class="hljs"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">释放过期 key 的内存，放到后台线程执行</span><br>lazyfree-lazy-expire yes<br></code></pre></td></tr></table></figure>
+</code></pre>
+<h3 id="实例内存达到上限"><a href="#实例内存达到上限" class="headerlink" title="实例内存达到上限"></a>实例内存达到上限</h3><blockquote>
+<p>  当 Redis 内存达到 maxmemory 后，每次写入新的数据之前，<strong>Redis 必须先从实例中踢出一部分数据，让整个实例的内存维持在 maxmemory 之下，然后才能把新数据写进来</strong>。踢出旧数据的逻辑也是需要消耗时间的，而具体耗时的长短，要取决于你配置的淘汰策略。</p>
+</blockquote>
+<h4 id="淘汰策略"><a href="#淘汰策略" class="headerlink" title="淘汰策略"></a>淘汰策略</h4><ul>
+<li><p>不淘汰任何 key</p>
+<ul>
+<li>noeviction：不淘汰任何 key，实例内存达到 maxmeory 后，再写入新数据直接返回错误</li>
+</ul>
+</li>
+<li><p>只选择设置了过期时间的key</p>
+<ul>
+<li><p>volatile-lru：只淘汰<strong>最近最少访问</strong>、并设置了过期时间的 key</p>
+</li>
+<li><p>volatile-random：只<strong>随机</strong>淘汰设置了过期时间的 key</p>
+</li>
+<li><p>volatile-lfu：只淘汰<strong>访问频率最低</strong>、并设置了过期时间 key（4.0+版本支持）</p>
+</li>
+<li><p>ttl：淘汰<strong>即将过期</strong>的 key，比随机删除时多进行一步过期时间的排序</p>
+</li>
+</ul>
+</li>
+<li><p>所有key</p>
+<ul>
+<li><p>allkeys-lru：不管 key 是否设置了过期，淘汰<strong>最近最少访问</strong>的 key</p>
+</li>
+<li><p>allkeys-random：不管 key 是否设置了过期，<strong>随机</strong>淘汰 key</p>
+</li>
+<li><p>allkeys-lfu：不管 key 是否设置了过期，淘汰<strong>访问频率最低</strong>的 key（4.0+版本支持）</p>
+</li>
+</ul>
+<p>一般最常使用的是 allkeys-lru &#x2F; volatile-lru 淘汰策略，它们的处理逻辑是，每次从实例中随机取出一批 key（这个数量可配置），然后淘汰一个最少访问的 key，之后把剩下的 key 暂存到一个池子中，继续随机取一批 key，并与之前池子中的 key 比较，再淘汰一个最少访问的 key。以此往复，直到实例内存降到 maxmemory 之下。</p>
+<p>需要注意的是，Redis 的淘汰数据的逻辑与删除过期 key 的一样，也是在命令真正执行之前执行的，也就是说它也会增加我们操作 Redis 的延迟，而且，写 OPS 越高，延迟也会越明显。</p>
+</li>
+</ul>
+<h4 id="优化方案-3"><a href="#优化方案-3" class="headerlink" title="优化方案"></a>优化方案</h4><ul>
+<li><p>避免存储 bigkey，降低释放内存的耗时</p>
+</li>
+<li><p>淘汰策略改为随机淘汰，随机淘汰比 LRU 要快很多（视业务情况调整）</p>
+</li>
+<li><p>拆分实例，把淘汰 key 的压力分摊到多个实例上</p>
+</li>
+<li><p>Redis 4.0 以上版本，开启 layz-free 机制，把淘汰 key 释放内存的操作放到后台线程中执行（配置 lazyfree-lazy-eviction &#x3D; yes）</p>
+</li>
+</ul>
+<h3 id="fork耗时严重"><a href="#fork耗时严重" class="headerlink" title="fork耗时严重"></a>fork耗时严重</h3><blockquote>
+<p>  为了保证 Redis 数据的安全性，可能会开启后台定时 RDB 和 AOF rewrite 功能。但如果Redis 延迟变大都发生在 Redis 后台 RDB 和 AOF rewrite 期间，需要排查，在这期间有可能导致变慢的情况。</p>
+</blockquote>
+<p>当 Redis 开启了后台 RDB 和 AOF rewrite 后，在执行时，它们都需要主进程创建出一个子进程进行数据的持久化。</p>
+<p><strong>主进程创建子进程，会调用操作系统提供的 fork 函数</strong>。</p>
+<p>而 fork 在执行过程中，主进程需要拷贝自己的内存页表给子进程，如果这个实例很大，那么这个拷贝的过程也会比较耗时。而且这个 fork 过程会消耗大量的 CPU 资源，在完成 fork 之前，整个 Redis 实例会被阻塞住，无法处理任何客户端请求。</p>
+<p>如果此时你的 CPU 资源本来就很紧张，那么 fork 的耗时会更长，甚至达到秒级，这会严重影响 Redis 的性能。</p>
+<p>那如何确认确实是因为 fork 耗时导致的 Redis 延迟变大呢？</p>
+<p>你可以在 Redis 上执行 INFO 命令，查看 latest_fork_usec 项，单位微秒。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 上一次 fork 耗时，单位微秒(整个实例阻塞无法处理客户端请求的时间)</span><br>latest_fork_usec:59477<br></code></pre></td></tr></table></figure>
+
+<p>除了数据持久化会生成 RDB 之外，当主从节点第一次建立数据同步时，主节点也创建子进程生成 RDB，然后发给从节点进行一次全量同步，所以，这个过程也会对 Redis 产生性能影响。</p>
+<h5 id="优化方案-4"><a href="#优化方案-4" class="headerlink" title="优化方案"></a>优化方案</h5><ul>
+<li><p>控制 Redis 实例的内存：尽量在 10G 以下，执行 fork 的耗时与实例大小有关，实例越大，耗时越久</p>
+</li>
+<li><p>合理配置数据持久化策略：在 slave 节点执行 RDB 备份，推荐在低峰期执行，而对于丢失数据不敏感的业务（例如把 Redis 当做纯缓存使用），可以关闭 AOF 和 AOF rewrite</p>
+</li>
+<li><p>Redis 实例不要部署在虚拟机上：fork 的耗时也与系统也有关，虚拟机比物理机耗时更久</p>
+</li>
+<li><p>降低主从库全量同步的概率：适当调大 repl-backlog-size 参数，避免主从全量同步</p>
+</li>
+<li><p>RDB和AOF混合使用，在两次RDB之间使用AOF。</p>
+</li>
+</ul>
+<h2 id="开启内存大页"><a href="#开启内存大页" class="headerlink" title="开启内存大页"></a>开启内存大页</h2><h2 id="开启AOF"><a href="#开启AOF" class="headerlink" title="开启AOF"></a>开启AOF</h2><h2 id="绑定CPU"><a href="#绑定CPU" class="headerlink" title="绑定CPU"></a>绑定CPU</h2><h2 id="使用Swap"><a href="#使用Swap" class="headerlink" title="使用Swap"></a>使用Swap</h2><h3 id="碎片整理"><a href="#碎片整理" class="headerlink" title="碎片整理"></a>碎片整理</h3><h3 id="网络带宽过载"><a href="#网络带宽过载" class="headerlink" title="网络带宽过载"></a>网络带宽过载</h3><h3 id="其他原因"><a href="#其他原因" class="headerlink" title="其他原因"></a>其他原因</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redi面试题整理</div>
+      <div>http://example.com/2024/03/26/Redis/Redis面试题整理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>fyy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/26/Redis/Redis%E5%9F%BA%E7%A1%80/" title="Redis基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/21/others/mybatisplus%E6%A0%B9%E6%8D%AEin%E6%9F%A5%E8%AF%A2%E7%9A%84%E9%A1%BA%E5%BA%8F%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ufph8TbmK43d1JfQxLvss4KY-MdYXbMMI","appKey":"96APiPOtZEiCQlv5h3jjZfbC","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数
+        <span id="leancloud-site-uv"></span>
+        人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

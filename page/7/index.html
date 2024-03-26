@@ -256,6 +256,250 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/9.%20EventLoopGroup%E3%80%81NioEventLoopGroup/" target="_self">
+          9. EventLoopGroup、NioEventLoopGroup
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/3.%20Netty%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/9.%20EventLoopGroup%E3%80%81NioEventLoopGroup/" target="_self">
+        <div>
+          EventLoopGroup 和其实现类 NioEventLoopGroup EventLoopGroup 是一组 EventLoop 的抽象，Netty 为了更好的利用多核 CPU 资源，一般会有多个 EventLoop 同时工作，每个 EventLoop 维护着一个 Selector 实例。  EventLoopGroup 提供 next 接口，可以从组里面按照一定规则获取其中一个 Event
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/06/Netty/4.%20Google%20Protobuf/1.%20%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" target="_self">
+          1. 编码和解码的基本介绍
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/4.%20Google%20Protobuf/1.%20%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" target="_self">
+        <div>
+          编码和解码的基本介绍 编写网络应用程序时，因为数据在网络中传输的都是二进制字节码数据，在发送数据时就需要编码，接收数据 时就需要解码 codec(编解码器) 的组成部分有两个：decoder(解码器)和 encoder(编码器)。encoder 负责把业务数据转换成字节码数据，decoder 负责把字节码数据转换成业务数据
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/06/Netty/4.%20Google%20Protobuf/2.%20Netty%E6%9C%AC%E8%BA%AB%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%A3%E7%A0%81%E7%9A%84%E6%9C%BA%E5%88%B6%E5%92%8C%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/" target="_self">
+          2. Netty本身的编码解码的机制和问题分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/4.%20Google%20Protobuf/2.%20Netty%E6%9C%AC%E8%BA%AB%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%A3%E7%A0%81%E7%9A%84%E6%9C%BA%E5%88%B6%E5%92%8C%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/" target="_self">
+        <div>
+          Netty 本身的编码解码的机制和问题分析 Netty 提供的编码器  StringEncoder，对字符串数据进行编码  ObjectEncoder，对 Java 对象进行编   Netty 提供的解码器  StringDecoder, 对字符串数据进行解码  ObjectDecoder，对 Java 对象进行解码    Netty 本身自带的 ObjectDecoder 和 ObjectEnc
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/06/Netty/4.%20Google%20Protobuf/3.%20Protobuf/" target="_self">
+          3. Protobuf
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/4.%20Google%20Protobuf/3.%20Protobuf/" target="_self">
+        <div>
+          
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-06 21:16" pubdate>
+              2022-09-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Netty/">#Netty</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2022/09/06/Netty/4.%20Google%20Protobuf/4.%20Protobuf%20%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E5%AE%9E%E4%BE%8B/" target="_self">
           4. Protobuf 快速入门实例
         </a>
@@ -616,255 +860,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/09/06/Netty/5.%20Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%B8%8EHandler%E7%9A%84%E8%B0%83%E7%94%A8%E6%9C%BA%E5%88%B6/6.%20%E5%85%B6%E5%AE%83%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8/" target="_self">
-          6. 其它编解码器
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/5.%20Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%B8%8EHandler%E7%9A%84%E8%B0%83%E7%94%A8%E6%9C%BA%E5%88%B6/6.%20%E5%85%B6%E5%AE%83%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8/" target="_self">
-        <div>
-          其它编解码器   其它解码器 LineBasedFrameDecoder：这个类在 Netty 内部也有使用，它使用行尾控制字符（\n 或者\r\n）作为分隔符来解析数据。 DelimiterBasedFrameDecoder：使用自定义的特殊字符作为消息的分隔符。 HttpObjectDecoder：一个 HTTP 数据的解码器 LengthFieldBasedFrameDecoder：通过指定
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/09/06/Netty/5.%20Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%B8%8EHandler%E7%9A%84%E8%B0%83%E7%94%A8%E6%9C%BA%E5%88%B6/7.%20Log4j%20%E6%95%B4%E5%90%88%E5%88%B0%20Netty/" target="_self">
-          7. Log4j 整合到 Netty
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/5.%20Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%B8%8EHandler%E7%9A%84%E8%B0%83%E7%94%A8%E6%9C%BA%E5%88%B6/7.%20Log4j%20%E6%95%B4%E5%90%88%E5%88%B0%20Netty/" target="_self">
-        <div>
-          Log4j 整合到 Netty 在 Maven 中添加对 Log4j 的依赖 在 pom.xml 12345678910111213141516171819202122&lt;dependency&gt;	&lt;groupId&gt;log4j&lt;/groupId&gt;	&lt;artifactId&gt;log4j&lt;/artifactId&gt;	&lt;version&gt;1.
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/09/06/Netty/6.%20TCP%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/1.%20TCP%20%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" target="_self">
-          1. TCP 粘包和拆包基本介绍
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/6.%20TCP%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/1.%20TCP%20%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" target="_self">
-        <div>
-          TCP 粘包和拆包基本介绍  TCP 是面向连接的，面向流的，提供高可靠性服务。收发两端（客户端和服务器端）都要有一一成对的 socket， 因此，发送端为了将多个发给接收端的包，更有效的发给对方，使用了优化方法（Nagle 算法），将多次间隔较小且数据量小的数据，合并成一个大的数据块，然后进行封包。这样做虽然提高了效率，但是接收端就难于分辨出完整的数据包了，因为面向流的通信是无消息保护边界的。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/09/06/Netty/6.%20TCP%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/2.%20TCP%20%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E7%8E%B0%E8%B1%A1%E5%AE%9E%E4%BE%8B/" target="_self">
-          2. TCP 粘包和拆包现象实例
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/06/Netty/6.%20TCP%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/2.%20TCP%20%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85%E7%8E%B0%E8%B1%A1%E5%AE%9E%E4%BE%8B/" target="_self">
-        <div>
-          TCP 粘包和拆包现象实例在编写 Netty 程序时，如果没有做处理，就会发生粘包和拆包的问题。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-06 21:16" pubdate>
-              2022-09-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Netty/" class="category-chain-item">Netty</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Netty/">#Netty</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/#board">17</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/#board">18</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

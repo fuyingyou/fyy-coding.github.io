@@ -17,26 +17,25 @@
   <meta name="author" content="fyy">
   <meta name="keywords" content="">
   
-    <meta name="description" content="实验二:线程的同步一、实验目的1）进一步掌握windows系统环境下线程的创建和撤销2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）3）使用windows系统提供的线程同步API解决实际问题 二、实验准备1. 进程同步机制的主要任务：对多个相关进程在执行次序上进行协调，使并发执行的诸进程之间能够按照一定的规则（或时序）共享系统资源，并能很好地相互合作">
+    <meta name="description" content="title: 线程的同步author:tags:       - c++ category:       - 其它 date: 2020-04-21 21:42:31 实验二:线程的同步一、实验目的1）进一步掌握windows系统环境下线程的创建和撤销2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）3）使用windows系统提供的线程同步API解决实">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OS Expe 02 线程的同步">
-<meta property="og:url" content="http://example.com/2020/04/21/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/OS%20Expe%2002%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5/index.html">
+<meta property="og:title" content="fyy-coding">
+<meta property="og:url" content="http://example.com/2024/03/18/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5/index.html">
 <meta property="og:site_name" content="fyy-coding">
-<meta property="og:description" content="实验二:线程的同步一、实验目的1）进一步掌握windows系统环境下线程的创建和撤销2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）3）使用windows系统提供的线程同步API解决实际问题 二、实验准备1. 进程同步机制的主要任务：对多个相关进程在执行次序上进行协调，使并发执行的诸进程之间能够按照一定的规则（或时序）共享系统资源，并能很好地相互合作">
+<meta property="og:description" content="title: 线程的同步author:tags:       - c++ category:       - 其它 date: 2020-04-21 21:42:31 实验二:线程的同步一、实验目的1）进一步掌握windows系统环境下线程的创建和撤销2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）3）使用windows系统提供的线程同步API解决实">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/56e1d34c-0c4a-4f71-907f-71ca2ee11143.png">
 <meta property="og:image" content="http://example.com/images/b98bdea7-4a78-4795-a55d-49ff2e963d84.png">
 <meta property="og:image" content="http://example.com/images/d1b0d65d-7900-46f6-94db-c01fa5a0b819.png">
-<meta property="article:published_time" content="2020-04-21T13:42:31.000Z">
-<meta property="article:modified_time" content="2024-03-18T11:52:00.352Z">
+<meta property="article:published_time" content="2024-03-18T12:18:48.367Z">
+<meta property="article:modified_time" content="2024-03-18T14:31:32.420Z">
 <meta property="article:author" content="fyy">
-<meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/images/56e1d34c-0c4a-4f71-907f-71ca2ee11143.png">
   
   
   
-  <title>OS Expe 02 线程的同步 - fyy-coding</title>
+  <title>fyy-coding</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -231,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="OS Expe 02 线程的同步"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -242,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2020-04-21 21:42" pubdate>
-          2020年4月21日 晚上
+        <time datetime="2024-03-18 20:18" pubdate>
+          2024年3月18日 晚上
         </time>
       </span>
     
@@ -265,7 +264,7 @@
         
         
         
-          16 分钟
+          17 分钟
         
       </span>
     
@@ -310,12 +309,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">OS Expe 02 线程的同步</h1>
+            <h1 id="seo-header"></h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="实验二-线程的同步"><a href="#实验二-线程的同步" class="headerlink" title="实验二:线程的同步"></a>实验二:线程的同步</h2><h3 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h3><p>1）进一步掌握windows系统环境下线程的创建和撤销<br>2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）<br>3）使用windows系统提供的线程同步API解决实际问题</p>
+                <p>title: 线程的同步<br>author:<br>tags:<br>       - c++</p>
+<p>category:<br>       - 其它</p>
+<p>date: 2020-04-21 21:42:31</p>
+<h2 id="实验二-线程的同步"><a href="#实验二-线程的同步" class="headerlink" title="实验二:线程的同步"></a>实验二:线程的同步</h2><h3 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h3><p>1）进一步掌握windows系统环境下线程的创建和撤销<br>2）熟悉windows系统提供的线程同步API（是WINDOWS提供给应用程序与操作系统的接口）<br>3）使用windows系统提供的线程同步API解决实际问题</p>
 <h3 id="二、实验准备"><a href="#二、实验准备" class="headerlink" title="二、实验准备"></a>二、实验准备</h3><h5 id="1-进程同步机制的主要任务："><a href="#1-进程同步机制的主要任务：" class="headerlink" title="1. 进程同步机制的主要任务："></a>1. 进程同步机制的主要任务：</h5><p>对多个相关进程在执行次序上进行协调，使并发执行的诸进程之间能够按照一定的规则（或时序）共享系统资源，并能很好地相互合作，从而使程序执行具有可再现性。</p>
 <h5 id="2-线程和进程的发展历程"><a href="#2-线程和进程的发展历程" class="headerlink" title="2. 线程和进程的发展历程"></a>2. 线程和进程的发展历程</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">在<span class="hljs-number">20</span>世纪<span class="hljs-number">60</span>年代中期，人们在设计多道程序<span class="hljs-variable constant_">OS</span>时，引入了进程的概念，从而解决了在单处理机环境下的程序并发执行问题。此后在长达<span class="hljs-number">20</span>年的时间里，在多道程序<span class="hljs-variable constant_">OS</span>中一直以进程作为能拥有资源和独立调度的（运行）的基本单位。<br><br>直到<span class="hljs-number">80</span>年代中期，人们又提出了比进程更小的基本单位 线程 的概念，试图用它来提高程序并发执行的程度，以进一步改善系统的服务质量。特别是在进入<span class="hljs-number">20</span>世纪<span class="hljs-number">90</span>年代后，多处理机系统得到迅速发展，由于线程能更好的提高程序的并发执行程度，因而近几年推出的多处理机<span class="hljs-variable constant_">OS</span>无一例外地都引入了进程，用以改善<span class="hljs-variable constant_">OS</span>的性能。<br></code></pre></td></tr></table></figure>
 
@@ -391,34 +393,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%85%B6%E5%AE%83/" class="category-chain-item">其它</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/c/" class="print-no-link">#c++</a>
-      
-    </div>
   
 </div>
 
@@ -428,8 +402,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>OS Expe 02 线程的同步</div>
-      <div>http://example.com/2020/04/21/课程实验/OS Expe 02 线程的同步/</div>
+      <div></div>
+      <div>http://example.com/2024/03/18/课程实验/线程的同步/</div>
     </div>
     <div class="license-meta">
       
@@ -441,7 +415,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2020年4月21日</div>
+          <div>2024年3月18日</div>
         </div>
       
       
@@ -473,9 +447,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/04/29/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/python%E7%88%AC%E5%8F%9651job%E7%9A%84%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" title="python爬取51job的招聘信息">
+                      <a href="/2024/03/19/Redis/Redis%E5%AE%9E%E6%88%98/" title="">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">python爬取51job的招聘信息</span>
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -483,8 +457,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/04/18/%E8%AF%BE%E7%A8%8B%E5%AE%9E%E9%AA%8C/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E6%92%A4%E9%94%80%20c++/" title="线程的创建与撤销 c++">
-                        <span class="hidden-mobile">线程的创建与撤销 c++</span>
+                      <a href="/2024/03/18/Git/" title="Git基本操作">
+                        <span class="hidden-mobile">Git基本操作</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
